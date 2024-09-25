@@ -8,10 +8,10 @@ public:
     VendingBank(int id);
     // getters-setters
     int id() const;
-    //FILL IN FURTHER PUBLIC FUNCTIONS HERE private :
-        // id_ is a unique identifier for the VendingBank
-        // much like a serial number
-        int id_;
-    //FILL IN FURTHER DATA MEMBERS HERE
-}
+    // FILL IN FURTHER PUBLIC FUNCTIONS HERE private :
+    //  id_ is a unique identifier for the VendingBank
+    //  much like a serial number
+    int id_;
+    // FILL IN FURTHER DATA MEMBERS HERE
+};
 #endif
