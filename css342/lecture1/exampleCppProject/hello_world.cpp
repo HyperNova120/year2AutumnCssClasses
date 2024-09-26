@@ -3,11 +3,12 @@ using namespace std;
 
 int main()
 {
-    string name;
-    name = (string) "Jimmy" + (string) " Hoffa";
-    cout << name << endl;
-    string tmp;
-    cout << "Enter:";
-    cin >> tmp;
-    cout << tmp << endl;
+    int intOne = 0;
+    int intTwo = 0;
+    cout << "Int 1:";
+    cin >> intOne;
+    cout << "Int 2:";
+    cin >> intTwo;
+    cout << "Result:" << max(intOne, intTwo) << " is the largest"<< endl;
+
 }
