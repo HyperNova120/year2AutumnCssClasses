@@ -10,5 +10,4 @@ int main()
     cout << "Int 2:";
     cin >> intTwo;
     cout << "Result:" << max(intOne, intTwo) << " is the largest"<< endl;
-
 }
