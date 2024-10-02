@@ -18,19 +18,19 @@ TimeSpan::TimeSpan(double hoursin, double minutesin, double secondsin) : TimeSpa
 
 void TimeSpan::set_time(int hoursin, int minutesin, int secondsin)
 {
-    m_hours_ = hoursin;
-    m_minutes_ = minutesin;
-    m_seconds_ = secondsin;
+    SetFromTotalSeconds((hoursin*3600)+(minutesin*60)+secondsin);
 }
 
-int TimeSpan::SetFromTotalSeconds(double totalSeconds)
+void TimeSpan::SetFromTotalSeconds(double totalSeconds)
 {
     int secIn = round(totalSeconds);
     int hr = secIn / 3600;
     secIn = secIn % 3600;
     int min = secIn / 60;
     secIn = secIn % 60;
-    set_time(hr, min, secIn);
+    m_hours_ = hr;
+    m_minutes_ = min;
+    m_seconds_ = secIn;
 }
 
 int TimeSpan::hours() const
@@ -57,48 +57,44 @@ ostream &operator<<(ostream &os, const TimeSpan &obj)
     return os;
 }
 
-istream &operator>>(istream &is, const TimeSpan &obj)
+istream &operator>>(istream &is, TimeSpan &obj)
 {
     int hrs, mins, secs;
-    is >> obj.m_hours_ >> obj.m_minutes_ >> obj.m_seconds_;
+    is >> hrs >> mins >> secs;
+    obj.SetFromTotalSeconds((hrs*3600) + (mins * 60) + secs);
     return is;
 }
 
 TimeSpan TimeSpan::operator+(const TimeSpan &obj)
 {
-    return TimeSpan(m_hours_ + obj.hours(), m_minutes_ + obj.minutes(), m_seconds_ + obj.seconds());
-}
-
-TimeSpan TimeSpan::operator++(const int secondAdd)
-{
-    SetFromTotalSeconds(TotalSeconds() + secondAdd);
-};
-TimeSpan TimeSpan::operator--(const int secondRemove)
-{
-    SetFromTotalSeconds(TotalSeconds() - secondRemove);
+    return TimeSpan(TotalSeconds() + obj.TotalSeconds());
 }
 
 TimeSpan TimeSpan::operator-(const TimeSpan &obj)
 {
-    this->m_hours_ -= obj.hours();
-    this->m_minutes_ -= obj.minutes();
-    this->m_seconds_ -= obj.seconds();
+    return TimeSpan(TotalSeconds() - obj.TotalSeconds());
+};
+
+TimeSpan TimeSpan::operator++(const int secondAdd)
+{
+    SetFromTotalSeconds(TotalSeconds() + secondAdd);
     return *this;
 };
+TimeSpan TimeSpan::operator--(const int secondRemove)
+{
+    SetFromTotalSeconds(TotalSeconds() - secondRemove);
+    return *this;
+}
 
 TimeSpan TimeSpan::operator-=(const TimeSpan &obj)
 {
-    this->m_hours_ -= obj.hours();
-    this->m_minutes_ -= obj.minutes();
-    this->m_seconds_ -= obj.seconds();
+    SetFromTotalSeconds(TotalSeconds() - obj.TotalSeconds());
     return *this;
 };
 
 TimeSpan TimeSpan::operator+=(const TimeSpan &obj)
 {
-    this->m_hours_ += obj.hours();
-    this->m_minutes_ += obj.minutes();
-    this->m_seconds_ += obj.seconds();
+    SetFromTotalSeconds(TotalSeconds() + obj.TotalSeconds());
     return *this;
 };
 

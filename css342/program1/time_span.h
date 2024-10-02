@@ -16,7 +16,7 @@ public:
     void set_time(int hoursin, int minutesin, int secondsin);
 
     friend ostream &operator<<(ostream &os, const TimeSpan &obj);
-    friend istream &operator>>(istream &is, const TimeSpan &obj);
+    friend istream &operator>>(istream &is, TimeSpan &obj);
 
     TimeSpan operator+(const TimeSpan &obj);
     TimeSpan operator++(const int second_add);
@@ -36,7 +36,7 @@ public:
     int seconds() const;
 
     int TotalSeconds() const;
-    int SetFromTotalSeconds(double total_seconds);
+    void SetFromTotalSeconds(double total_seconds);
 
 private:
     int m_hours_;

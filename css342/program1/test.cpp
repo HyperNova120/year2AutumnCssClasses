@@ -67,6 +67,37 @@ bool TestRemoveInPlace()
     return true;
 }
 
+bool TestAddBetter()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(1, 1, 1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 1, 1, 1)))
+    {
+        return false;
+    }
+    TimeSpan ts3 = ts1 + ts2;
+    if ((!CheckValues(ts3, 6, 7, 8)) || (!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 1, 1, 1)))
+    {
+        return false;
+    }
+    return true;
+}
+bool TestRemoveBetter()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(1, 1, 1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 1, 1, 1)))
+    {
+        return false;
+    }
+    TimeSpan ts3 = ts1 - ts2;
+    if ((!CheckValues(ts3, 4, 5, 6)) || (!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 1, 1, 1)))
+    {
+        return false;
+    }
+    return true;
+}
+
 bool TestEquals()
 {
     TimeSpan ts1(5, 6, 7);
@@ -109,6 +140,40 @@ bool TestLessThan2()
     return (ts2 < ts1);
 }
 
+bool TestCompareEquals()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(5, 6, 7);
+    if (!(ts1 <= ts2))
+    {
+        return false;
+    }
+    if (!(ts1 >= ts2))
+    {
+        return false;
+    }
+    ts1.set_time(4,5,6);
+    if (!(ts1 <= ts2))
+    {
+        return false;
+    }
+    if (!(ts2 >= ts1))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Testistream()
+{
+    TimeSpan ts1(0, 0, 0);
+    cout << "Enter 3 ints seperated by spaces:";
+    cin >> ts1;
+    cout << ts1 << endl;
+    return false;
+}
+
 void test(bool result, string title)
 {
     (result) ? cout << "[PASS]:" << title << endl : cout << "[FAIL]:" << title << endl;
@@ -127,13 +192,15 @@ int main()
     test(TestGreaterThan2(), "TestGreaterThanFalse");
     test(TestLessThan(), "TestLessThanTrue");
     test(TestLessThan2(), "TestLessThanFalse");
+    test(TestAddBetter(), "TestAddBetter");
+    test(TestRemoveBetter(), "TestRemoveBetter");
+    test(TestCompareEquals(),"TestCompareEquals");
     cout << "[PASS]:<<:" << TimeSpan(15, 36, 24) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 59, 59) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 59, 60) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 59, 61) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 60, 60) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 61, 61) << endl;
-
-
+    Testistream();
     cout << "Testing Complete" << endl;
 }
