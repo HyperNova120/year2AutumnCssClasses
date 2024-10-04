@@ -19,9 +19,10 @@ public:
     friend istream &operator>>(istream &is, TimeSpan &obj);
 
     TimeSpan operator+(const TimeSpan &obj);
+    TimeSpan operator-(const TimeSpan &obj);
     TimeSpan operator++(const int second_add);
     TimeSpan operator--(const int second_remove);
-    TimeSpan operator-(const TimeSpan &obj);
+    TimeSpan operator-();
     TimeSpan operator-=(const TimeSpan &obj);
     TimeSpan operator+=(const TimeSpan &obj);
     bool operator==(const TimeSpan &obj);
@@ -39,8 +40,8 @@ public:
     void SetFromTotalSeconds(double total_seconds);
 
 private:
-    int m_hours_;
-    int m_seconds_;
-    int m_minutes_;
+    int hours_;
+    int seconds_;
+    int minutes_;
 };
 #endif

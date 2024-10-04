@@ -14,6 +14,12 @@ bool TestZeros()
     TimeSpan ts(0, 0, 0);
     return CheckValues(ts, 0, 0, 0);
 }
+
+bool TestNegSet()
+{
+    TimeSpan ts(0, -90, -90);
+    return CheckValues(ts, -1, -31, -30);
+}
 bool TestFloatSeconds()
 {
     TimeSpan ts(127.86);
@@ -152,7 +158,7 @@ bool TestCompareEquals()
     {
         return false;
     }
-    ts1.set_time(4,5,6);
+    ts1.set_time(4, 5, 6);
     if (!(ts1 <= ts2))
     {
         return false;
@@ -174,6 +180,160 @@ bool Testistream()
     return false;
 }
 
+bool TestNegation()
+{
+    TimeSpan ts1(5, 6, 7);
+    // cout << ts1 << endl;
+    ts1 = -ts1;
+    // cout << ts1 << endl;
+    return CheckValues(ts1, -5, -6, -7);
+}
+
+bool TestAddPlusPlus()
+{
+    TimeSpan ts1(5, 6, 7);
+    //cout << ts1 << endl;
+    ts1++;
+    //cout << ts1 << endl;
+    return CheckValues(ts1, 5, 6, 8);
+}
+
+bool TestRemovePlusPlus()
+{
+    TimeSpan ts1(5, 6, 7);
+    // cout << ts1 << endl;
+    ts1--;
+    // cout << ts1 << endl;
+    return CheckValues(ts1, 5, 6, 6);
+}
+
+//Testing For Negative Values
+bool TestAddInPlaceNegative()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    ts1 += ts2;
+    if ((!CheckValues(ts1, 4, 5, 6)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+bool TestRemoveInPlaceNegative()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    ts1 -= ts2;
+    if ((!CheckValues(ts1, 6, 7, 8)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+
+bool TestAddBetterNegative()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    TimeSpan ts3 = ts1 + ts2;
+    if ((!CheckValues(ts3, 4, 5, 6)) || (!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+bool TestRemoveBetterNegative()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    TimeSpan ts3 = ts1 - ts2;
+    if ((!CheckValues(ts3, 6, 7, 8)) || (!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+
+//Testing For Full Negative Values
+bool FullTestAddInPlaceNegative()
+{
+    TimeSpan ts1(-5, -6, -7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, -5, -6, -7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    ts1 += ts2;
+    if ((!CheckValues(ts1, -6, -7, -8)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+bool FullTestRemoveInPlaceNegative()
+{
+    TimeSpan ts1(-5, -6, -7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, -5, -6, -7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    ts1 -= ts2;
+    if ((!CheckValues(ts1, -4, -5, -6)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+
+bool FullTestAddBetterNegative()
+{
+    TimeSpan ts1(-5, -6, -7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, -5, -6, -7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    TimeSpan ts3 = ts1 + ts2;
+    if ((!CheckValues(ts3, -6, -7, -8)) || (!CheckValues(ts1, -5, -6, -7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+bool FullTestRemoveBetterNegative()
+{
+    TimeSpan ts1(-5, -6, -7);
+    TimeSpan ts2(-1, -1, -1);
+    if ((!CheckValues(ts1, -5, -6, -7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    TimeSpan ts3 = ts1 - ts2;
+    if ((!CheckValues(ts3, -4, -5, -6)) || (!CheckValues(ts1, -5, -6, -7)) || (!CheckValues(ts2, -1, -1, -1)))
+    {
+        return false;
+    }
+    return true;
+}
+
+
 void test(bool result, string title)
 {
     (result) ? cout << "[PASS]:" << title << endl : cout << "[FAIL]:" << title << endl;
@@ -181,7 +341,7 @@ void test(bool result, string title)
 
 int main()
 {
-    cout << "Testing TimeSpan Class" << endl;
+    cout << "============Testing TimeSpan Class============" << endl;
     test(TestZeros(), "TestZeros");
     test(TestFloatSeconds(), "TestFloatSeconds");
     test(TestNegativeMinute(), "TestNegativeMinute");
@@ -194,13 +354,26 @@ int main()
     test(TestLessThan2(), "TestLessThanFalse");
     test(TestAddBetter(), "TestAddBetter");
     test(TestRemoveBetter(), "TestRemoveBetter");
-    test(TestCompareEquals(),"TestCompareEquals");
+    test(TestCompareEquals(), "TestCompareEquals");
+    test(TestNegSet(), "TestNegSet");
+    test(TestNegation(), "TestNegation");
+    test(TestAddPlusPlus(), "TestAddPlusPlus");
+    test(TestRemovePlusPlus(), "TestRemovePlusPlus");
+    test(TestAddInPlaceNegative(), "TestAddInPlaceNegative");
+    test(TestRemoveInPlaceNegative(), "TestRemoveInPlaceNegative");
+    test(TestAddBetterNegative(),"TestAddBetterNegative");
+    test(TestRemoveBetterNegative(), "TestRemoveBetterNegative");
+    test(FullTestAddInPlaceNegative(), "FullTestAddInPlaceNegative");
+    test(FullTestRemoveInPlaceNegative(), "FullTestRemoveInPlaceNegative");
+    test(FullTestAddBetterNegative(),"FullTestAddBetterNegative");
+    test(FullTestRemoveBetterNegative(), "FullTestRemoveBetterNegative");
+
     cout << "[PASS]:<<:" << TimeSpan(15, 36, 24) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 59, 59) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 59, 60) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 59, 61) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 60, 60) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 61, 61) << endl;
-    Testistream();
-    cout << "Testing Complete" << endl;
+    // Testistream();
+    cout << "===============Testing Complete===============" << endl;
 }

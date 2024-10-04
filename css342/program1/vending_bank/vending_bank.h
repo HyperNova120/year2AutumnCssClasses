@@ -15,7 +15,7 @@ public:
     friend ostream &operator<<(ostream &os, const VendingBank &obj);
 
     //returns if the current transaction can cover a given cost
-    bool does_current_transaction_cover(int cost_bills, int cost_cents);
+    bool does_current_transaction_cover(int cost_bills, int cost_cents) const;
 
     //adds given cost to currency revevoir and returns any extra
     void complete_transaction(int cost_bills, int cost_cents);
