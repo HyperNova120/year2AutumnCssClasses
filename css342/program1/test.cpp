@@ -1,4 +1,6 @@
+
 #include <iostream>
+#include <sstream>
 #include "time_span.h"
 using namespace std;
 bool CheckValues(TimeSpan time, int hours, int minutes, int seconds)
@@ -362,6 +364,15 @@ void test(bool result, string title)
     (result) ? cout << "[PASS]" << endl : cout << "[FAIL]" << endl;
 }
 
+bool testOstreamOp(TimeSpan ts, int hrs, int mins, int secs)
+{
+    ostringstream oss;
+    oss << ts;
+    ostringstream oss2;
+    oss2 << "Hours: " << hrs << ", Minutes: " << mins << ", Seconds: " << secs;
+    return oss.str() == oss2.str();
+}
+
 int main()
 {
     cout << "============Testing TimeSpan Class============" << endl;
@@ -391,13 +402,17 @@ int main()
     test(FullTestAddBetterNegative(), "FullTestAddBetterNegative");
     test(FullTestRemoveBetterNegative(), "FullTestRemoveBetterNegative");
     test(TestPosToNeg(), "TestPosToNeg");
-
-    cout << "[PASS]:<<:" << TimeSpan(15, 36, 24) << endl;
-    cout << "[PASS]:<<:" << TimeSpan(0, 59, 59) << endl;
-    cout << "[PASS]:<<:" << TimeSpan(0, 59, 60) << endl;
-    cout << "[PASS]:<<:" << TimeSpan(0, 59, 61) << endl;
-    cout << "[PASS]:<<:" << TimeSpan(0, 60, 60) << endl;
-    cout << "[PASS]:<<:" << TimeSpan(0, 61, 61) << endl;
+    test(testOstreamOp(TimeSpan(5, 2, 3), 5, 2, 3), "testOstreamOp1");
+    test(testOstreamOp(TimeSpan(1.5, 9.2, 5), 1, 39, 17), "testOstreamOp2");
+    test(testOstreamOp(TimeSpan(1.5, 4, -10), 1, 33, 50), "testOstreamOp3");
+    test(testOstreamOp(TimeSpan(7, -3), 0, 6, 57), "testOstreamOp4");
+    test(testOstreamOp(TimeSpan(-190), 0, -3, -10), "testOstreamOp5");
+    test(testOstreamOp(TimeSpan(15, 36, 24), 15, 36, 24), "testOstreamOp6");
+    test(testOstreamOp(TimeSpan(0, 59, 59), 0, 59, 59), "testOstreamOp7");
+    test(testOstreamOp(TimeSpan(0, 59, 60), 1, 0, 0), "testOstreamOp8");
+    test(testOstreamOp(TimeSpan(0, 59, 61), 1, 0, 1), "testOstreamOp9");
+    test(testOstreamOp(TimeSpan(0, 60, 60), 1, 1, 0), "testOstreamOp10");
+    test(testOstreamOp(TimeSpan(0, 61, 61), 1, 2, 1), "testOstreamOp11");
     // Testistream();
     cout << "===============Testing Complete===============" << endl;
 }
