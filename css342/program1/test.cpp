@@ -192,9 +192,9 @@ bool TestNegation()
 bool TestAddPlusPlus()
 {
     TimeSpan ts1(5, 6, 7);
-    //cout << ts1 << endl;
+    // cout << ts1 << endl;
     ts1++;
-    //cout << ts1 << endl;
+    // cout << ts1 << endl;
     return CheckValues(ts1, 5, 6, 8);
 }
 
@@ -207,7 +207,7 @@ bool TestRemovePlusPlus()
     return CheckValues(ts1, 5, 6, 6);
 }
 
-//Testing For Negative Values
+// Testing For Negative Values
 bool TestAddInPlaceNegative()
 {
     TimeSpan ts1(5, 6, 7);
@@ -270,7 +270,7 @@ bool TestRemoveBetterNegative()
     return true;
 }
 
-//Testing For Full Negative Values
+// Testing For Full Negative Values
 bool FullTestAddInPlaceNegative()
 {
     TimeSpan ts1(-5, -6, -7);
@@ -333,10 +333,33 @@ bool FullTestRemoveBetterNegative()
     return true;
 }
 
+bool TestPosToNeg()
+{
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(8, 0, 0);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 8, 0, 0)))
+    {
+        return false;
+    }
+    ts1 -= ts2;
+    if ((!CheckValues(ts1, -2, -53, -53)) || (!CheckValues(ts2, 8, 0, 0)))
+    {
+        cout << ts1 << endl;
+        return false;
+    }
+    return true;
+}
 
 void test(bool result, string title)
 {
-    (result) ? cout << "[PASS]:" << title << endl : cout << "[FAIL]:" << title << endl;
+    int indentSize = 50 - title.length();
+    string indent = "";
+    for (int i = 0; i < indentSize; i++)
+    {
+        indent = indent + " ";
+    }
+    cout << "(" << title << ")" << indent;
+    (result) ? cout << "[PASS]" << endl : cout << "[FAIL]" << endl;
 }
 
 int main()
@@ -361,12 +384,13 @@ int main()
     test(TestRemovePlusPlus(), "TestRemovePlusPlus");
     test(TestAddInPlaceNegative(), "TestAddInPlaceNegative");
     test(TestRemoveInPlaceNegative(), "TestRemoveInPlaceNegative");
-    test(TestAddBetterNegative(),"TestAddBetterNegative");
+    test(TestAddBetterNegative(), "TestAddBetterNegative");
     test(TestRemoveBetterNegative(), "TestRemoveBetterNegative");
     test(FullTestAddInPlaceNegative(), "FullTestAddInPlaceNegative");
     test(FullTestRemoveInPlaceNegative(), "FullTestRemoveInPlaceNegative");
-    test(FullTestAddBetterNegative(),"FullTestAddBetterNegative");
+    test(FullTestAddBetterNegative(), "FullTestAddBetterNegative");
     test(FullTestRemoveBetterNegative(), "FullTestRemoveBetterNegative");
+    test(TestPosToNeg(), "TestPosToNeg");
 
     cout << "[PASS]:<<:" << TimeSpan(15, 36, 24) << endl;
     cout << "[PASS]:<<:" << TimeSpan(0, 59, 59) << endl;
