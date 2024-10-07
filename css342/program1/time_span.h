@@ -36,12 +36,12 @@ public:
     int minutes() const;
     int seconds() const;
 
-    int TotalSeconds() const;
-    void SetFromTotalSeconds(double total_seconds);
-
 private:
     int hours_;
     int seconds_;
     int minutes_;
+
+    int TotalSeconds() const;
+    void SetFromTotalSeconds(double total_seconds);
 };
 #endif

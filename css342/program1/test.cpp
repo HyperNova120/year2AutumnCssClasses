@@ -352,6 +352,7 @@ bool TestPosToNeg()
     return true;
 }
 
+int totalFailedTests = 0;
 void test(bool result, string title)
 {
     int indentSize = 50 - title.length();
@@ -360,7 +361,11 @@ void test(bool result, string title)
     {
         indent = indent + " ";
     }
-    cout << "(" << title << ")" << indent;
+    cout << "[" << title << "]" << indent;
+    if (!result)
+    {
+        totalFailedTests++;
+    }
     (result) ? cout << "[PASS]" << endl : cout << "[FAIL]" << endl;
 }
 
@@ -415,5 +420,6 @@ int main()
     test(testOstreamOp(TimeSpan(0, 61, 61), 1, 2, 1), "testOstreamOp 11");
     test(testOstreamOp(TimeSpan(-3661), -1, -1, -1), "testOstreamOp 12");
     // Testistream();
+    cout << totalFailedTests << " Failed Tests" << endl;
     cout << "====================[Testing Complete]====================" << endl;
 }
