@@ -375,7 +375,7 @@ bool testOstreamOp(TimeSpan ts, int hrs, int mins, int secs)
 
 int main()
 {
-    cout << "============Testing TimeSpan Class============" << endl;
+    cout << "=================[Testing TimeSpan Class]=================" << endl;
     test(TestZeros(), "TestZeros");
     test(TestFloatSeconds(), "TestFloatSeconds");
     test(TestNegativeMinute(), "TestNegativeMinute");
@@ -415,5 +415,5 @@ int main()
     test(testOstreamOp(TimeSpan(0, 61, 61), 1, 2, 1), "testOstreamOp 11");
     test(testOstreamOp(TimeSpan(-3661), -1, -1, -1), "testOstreamOp 12");
     // Testistream();
-    cout << "===============Testing Complete===============" << endl;
+    cout << "====================[Testing Complete]====================" << endl;
 }
