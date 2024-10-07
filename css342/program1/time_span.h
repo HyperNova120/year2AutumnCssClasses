@@ -13,6 +13,7 @@ public:
     TimeSpan(double minutesin, double secondsin);
     TimeSpan(double hoursin, double minutesin, double secondsin);
 
+    //formatted this way b/e required by program 1 spec
     void set_time(int hoursin, int minutesin, int secondsin);
 
     friend ostream &operator<<(ostream &os, const TimeSpan &obj);
@@ -41,6 +42,7 @@ private:
     int seconds_;
     int minutes_;
 
+    //easily handle settings, and comparing
     int TotalSeconds() const;
     void SetFromTotalSeconds(double total_seconds);
 };

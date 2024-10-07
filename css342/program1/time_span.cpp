@@ -54,6 +54,7 @@ ostream &operator<<(ostream &os, const TimeSpan &obj)
     return os;
 }
 
+//takes istream input as int int int 
 istream &operator>>(istream &is, TimeSpan &obj)
 {
     int hrs, mins, secs;
