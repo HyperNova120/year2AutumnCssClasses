@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include "PlayingCard.h"
 using namespace std;
 
 void MySwap(string &name1, string &name2);
@@ -15,6 +15,7 @@ int Area(Rectangle &rect);
 
 int main()
 {
+    /*
     string name1 = "sue";
     string name2 = "ravi";
     cout << name1 << " " << name2 << endl;
@@ -24,6 +25,10 @@ int main()
     Rectangle my_yard = {5, 7};
     int result = Area(my_yard);
     cout << "Area Of Rectange my_yard:" << my_yard.width << " X " << my_yard.length << " Y = " << result << " TESTING:" << my_yard.width << " X " << my_yard.length << " Y" << endl;
+    */
+
+   Card favCard(13, KHeart);
+   cout << favCard << endl;
 }
 
 void MySwap(string &name1, string &name2)

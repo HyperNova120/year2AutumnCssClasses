@@ -1,6 +1,9 @@
 #ifndef LECTURE3_CARD_H_
 #define LECTURE3_CARD_H_
 
+#include <iostream>
+using namespace std;
+
 enum CardSuite
 {
     KHeart,
@@ -8,20 +11,22 @@ enum CardSuite
     KClub,
     KSpade
 };
+const string kSuites[4] = {"heart","diamond","club","spade"};
 
 class Card
 {
 public:
     Card();
-    Card(CardSuite suite_in, int value_in);
+    Card(int value_in, CardSuite suite_in);
 
-    CardSuite Suite() const;
+    CardSuite suite() const;
     int value() const;
 
+    friend ostream &operator<<(ostream &os, const Card &card);
+
 private:
-    bool joker_;
     CardSuite suite_;
     int value_;
 };
 
-#endif // LECTURE3_CARD_H_
+#endif //LECTURE3_CARD_H_

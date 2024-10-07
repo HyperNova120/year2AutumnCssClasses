@@ -62,17 +62,17 @@ istream &operator>>(istream &is, TimeSpan &obj)
     return is;
 }
 
-TimeSpan TimeSpan::operator+(const TimeSpan &obj)
+TimeSpan TimeSpan::operator+(const TimeSpan &obj) const
 {
     return TimeSpan(TotalSeconds() + obj.TotalSeconds());
 }
 
-TimeSpan TimeSpan::operator-(const TimeSpan &obj)
+TimeSpan TimeSpan::operator-(const TimeSpan &obj) const
 {
     return TimeSpan(TotalSeconds() - obj.TotalSeconds());
 };
 
-TimeSpan TimeSpan::operator-()
+TimeSpan TimeSpan::operator-() const
 {
     return TimeSpan(TotalSeconds() * -1);
 }
@@ -101,32 +101,32 @@ TimeSpan TimeSpan::operator+=(const TimeSpan &obj)
     return *this;
 };
 
-bool TimeSpan::operator==(const TimeSpan &obj)
+bool TimeSpan::operator==(const TimeSpan &obj) const
 {
     return TotalSeconds() == obj.TotalSeconds();
 };
 
-bool TimeSpan::operator!=(const TimeSpan &obj)
+bool TimeSpan::operator!=(const TimeSpan &obj) const
 {
     return TotalSeconds() != obj.TotalSeconds();
 };
 
-bool TimeSpan::operator<=(const TimeSpan &obj)
+bool TimeSpan::operator<=(const TimeSpan &obj) const
 {
     return TotalSeconds() <= obj.TotalSeconds();
 };
 
-bool TimeSpan::operator>=(const TimeSpan &obj)
+bool TimeSpan::operator>=(const TimeSpan &obj) const
 {
     return TotalSeconds() >= obj.TotalSeconds();
 };
 
-bool TimeSpan::operator<(const TimeSpan &obj)
+bool TimeSpan::operator<(const TimeSpan &obj) const
 {
     return TotalSeconds() < obj.TotalSeconds();
 };
 
-bool TimeSpan::operator>(const TimeSpan &obj)
+bool TimeSpan::operator>(const TimeSpan &obj) const
 {
     return TotalSeconds() > obj.TotalSeconds();
 };

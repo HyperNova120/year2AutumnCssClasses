@@ -186,9 +186,9 @@ bool TestNegation()
 {
     TimeSpan ts1(5, 6, 7);
     // cout << ts1 << endl;
-    ts1 = -ts1;
+    TimeSpan ts2 = -ts1;
     // cout << ts1 << endl;
-    return CheckValues(ts1, -5, -6, -7);
+    return CheckValues(ts2, -5, -6, -7) && CheckValues(ts1, 5, 6, 7);
 }
 
 bool TestAddPlusPlus()
@@ -352,6 +352,15 @@ bool TestPosToNeg()
     return true;
 }
 
+bool testOstreamOp(TimeSpan ts, int hrs, int mins, int secs)
+{
+    ostringstream oss;
+    oss << ts;
+    ostringstream oss2;
+    oss2 << "Hours: " << hrs << ", Minutes: " << mins << ", Seconds: " << secs;
+    return oss.str() == oss2.str();
+}
+
 int totalFailedTests = 0;
 void test(bool result, string title)
 {
@@ -367,15 +376,6 @@ void test(bool result, string title)
         totalFailedTests++;
     }
     (result) ? cout << "[PASS]" << endl : cout << "[FAIL]" << endl;
-}
-
-bool testOstreamOp(TimeSpan ts, int hrs, int mins, int secs)
-{
-    ostringstream oss;
-    oss << ts;
-    ostringstream oss2;
-    oss2 << "Hours: " << hrs << ", Minutes: " << mins << ", Seconds: " << secs;
-    return oss.str() == oss2.str();
 }
 
 int main()

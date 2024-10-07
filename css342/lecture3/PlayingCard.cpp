@@ -6,7 +6,7 @@ Card::Card()
     value_ = 13;
 }
 
-Card::Card(CardSuite suite_in, int value_in)
+Card::Card(int value_in, CardSuite suite_in)
 {
     suite_ = suite_in;
     if (value_in < 1 || value_in > 13)
@@ -16,7 +16,13 @@ Card::Card(CardSuite suite_in, int value_in)
     value_ = value_in;
 }
 
-CardSuite Card::Suite() const
+ostream& operator<<(ostream &os, const Card &card)
+{
+    os << card.value() << " of " << kSuites[card.suite()] << endl;
+    return os;
+}
+
+CardSuite Card::suite() const
 {
     return suite_;
 }

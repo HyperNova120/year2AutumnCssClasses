@@ -2,7 +2,7 @@
 #define PROGRAM1_TIME_SPAN_H
 
 #include <iostream>
-#include "math.h"
+#include <cmath>
 using namespace std;
 
 class TimeSpan
@@ -18,19 +18,19 @@ public:
     friend ostream &operator<<(ostream &os, const TimeSpan &obj);
     friend istream &operator>>(istream &is, TimeSpan &obj);
 
-    TimeSpan operator+(const TimeSpan &obj);
-    TimeSpan operator-(const TimeSpan &obj);
+    TimeSpan operator+(const TimeSpan &obj) const;
+    TimeSpan operator-(const TimeSpan &obj) const;
     TimeSpan operator++(const int second_add);
     TimeSpan operator--(const int second_remove);
-    TimeSpan operator-();
+    TimeSpan operator-() const;
     TimeSpan operator-=(const TimeSpan &obj);
     TimeSpan operator+=(const TimeSpan &obj);
-    bool operator==(const TimeSpan &obj);
-    bool operator!=(const TimeSpan &obj);
-    bool operator<=(const TimeSpan &obj);
-    bool operator>=(const TimeSpan &obj);
-    bool operator<(const TimeSpan &obj);
-    bool operator>(const TimeSpan &obj);
+    bool operator==(const TimeSpan &obj) const;
+    bool operator!=(const TimeSpan &obj) const;
+    bool operator<=(const TimeSpan &obj) const;
+    bool operator>=(const TimeSpan &obj) const;
+    bool operator<(const TimeSpan &obj) const;
+    bool operator>(const TimeSpan &obj) const;
 
     int hours() const;
     int minutes() const;
