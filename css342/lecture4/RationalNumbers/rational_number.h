@@ -16,12 +16,12 @@ public:
     int numerator() const;
     int denominator() const;
 
-    RationalNumber &operator*(const RationalNumber &other) const;
-    RationalNumber &operator/(const RationalNumber &other) const;
+    RationalNumber operator*(const RationalNumber &other) const;
+    RationalNumber operator/(const RationalNumber &other) const;
     RationalNumber &operator*=(const RationalNumber &other);
     RationalNumber &operator/=(const RationalNumber &other);
-    RationalNumber &operator+(const RationalNumber &other) const;
-    RationalNumber &operator-(const RationalNumber &other) const;
+    RationalNumber operator+(const RationalNumber &other) const;
+    RationalNumber operator-(const RationalNumber &other) const;
     RationalNumber &operator+=(const RationalNumber &other);
     RationalNumber &operator-=(const RationalNumber &other);
 

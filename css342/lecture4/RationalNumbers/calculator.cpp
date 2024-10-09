@@ -13,4 +13,12 @@ int main()
     cout << num4 << endl;
     RationalNumber num5(-14, -2);
     cout << num5 << endl;
+
+
+    RationalNumber test2(1, 2);
+    RationalNumber test1(3, 4);
+
+    RationalNumber test3 = test1/test2;
+    cout << test3 << endl;
+
 }

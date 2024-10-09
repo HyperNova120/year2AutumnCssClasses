@@ -34,7 +34,6 @@ int RationalNumber::numerator() const
 
 void RationalNumber::reduce()
 {
-    // todo implement
     double min = abs(fmin(num_, den_));
     double max = abs(fmax(num_, den_));
     int GCF = 0;
@@ -65,39 +64,35 @@ ostream &operator<<(ostream &os, RationalNumber &obj)
     return os;
 }
 
-RationalNumber &RationalNumber::operator*(const RationalNumber &other) const
+RationalNumber RationalNumber::operator*(const RationalNumber &other) const
 {
     RationalNumber returner(num_ * other.num_, den_ * other.den_);
-    returner.reduce();
     return returner;
 }
 
-RationalNumber &RationalNumber::operator/(const RationalNumber &other) const
+RationalNumber RationalNumber::operator/(const RationalNumber &other) const
 {
     RationalNumber returner(num_ * other.den_, den_ * other.num_);
-    returner.reduce();
     return returner;
 }
 
-RationalNumber &RationalNumber::operator+(const RationalNumber &other) const
+RationalNumber RationalNumber::operator+(const RationalNumber &other) const
 {
     int tmpNum, tmpDen, tmpOtherNum;
     tmpNum = num_ * other.den_;
     tmpOtherNum = den_ * other.num_;
     tmpDen = den_ * other.den_;
     RationalNumber returner(tmpNum + tmpOtherNum, tmpDen);
-    returner.reduce();
     return returner;
 }
 
-RationalNumber &RationalNumber::operator-(const RationalNumber &other) const
+RationalNumber RationalNumber::operator-(const RationalNumber &other) const
 {
     int tmpNum, tmpDen, tmpOtherNum;
     tmpNum = num_ * other.den_;
     tmpOtherNum = den_ * other.num_;
     tmpDen = den_ * other.den_;
     RationalNumber returner(tmpNum - tmpOtherNum, tmpDen);
-    returner.reduce();
     return returner;
 }
 
