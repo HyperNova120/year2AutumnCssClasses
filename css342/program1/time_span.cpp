@@ -1,5 +1,7 @@
 #include "time_span.h"
-
+/*
+    represents a time span. it can hold any time as a set of ints, hours, minutes, seconds both as positive and negative timespans
+*/
 // constructors
 TimeSpan::TimeSpan()
 {
@@ -49,8 +51,15 @@ ostream &operator<<(ostream &os, const TimeSpan &obj)
 istream &operator>>(istream &is, TimeSpan &obj)
 {
     int hrs, mins, secs;
-    is >> hrs >> mins >> secs;
-    obj.SetFromTotalSeconds((hrs * 3600) + (mins * 60) + secs);
+    try
+    {
+        is >> hrs >> mins >> secs;
+        obj.SetFromTotalSeconds((hrs * 3600) + (mins * 60) + secs);
+    }
+    catch (const std::exception &e)
+    {
+        cerr << e.what() << endl;
+    }
     return is;
 }
 

@@ -8,6 +8,7 @@ using namespace std;
 class TimeSpan
 {
 public:
+    //constructors
     TimeSpan();
     TimeSpan(double secondsin);
     TimeSpan(double minutesin, double secondsin);
@@ -16,9 +17,11 @@ public:
     //formatted this way b/e required by program 1 spec
     void set_time(int hoursin, int minutesin, int secondsin);
 
+    //i/ostream overloads
     friend ostream &operator<<(ostream &os, const TimeSpan &obj);
     friend istream &operator>>(istream &is, TimeSpan &obj);
 
+    //operator overloads
     TimeSpan operator+(const TimeSpan &obj) const;
     TimeSpan operator-(const TimeSpan &obj) const;
     TimeSpan operator++(const int second_add);
@@ -33,6 +36,7 @@ public:
     bool operator<(const TimeSpan &obj) const;
     bool operator>(const TimeSpan &obj) const;
 
+    //getters
     int hours() const;
     int minutes() const;
     int seconds() const;
