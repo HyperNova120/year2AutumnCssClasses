@@ -12,21 +12,24 @@ public:
     // getters-setters
     int id() const;
 
-    friend ostream &operator<<(ostream &os, const VendingBank &obj);
+    // returns if the current transaction can cover a given cost
+    bool does_current_transaction_cover(const int cost_pennys, const int cost_nickels, const int cost_dimes, const int cost_quarters,
+                                        const int cost_half_dollars, const int cost_dollar_coins) const;
 
-    //returns if the current transaction can cover a given cost
-    bool does_current_transaction_cover(int cost_bills, int cost_cents) const;
+    // adds given cost to currency revevoir and returns any extra
+    void complete_transaction(const int pennys, const int nickels, const int dimes, const int quarters, const int half_dollars,
+                              const int dollar_coins);
 
-    //adds given cost to currency revevoir and returns any extra
-    void complete_transaction(int cost_bills, int cost_cents);
+    // returns current transaction amounts
+    friend ostream &operator<<(ostream &os, VendingBank &obj);
 
-    
+    friend istream &operator>>(istream &is, VendingBank &obj);
 
-    //handles current transaction amounts
-    void AddToTransactionAmount(int bills_to_add, int cents_to_add);
-    void AddToTransactionAmount(int bills_to_add[], int cents_to_add[]);
-    void RemoveFromTransactionAmount(int bills_to_add[], int cents_to_add[]);
-    void RemoveFromTransactionAmount(int bills_to_add[], int cents_to_add[]);
+    // handles current transaction amounts
+    void AddToTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    void AddToTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    void RemoveFromTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    void RemoveFromTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
     // FILL IN FURTHER PUBLIC FUNCTIONS HERE private :
 private:
@@ -35,26 +38,23 @@ private:
 
     int id_;
 
-    void AddToCurrencyReservoir(int bills_to_add, int cents_to_add);
+    void AddToCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
-    void AddToCurrencyReservoir(int bills_to_add[], int cents_to_add[]);
+    void AddToCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
-    void RemoveFromCurrencyReservoir(int bills_to_add[], int cents_to_add[]);
+    void RemoveFromCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
-    void RemoveFromCurrencyReservoir(int bills_to_add[], int cents_to_add[]);
+    void RemoveFromCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
+    // amount of money in the current transaction
+    long transaction_penny_;
+    long transaction_nickle_;
+    long transaction_dime_;
+    long transaction_quarter_;
+    long transaction_half_dollar_;
+    long transaction_dollar_coin_;
 
-    //amount of money in the current transaction
-    int current_dollars_;
-    int current_cents_;
-
-
-    //internal total currency reservoir
-    long dollar_bills_;
-    long two_dollar_bills_;
-    long five_dollar_bills_;
-    long ten_dollar_bills_;
-    long twenty_dollar_bills_;
+    // internal total currency reservoir
     long penny_;
     long nickle_;
     long dime_;
