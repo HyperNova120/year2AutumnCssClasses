@@ -24,8 +24,8 @@ public:
     //operator overloads
     TimeSpan operator+(const TimeSpan &obj) const;
     TimeSpan operator-(const TimeSpan &obj) const;
-    TimeSpan operator++(const int second_add);
-    TimeSpan operator--(const int second_remove);
+    TimeSpan &operator++();
+    TimeSpan &operator--();
     TimeSpan operator-() const;
     TimeSpan operator-=(const TimeSpan &obj);
     TimeSpan operator+=(const TimeSpan &obj);

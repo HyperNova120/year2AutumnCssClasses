@@ -7,6 +7,7 @@ using namespace std;
 class VendingBank
 {
 public:
+    ~VendingBank();
     VendingBank();
     VendingBank(int id);
     // getters-setters
@@ -27,9 +28,9 @@ public:
 
     // handles current transaction amounts
     void AddToTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
-    void AddToTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    void AddToTransactionAmount(int pennys[], int nickels[], int dimes[], int quarters[], int half_dollars[], int dollar_coins[]);
     void RemoveFromTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
-    void RemoveFromTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    void RemoveFromTransactionAmount(int pennys[], int nickels[], int dimes[], int quarters[], int half_dollars[], int dollar_coins[]);
 
     // FILL IN FURTHER PUBLIC FUNCTIONS HERE private :
 private:
@@ -40,11 +41,11 @@ private:
 
     void AddToCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
-    void AddToCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    void AddToCurrencyReservoir(int pennys[], int nickels[], int dimes[], int quarters[], int half_dollars[], int dollar_coins[]);
 
     void RemoveFromCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
-    void RemoveFromCurrencyReservoir(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    void RemoveFromCurrencyReservoir(int penny[], int nickels[], int dimes[], int quarters[], int half_dollars[], int dollar_coins[]);
 
     // amount of money in the current transaction
     long transaction_penny_;

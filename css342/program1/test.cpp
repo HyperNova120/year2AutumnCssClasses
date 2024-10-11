@@ -195,7 +195,7 @@ bool TestAddPlusPlus()
 {
     TimeSpan ts1(5, 6, 7);
     // cout << ts1 << endl;
-    ts1++;
+    ++ts1;
     // cout << ts1 << endl;
     return CheckValues(ts1, 5, 6, 8);
 }
@@ -204,7 +204,7 @@ bool TestRemovePlusPlus()
 {
     TimeSpan ts1(5, 6, 7);
     // cout << ts1 << endl;
-    ts1--;
+    --ts1;
     // cout << ts1 << endl;
     return CheckValues(ts1, 5, 6, 6);
 }
@@ -361,6 +361,27 @@ bool testOstreamOp(TimeSpan ts, int hrs, int mins, int secs)
     return oss.str() == oss2.str();
 }
 
+bool testIstreamOp(int hrs, int mins, int secs)
+{
+    stringstream ss{};
+
+    ss << "" << hrs << " " << mins << " " << secs;
+
+    secs += (hrs * 3600) + (mins * 60);
+    hrs = secs / 3600;
+    secs = secs % 3600;
+    mins = secs / 60;
+    secs = secs % 60;
+
+    TimeSpan ts;
+    ss >> ts;
+    ostringstream oss2;
+    oss2 << "Hours: " << hrs << ", Minutes: " << mins << ", Seconds: " << secs;
+    ostringstream test;
+    test << ts;
+    return test.str() == oss2.str();
+}
+
 int totalFailedTests = 0;
 void test(bool result, string title)
 {
@@ -419,6 +440,17 @@ int main()
     test(testOstreamOp(TimeSpan(0, 60, 60), 1, 1, 0), "testOstreamOp 10");
     test(testOstreamOp(TimeSpan(0, 61, 61), 1, 2, 1), "testOstreamOp 11");
     test(testOstreamOp(TimeSpan(-3661), -1, -1, -1), "testOstreamOp 12");
+
+    test(testIstreamOp(-1, -1, -1), "testIstreamOp 1");
+    test(testIstreamOp(1, -1, 1), "testIstreamOp 2");
+    test(testIstreamOp(-15, 25, 27), "testIstreamOp 3");
+    test(testIstreamOp(3600, 56, 56), "testIstreamOp 4");
+    test(testIstreamOp(0, -13432, 12421), "testIstreamOp 5");
+    test(testIstreamOp(0, 0, 0), "testIstreamOp 6");
+    test(testIstreamOp(-15, 12341, -12421), "testIstreamOp 7");
+    test(testIstreamOp(124, 1235, 1245), "testIstreamOp 8");
+    test(testIstreamOp(-12521, -12521, -12512), "testIstreamOp 9");
+
     // Testistream();
     cout << totalFailedTests << " Failed Tests" << endl;
     cout << "====================[Testing Complete]====================" << endl;

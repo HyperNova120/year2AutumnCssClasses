@@ -50,11 +50,11 @@ ostream &operator<<(ostream &os, const TimeSpan &obj)
 // takes istream input as int int int
 istream &operator>>(istream &is, TimeSpan &obj)
 {
-    int hrs, mins, secs;
     try
     {
+        int hrs, mins, secs;
         is >> hrs >> mins >> secs;
-        obj.SetFromTotalSeconds((hrs * 3600) + (mins * 60) + secs);
+        obj.set_time(hrs, mins, secs);
     }
     catch (const std::exception &e)
     {
@@ -79,13 +79,13 @@ TimeSpan TimeSpan::operator-() const
     return TimeSpan(TotalSeconds() * -1);
 }
 
-TimeSpan TimeSpan::operator++(const int secondAdd)
+TimeSpan &TimeSpan::operator++()
 {
     SetFromTotalSeconds(TotalSeconds() + 1);
     return *this;
 };
 
-TimeSpan TimeSpan::operator--(const int secondRemove)
+TimeSpan &TimeSpan::operator--()
 {
     SetFromTotalSeconds(TotalSeconds() - 1);
     return *this;
