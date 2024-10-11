@@ -399,6 +399,7 @@ void test(bool result, string title)
     (result) ? cout << "[PASS]" << endl : cout << "[FAIL]" << endl;
 }
 
+
 int main()
 {
     cout << "=================[Testing TimeSpan Class]=================" << endl;
@@ -440,7 +441,6 @@ int main()
     test(testOstreamOp(TimeSpan(0, 60, 60), 1, 1, 0), "testOstreamOp 10");
     test(testOstreamOp(TimeSpan(0, 61, 61), 1, 2, 1), "testOstreamOp 11");
     test(testOstreamOp(TimeSpan(-3661), -1, -1, -1), "testOstreamOp 12");
-
     test(testIstreamOp(-1, -1, -1), "testIstreamOp 1");
     test(testIstreamOp(1, -1, 1), "testIstreamOp 2");
     test(testIstreamOp(-15, 25, 27), "testIstreamOp 3");
@@ -450,6 +450,9 @@ int main()
     test(testIstreamOp(-15, 12341, -12421), "testIstreamOp 7");
     test(testIstreamOp(124, 1235, 1245), "testIstreamOp 8");
     test(testIstreamOp(-12521, -12521, -12512), "testIstreamOp 9");
+
+
+    
 
     // Testistream();
     cout << totalFailedTests << " Failed Tests" << endl;

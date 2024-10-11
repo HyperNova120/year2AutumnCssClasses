@@ -79,6 +79,12 @@ TimeSpan TimeSpan::operator-() const
     return TimeSpan(TotalSeconds() * -1);
 }
 
+TimeSpan &TimeSpan::operator=(const TimeSpan &obj)
+{
+    SetFromTotalSeconds(obj.TotalSeconds());
+    return *this;
+}
+
 TimeSpan &TimeSpan::operator++()
 {
     SetFromTotalSeconds(TotalSeconds() + 1);
@@ -150,3 +156,4 @@ int TimeSpan::TotalSeconds() const
 {
     return seconds_ + (minutes_ * 60) + (hours_ * 3600);
 }
+
