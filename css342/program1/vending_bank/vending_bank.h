@@ -10,8 +10,12 @@ public:
     ~VendingBank();
     VendingBank();
     VendingBank(int id);
+    VendingBank(int id, int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+    VendingBank(int id, int pennys[], int nickels[], int dimes[], int quarters[], int half_dollars[], int dollar_coins[]);
     // getters-setters
     int id() const;
+
+    void reset();
 
     // returns if the current transaction can cover a given cost
     bool does_current_transaction_cover(const int cost_pennys, const int cost_nickels, const int cost_dimes, const int cost_quarters,
@@ -62,5 +66,6 @@ private:
     long quarter_;
     long half_dollar_;
     long dollar_coin_;
+    /**/
 };
 #endif

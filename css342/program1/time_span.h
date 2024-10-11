@@ -27,8 +27,6 @@ public:
     TimeSpan &operator=(const TimeSpan &obj);
     TimeSpan &operator++();
     TimeSpan &operator--();
-    TimeSpan &operator++(int value);
-    TimeSpan &operator--(int value);
     TimeSpan operator-() const;
     TimeSpan operator-=(const TimeSpan &obj);
     TimeSpan operator+=(const TimeSpan &obj);
