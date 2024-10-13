@@ -35,6 +35,27 @@ public:
     void AddToTransactionAmount(int pennys[], int nickels[], int dimes[], int quarters[], int half_dollars[], int dollar_coins[]);
     void RemoveFromTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
     void RemoveFromTransactionAmount(int pennys[], int nickels[], int dimes[], int quarters[], int half_dollars[], int dollar_coins[]);
+    void SetTransactionAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
+
+    //current transaction getters
+    long transaction_penny() const;
+    long transaction_nickle() const;
+    long transaction_dime() const;
+    long transaction_quarter() const;
+    long transaction_half_dollar() const;
+    long transaction_dollar_coin() const;
+
+
+
+    //currency reservoir getters
+    long penny() const;
+    long nickle() const;
+    long dime() const;
+    long quarter() const;
+    long half_dollar() const;
+    long dollar_coin() const;
+
+    void SetCurrencyReservoirAmount(int pennys, int nickels, int dimes, int quarters, int half_dollars, int dollar_coins);
 
     // FILL IN FURTHER PUBLIC FUNCTIONS HERE private :
 private:
