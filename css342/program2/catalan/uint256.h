@@ -40,10 +40,10 @@ public:
 
     bitset<256> GetBitSet() const;
 
-    static UInt256 GetBitAndValue();
+    static UInt256 GetBitwiseAndValue();
 
-    __uint128_t high();
-    __uint128_t low();
+    __uint128_t high() const;
+    __uint128_t low() const;
 
 private:
     __uint128_t low_;

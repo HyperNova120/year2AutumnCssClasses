@@ -37,7 +37,7 @@ UInt256 &UInt256::operator+=(const UInt256 &other)
     __uint128_t old_low = low_;
     low_ += other.low_;
     high_ += other.high_;
-    if (old_low > low_)
+    if (low_ < old_low)
     {
         high_++;
     }
@@ -46,7 +46,7 @@ UInt256 &UInt256::operator+=(const UInt256 &other)
 
 UInt256 &UInt256::operator+(const UInt256 &other) const
 {
-    UInt256 tmp(*this); 
+    UInt256 tmp(*this);
     return tmp += other;
 }
 
@@ -79,6 +79,7 @@ bool UInt256::operator==(const UInt256 &other) const
 
 UInt256 UInt256::operator*(const UInt256 &other)
 {
+    
     // low bits
     // low bits 64 most significant bits
     __uint128_t low_Upper = low_ >> 64;
@@ -104,6 +105,8 @@ UInt256 UInt256::operator*(const UInt256 &other)
     cc += ((tmp + OL_TL) < tmp);
     __uint128_t carry = TU_OU + (TU_OL >> 64) + (OU_TL >> 64);
     return UInt256(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
+
+    
 }
 
 UInt256 UInt256::operator<<(int shift) const
@@ -150,7 +153,7 @@ UInt256 UInt256::operator>>(int shift) const
         {
             tmp.low_ |= digitAdder;
         }
-        }
+    }
     return tmp;
 }
 
@@ -182,19 +185,19 @@ bitset<256> UInt256::GetBitSet() const
     return tmp;
 }
 
-UInt256 UInt256::GetBitAndValue()
+UInt256 UInt256::GetBitwiseAndValue()
 {
     __uint128_t tmp = ULLONG_MAX;
     tmp <<= 64;
     tmp |= ULLONG_MAX;
     return UInt256(0, tmp);
 }
-__uint128_t UInt256::high()
+__uint128_t UInt256::high() const
 {
     return high_;
 }
 
-__uint128_t UInt256::low()
+__uint128_t UInt256::low() const
 {
     return low_;
 }

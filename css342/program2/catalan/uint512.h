@@ -42,8 +42,8 @@ public:
 
     static UInt512 GetBitAndValue();
 
-    UInt256 high();
-    UInt256 low();
+    UInt256 high() const;
+    UInt256 low() const;
 
 private:
     UInt256 low_;

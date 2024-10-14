@@ -83,27 +83,28 @@ UInt512 UInt512::operator*(const UInt512 &other)
     // low bits 128 most significant bits
     UInt256 low_Upper = low_ >> 128;
     // low bits 128 least significant bits
-    UInt256 low_Lower = low_ & UInt256::GetBitAndValue();
+    UInt256 low_Lower = low_ & UInt256::GetBitwiseAndValue();
 
     // other low bits
     // high bits 128 most significant bits
     UInt256 other_low_Upper = other.low_ >> 128;
     // high bits 128 least significant bits
-    UInt256 other_low_Lower = other.low_ & UInt256::GetBitAndValue();
+    UInt256 other_low_Lower = other.low_ & UInt256::GetBitwiseAndValue();
 
     UInt256 TU_OU = low_Upper * other_low_Upper;
     UInt256 TU_OL = low_Upper * other_low_Lower;
     UInt256 OU_TL = other_low_Upper * low_Lower;
     UInt256 OL_TL = other_low_Lower * low_Lower;
 
-    UInt256 tmp = (TU_OL & UInt256::GetBitAndValue()) << 128;
-    UInt256 tmp2 = (OU_TL & UInt256::GetBitAndValue()) << 128;
+    UInt256 tmp = (TU_OL & UInt256::GetBitwiseAndValue()) << 128;
+    UInt256 tmp2 = (OU_TL & UInt256::GetBitwiseAndValue()) << 128;
 
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
     UInt256 carry = TU_OU + (TU_OL >> 128) + (OU_TL >> 128);
     return UInt512(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
+
 }
 
 UInt512 UInt512::operator<<(int shift) const
@@ -180,12 +181,12 @@ UInt512 UInt512::GetBitAndValue()
     return UInt512(0, tmp);
 }
 
-UInt256 UInt512::high()
+UInt256 UInt512::high() const
 {
     return high_;
 }
 
-UInt256 UInt512::low()
+UInt256 UInt512::low() const
 {
     return low_;
 }
