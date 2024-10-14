@@ -1,12 +1,14 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <climits>
+#include "uint256.h"
 
 using namespace std;
 
-map<__uint128_t, __uint128_t> knownNumbers_;
+map<UInt256, UInt256> knownNumbers_;
 
-__uint128_t FindCatalanNumber(__uint128_t n)
+UInt256 FindCatalanNumber(unsigned long long n)
 {
     if (n == 0)
     {
@@ -19,41 +21,13 @@ __uint128_t FindCatalanNumber(__uint128_t n)
         return knownNumbers_[n];
     }
 
-    __uint128_t sum_ = 0;
-    for (__uint128_t i = 0; i < n; i++)
+    UInt256 sum_ = 0;
+    for (unsigned long long i = 0; i < n; i++)
     {
         sum_ += FindCatalanNumber(i) * FindCatalanNumber((n - 1) - i);
     }
     knownNumbers_[n] = sum_;
     return sum_;
-}
-
-ostream &operator<<(std::ostream &dest, __uint128_t value)
-{
-    std::ostream::sentry s(dest);
-    if (s)
-    {
-        __uint128_t tmp = value < 0 ? -value : value;
-        char buffer[128];
-        char *d = std::end(buffer);
-        do
-        {
-            --d;
-            *d = "0123456789"[tmp % 10];
-            tmp /= 10;
-        } while (tmp != 0);
-        if (value < 0)
-        {
-            --d;
-            *d = '-';
-        }
-        int len = std::end(buffer) - d;
-        if (dest.rdbuf()->sputn(d, len) != len)
-        {
-            dest.setstate(std::ios_base::badbit);
-        }
-    }
-    return dest;
 }
 
 int main(int argc, char *argv[])
@@ -66,19 +40,19 @@ int main(int argc, char *argv[])
 
     stringstream ss;
     ss << argv[1];
-    int n_;
-    ss >> n_;
+    int n;
+    ss >> n;
 
-    if (n_ < 0)
+    if (n < 0)
     {
         cout << "Catalan: Malformed Input; Cannot Be Negative" << endl;
         return -1;
     }
-    else if (n_ > 69)
+    else if (n > 133)
     {
         cout << "Catalan: Input Too Large, Will Cause Overflow" << endl;
         return -1;
     }
-
-    cout << FindCatalanNumber(n_) << endl;
+    UInt256 result = FindCatalanNumber(n);
+    cout << result << endl;
 }
