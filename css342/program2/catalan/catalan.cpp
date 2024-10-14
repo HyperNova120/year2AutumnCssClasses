@@ -3,12 +3,13 @@
 #include <sstream>
 #include <climits>
 #include "uint256.h"
+#include "uint512.h"
 
 using namespace std;
 
-map<UInt256, UInt256> knownNumbers_;
+map<UInt512, UInt512> knownNumbers_;
 
-UInt256 FindCatalanNumber(unsigned long long n)
+UInt512 FindCatalanNumber(unsigned long long n)
 {
     if (n == 0)
     {
@@ -21,7 +22,7 @@ UInt256 FindCatalanNumber(unsigned long long n)
         return knownNumbers_[n];
     }
 
-    UInt256 sum_ = 0;
+    UInt512 sum_ = 0;
     for (unsigned long long i = 0; i < n; i++)
     {
         sum_ += FindCatalanNumber(i) * FindCatalanNumber((n - 1) - i);
@@ -53,6 +54,26 @@ int main(int argc, char *argv[])
         cout << "Catalan: Input Too Large, Will Cause Overflow" << endl;
         return -1;
     }
-    UInt256 result = FindCatalanNumber(n);
+    UInt512 result = FindCatalanNumber(n);
     cout << result << endl;
+
+    /* UInt256 shiftTest(0, ULLONG_MAX);
+    cout << shiftTest << endl;
+    cout << "after Shift" << endl;
+    shiftTest = shiftTest << 128;
+    cout << shiftTest << endl;
+    cout << "after Shift" << endl;
+    shiftTest = shiftTest >> 128;
+    cout << shiftTest << endl;
+    UInt256 andTest = shiftTest << 1;
+    cout << "andTest" << endl;
+    cout << andTest << endl;
+    andTest = andTest & shiftTest;
+    cout << "after andTest" << endl;
+    cout << andTest << endl; */
+
+    /*  UInt256 test(ULLONG_MAX);
+     cout << test << endl;
+     test = test << 128;
+     cout << test << endl; */
 }

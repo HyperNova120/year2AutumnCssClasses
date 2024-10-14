@@ -1,9 +1,10 @@
 #ifndef UINT256_H_
 #define UINT256_H_
 #include <iostream>
+#include <bitset>
 using namespace std;
 
-const bool KDEBUG = false;
+const bool KDEBUG = true;
 class UInt256
 {
 public:
@@ -14,26 +15,38 @@ public:
 
     bool operator<(const UInt256 &other) const;
     bool operator<(const __uint128_t value) const;
-    bool operator() (const UInt256 &other, const UInt256 &other2) const;
+    bool operator()(const UInt256 &other, const UInt256 &other2) const;
 
     UInt256 &operator+=(const UInt256 &other);
+    UInt256 &operator+(const UInt256 &other) const;
     UInt256 &operator++(int value);
 
     UInt256 &operator-(const UInt256 &other);
     UInt256 &operator+(const __uint128_t value);
 
-    bool operator==(const UInt256 &other);
-    bool operator==(const __uint128_t value);
-    bool operator!=(const UInt256 &other);
-    bool operator!=(const __uint128_t value);
+    bool operator==(const UInt256 &other) const;
+    bool operator==(const __uint128_t value) const;
+    bool operator!=(const UInt256 &other) const;
+    bool operator!=(const __uint128_t value) const;
 
     UInt256 operator*(const UInt256 &other);
 
-    friend ostream &operator<<(ostream &os, UInt256 &obj);
+    friend ostream &operator<<(ostream &os, const UInt256 &obj);
+
+    UInt256 operator<<(int shift) const;
+    UInt256 operator>>(int shift) const;
+    UInt256 operator&(const UInt256 &other) const;
+
+    bitset<256> GetBitSet() const;
+
+    static UInt256 GetBitAndValue();
+
+    __uint128_t high();
+    __uint128_t low();
 
 private:
-    __uint128_t high_;
     __uint128_t low_;
+    __uint128_t high_;
 };
 
 #endif // UINT256_H_
