@@ -4,7 +4,7 @@
 #include <bitset>
 using namespace std;
 
-const bool KDEBUG = true;
+const bool KDEBUG = false;
 class UInt256
 {
 public:
@@ -18,12 +18,14 @@ public:
     bool operator()(const UInt256 &other, const UInt256 &other2) const;
 
     UInt256 &operator+=(const UInt256 &other);
-    UInt256 &operator+(const UInt256 &other) const;
-    UInt256 &operator+(const __uint128_t &other) const;
+    UInt256 operator+(const UInt256 &other) const;
+    UInt256 operator+(const __uint128_t &other) const;
     UInt256 &operator++(int value);
 
-    UInt256 &operator-(const UInt256 &other);
-    UInt256 &operator+(const __uint128_t value);
+    UInt256 operator-(const UInt256 &other);
+    UInt256 operator+(const __uint128_t value);
+
+    UInt256 &operator=(const UInt256 &other);
 
     bool operator==(const UInt256 &other) const;
     bool operator==(const __uint128_t value) const;

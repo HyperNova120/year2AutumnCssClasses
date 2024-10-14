@@ -44,15 +44,15 @@ UInt256 &UInt256::operator+=(const UInt256 &other)
     return *this;
 }
 
-UInt256 &UInt256::operator+(const UInt256 &other) const
+UInt256 UInt256::operator+(const UInt256 &other) const
 {
     UInt256 tmp(*this);
     return tmp += other;
 }
 
-UInt256 &UInt256::operator+(const __uint128_t &value) const
+UInt256 UInt256::operator+(const __uint128_t &value) const
 {
-    UInt256 tmp = *this + UInt256(value);
+    UInt256 tmp(*this + UInt256(value));
     return tmp;
 }
 
@@ -62,7 +62,7 @@ UInt256 &UInt256::operator++(int value)
     return *this;
 }
 
-UInt256 &UInt256::operator+(const __uint128_t value)
+UInt256 UInt256::operator+(const __uint128_t value)
 {
     return *this += UInt256(value);
 }
@@ -269,4 +269,11 @@ ostream &operator<<(ostream &os, const UInt256 &obj)
     reverse(currentValue.begin(), currentValue.end());
     os << currentValue;
     return os;
+}
+
+UInt256 &UInt256::operator=(const UInt256 &other)
+{
+    low_ = other.low_;
+    high_ = other.high_;
+    return *this;
 }
