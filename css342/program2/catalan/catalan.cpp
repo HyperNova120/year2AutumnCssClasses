@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
         cout << "Catalan: Input Too Large, Will Cause Overflow" << endl;
         return -1;
     }
-    UInt512 result = FindCatalanNumber(n);
-    cout << result << endl;
+    /* UInt512 result = FindCatalanNumber(n);
+    cout << result << endl; */
 
     /* UInt256 shiftTest(0, ULLONG_MAX);
     cout << shiftTest << endl;
@@ -72,8 +72,8 @@ int main(int argc, char *argv[])
     cout << "after andTest" << endl;
     cout << andTest << endl; */
 
-    /*  UInt256 test(ULLONG_MAX);
-     cout << test << endl;
-     test = test << 128;
-     cout << test << endl; */
+    UInt512 test(5);
+    UInt512 test2(5);
+    test = test * test2;
+    cout << test << endl;
 }

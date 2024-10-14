@@ -19,6 +19,7 @@ public:
 
     UInt256 &operator+=(const UInt256 &other);
     UInt256 &operator+(const UInt256 &other) const;
+    UInt256 &operator+(const __uint128_t &other) const;
     UInt256 &operator++(int value);
 
     UInt256 &operator-(const UInt256 &other);

@@ -46,8 +46,14 @@ UInt256 &UInt256::operator+=(const UInt256 &other)
 
 UInt256 &UInt256::operator+(const UInt256 &other) const
 {
-    UInt256 tmp(*this);
+    UInt256 tmp(*this); 
     return tmp += other;
+}
+
+UInt256 &UInt256::operator+(const __uint128_t &value) const
+{
+    UInt256 tmp = *this + UInt256(value);
+    return tmp;
 }
 
 UInt256 &UInt256::operator++(int value)
@@ -103,16 +109,21 @@ UInt256 UInt256::operator*(const UInt256 &other)
 UInt256 UInt256::operator<<(int shift) const
 {
     UInt256 tmp;
-    tmp.high_ = high_ << shift;
+    tmp.high_ = high_;
     tmp.low_ = low_;
     for (int i = 0; i < shift; i++)
     {
+        bool add = false;
         if (tmp.low_ >> 127 == 1)
         {
-            tmp.high_++;
+            add = true;
         }
         tmp.low_ <<= 1;
         tmp.high_ <<= 1;
+        if (add)
+        {
+            tmp.high_++;
+        }
     }
     return tmp;
 }
@@ -121,20 +132,25 @@ UInt256 UInt256::operator>>(int shift) const
 {
     UInt256 tmp;
     tmp.high_ = high_;
-    tmp.low_ = low_ >> shift;
+    tmp.low_ = low_;
     __uint128_t mask = 1;
     __uint128_t digitAdder = 1;
     digitAdder <<= 127;
 
     for (int i = 0; i < shift; i++)
     {
+        bool add = false;
         if (tmp.high_ & mask == 1)
         {
-            tmp.low_ |= digitAdder;
+            add = true;
         }
         tmp.high_ >>= 1;
         tmp.low_ >>= 1;
-    }
+        if (add)
+        {
+            tmp.low_ |= digitAdder;
+        }
+        }
     return tmp;
 }
 
