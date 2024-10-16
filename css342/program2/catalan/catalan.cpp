@@ -15,7 +15,6 @@ UInt512 FindCatalanNumber(unsigned long long n)
     {
         return 1;
     }
-
     if (knownNumbers_.find(n) != knownNumbers_.end())
     {
         // cout << "known number" << endl;
@@ -49,17 +48,11 @@ int main(int argc, char *argv[])
         cout << "Catalan: Malformed Input; Cannot Be Negative" << endl;
         return -1;
     }
-    else if (n > 262)
+    else if (n > 262) // yes this has been tested, 512bit is big enough and correct until n=262
     {
         cout << "Catalan: Input Too Large, Will Cause Overflow" << endl;
         return -1;
     }
     UInt512 result = FindCatalanNumber(n);
     cout << result << endl;
-
-    /*
-        UInt512 test(5);
-        UInt512 test2(5);
-        test = test * test2;
-        cout << test << endl; */
 }

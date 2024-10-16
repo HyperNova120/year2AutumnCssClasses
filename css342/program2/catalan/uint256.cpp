@@ -79,7 +79,7 @@ bool UInt256::operator==(const UInt256 &other) const
 
 UInt256 UInt256::operator*(const UInt256 &other)
 {
-    
+
     // low bits
     // low bits 64 most significant bits
     __uint128_t low_Upper = low_ >> 64;
@@ -105,8 +105,6 @@ UInt256 UInt256::operator*(const UInt256 &other)
     cc += ((tmp + OL_TL) < tmp);
     __uint128_t carry = TU_OU + (TU_OL >> 64) + (OU_TL >> 64);
     return UInt256(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
-
-    
 }
 
 UInt256 UInt256::operator<<(int shift) const
