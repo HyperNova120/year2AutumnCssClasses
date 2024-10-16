@@ -44,7 +44,6 @@ int main(int argc, char *argv[])
 
     GreedyRobot gr;
     gr.CalculatePaths(max__move_distance_, robot_pos, target_pos);
-    int smallest_path = INT32_MAX;
 
     vector<string> temp;
     for (string s : gr.knownPaths())
