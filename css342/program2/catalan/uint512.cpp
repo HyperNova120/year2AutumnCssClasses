@@ -13,7 +13,7 @@ UInt512::UInt512(const UInt512 &other)
     high_ = other.high_;
 }
 
-UInt512::UInt512(KBase_Type value)
+UInt512::UInt512(Kbase_type_ value)
 {
     low_ = value;
     high_ = 0;
@@ -22,10 +22,10 @@ UInt512::UInt512(KBase_Type value)
 UInt512::UInt512(__uint128_t value)
 {
     high_ = 0;
-    low_ = KBase_Type(value);
+    low_ = Kbase_type_(value);
 }
 
-UInt512::UInt512(KBase_Type high, KBase_Type low)
+UInt512::UInt512(Kbase_type_ high, Kbase_type_ low)
 {
     high_ = high;
     low_ = low;
@@ -43,7 +43,7 @@ bool UInt512::operator<(const __uint128_t value) const
 
 UInt512 &UInt512::operator+=(const UInt512 &other)
 {
-    KBase_Type old_low = low_;
+    Kbase_type_ old_low = low_;
     low_ += other.low_;
     high_ += other.high_;
     if (low_ < old_low)
@@ -55,60 +55,60 @@ UInt512 &UInt512::operator+=(const UInt512 &other)
 
 UInt512 UInt512::operator*(const UInt512 &other)
 {
-    KBase_Type mask = KBase_Type::GetBitwiseAndValue();
+    Kbase_type_ mask = Kbase_type_::GetBitwiseAndValue();
     // low bits
     // low bits (KBase_Size / 2) most significant bits
-    KBase_Type low_Upper = low_ >> (KBase_Size / 2);
+    Kbase_type_ low_upper = low_ >> (Kbase_size_ / 2);
     // low bits (KBase_Size / 2) least significant bits
-    KBase_Type low_Lower = low_ & mask;
+    Kbase_type_ low_lower = low_ & mask;
 
     // other low bits
     // high bits (KBase_Size / 2) most significant bits
-    KBase_Type other_low_Upper = other.low_ >> (KBase_Size / 2);
+    Kbase_type_ other_low_upper = other.low_ >> (Kbase_size_ / 2);
     // high bits (KBase_Size / 2) least significant bits
-    KBase_Type other_low_Lower = other.low_ & mask;
+    Kbase_type_ other_low_lower = other.low_ & mask;
 
     // KBase_Type TU_OU = low_Upper * other_low_Upper;
-    KBase_Type TU_OL = low_Upper * other_low_Lower;
-    KBase_Type OU_TL = other_low_Upper * low_Lower;
-    KBase_Type OL_TL = other_low_Lower * low_Lower;
+    Kbase_type_ TU_OL = low_upper * other_low_lower;
+    Kbase_type_ OU_TL = other_low_upper * low_lower;
+    Kbase_type_ OL_TL = other_low_lower * low_lower;
 
-    KBase_Type tmp = (TU_OL & mask) << (KBase_Size / 2);
-    KBase_Type tmp2 = (OU_TL & mask) << (KBase_Size / 2);
+    Kbase_type_ tmp = (TU_OL & mask) << (Kbase_size_ / 2);
+    Kbase_type_ tmp2 = (OU_TL & mask) << (Kbase_size_ / 2);
 
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
-    KBase_Type carry = low_Upper * other_low_Upper;
-    carry += (TU_OL >> (KBase_Size / 2));
-    carry += (OU_TL >> (KBase_Size / 2));
+    Kbase_type_ carry = low_upper * other_low_upper;
+    carry += (TU_OL >> (Kbase_size_ / 2));
+    carry += (OU_TL >> (Kbase_size_ / 2));
 
     return UInt512((this->high_ * other.low_) + (this->low_ * other.high_) + carry + cc, tmp += OL_TL);
 }
 
 bitset<512> UInt512::GetBitSet() const
 {
-    bitset<KBase_Size> lowerBitSet(low_.GetBitSet());
-    bitset<KBase_Size> HigherBitSet(high_.GetBitSet());
+    bitset<Kbase_size_> lower_bit_set(low_.GetBitSet());
+    bitset<Kbase_size_> higher_bit_set(high_.GetBitSet());
     bitset<512> tmp;
-    for (int i = 0; i < lowerBitSet.size(); i++)
+    for (int i = 0; i < lower_bit_set.size(); i++)
     {
-        tmp[i] = lowerBitSet[i];
+        tmp[i] = lower_bit_set[i];
     }
 
-    for (int i = 0; i < HigherBitSet.size(); i++)
+    for (int i = 0; i < higher_bit_set.size(); i++)
     {
-        tmp[i + KBase_Size] = HigherBitSet[i];
+        tmp[i + Kbase_size_] = higher_bit_set[i];
     }
     return tmp;
 }
 
-UInt512::KBase_Type UInt512::high() const
+UInt512::Kbase_type_ UInt512::high() const
 {
     return high_;
 }
 
-UInt512::KBase_Type UInt512::low() const
+UInt512::Kbase_type_ UInt512::low() const
 {
     return low_;
 }
@@ -123,17 +123,17 @@ ostream &operator<<(ostream &os, const UInt512 &obj)
     {
         os << "Bits:" << set << "\n";
     }
-    string currentAdd = "1";
-    string currentValue = "0";
+    string current_add = "1";
+    string current_value = "0";
     for (int i = 0; i < set.size(); i++)
     {
         if (set[i] == 1)
         {
-            currentValue = addStringDec(currentValue, currentAdd);
+            current_value = addStringDec(current_value, current_add);
         }
-        currentAdd = addStringDec(currentAdd, currentAdd);
+        current_add = addStringDec(current_add, current_add);
     }
-    reverse(currentValue.begin(), currentValue.end());
-    os << currentValue;
+    reverse(current_value.begin(), current_value.end());
+    os << current_value;
     return os;
 }

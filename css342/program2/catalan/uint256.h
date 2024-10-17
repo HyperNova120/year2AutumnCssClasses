@@ -11,31 +11,31 @@ string addStringDec(string base, string add);
 class UInt256
 {
 public:
-    using KBase_Type = __uint128_t;
-    static const int KBase_Size = 128;
+    using Kbase_type_ = __uint128_t;
+    static const int Kbase_size_ = 128;
     UInt256();
     UInt256(const UInt256 &other);
-    UInt256(KBase_Type value);
-    UInt256(KBase_Type high, KBase_Type low);
+    UInt256(Kbase_type_ value);
+    UInt256(Kbase_type_ high, Kbase_type_ low);
 
     bool operator<(const UInt256 &other) const;
-    bool operator<(const KBase_Type value) const;
+    bool operator<(const Kbase_type_ value) const;
     bool operator()(const UInt256 &other, const UInt256 &other2) const;
 
     UInt256 &operator+=(const UInt256 &other);
     UInt256 operator+(const UInt256 &other) const;
-    UInt256 operator+(const KBase_Type &other) const;
+    UInt256 operator+(const Kbase_type_ &other) const;
     UInt256 &operator++(int value);
 
     UInt256 operator-(const UInt256 &other);
-    UInt256 operator+(const KBase_Type value);
+    UInt256 operator+(const Kbase_type_ value);
 
     UInt256 &operator=(const UInt256 &other);
 
     bool operator==(const UInt256 &other) const;
-    bool operator==(const KBase_Type value) const;
+    bool operator==(const Kbase_type_ value) const;
     bool operator!=(const UInt256 &other) const;
-    bool operator!=(const KBase_Type value) const;
+    bool operator!=(const Kbase_type_ value) const;
 
     UInt256 operator*(const UInt256 &other);
 
@@ -52,12 +52,12 @@ public:
 
     static UInt256 GetBitwiseAndValue();
 
-    KBase_Type high() const;
-    KBase_Type low() const;
+    Kbase_type_ high() const;
+    Kbase_type_ low() const;
 
 private:
-    KBase_Type low_;
-    KBase_Type high_;
+    Kbase_type_ low_;
+    Kbase_type_ high_;
 };
 
 #endif // UINT256_H_

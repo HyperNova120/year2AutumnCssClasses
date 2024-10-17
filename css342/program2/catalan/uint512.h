@@ -10,14 +10,14 @@ using namespace std;
 class UInt512
 {
 public:
-    using KBase_Type = UInt256;
-    static const int KBase_Size = 256;
+    using Kbase_type_ = UInt256;
+    static const int Kbase_size_ = 256;
 
     UInt512();
     UInt512(const UInt512 &other);
-    UInt512(KBase_Type value);
+    UInt512(Kbase_type_ value);
     UInt512(__uint128_t value);
-    UInt512(KBase_Type high, KBase_Type low);
+    UInt512(Kbase_type_ high, Kbase_type_ low);
 
     bool operator<(const UInt512 &other) const;
     bool operator<(const __uint128_t value) const;
@@ -30,12 +30,12 @@ public:
 
     bitset<512> GetBitSet() const;
 
-    KBase_Type high() const;
-    KBase_Type low() const;
+    Kbase_type_ high() const;
+    Kbase_type_ low() const;
 
 private:
-    KBase_Type low_;
-    KBase_Type high_;
+    Kbase_type_ low_;
+    Kbase_type_ high_;
 };
 
 #endif // UInt512_H_
