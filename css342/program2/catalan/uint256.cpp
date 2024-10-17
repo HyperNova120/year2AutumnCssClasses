@@ -109,48 +109,53 @@ UInt256 UInt256::operator*(const UInt256 &other)
 
 UInt256 UInt256::operator<<(int shift) const
 {
-    UInt256 tmp;
-    tmp.high_ = high_;
-    tmp.low_ = low_;
-    for (int i = 0; i < shift; i++)
+    UInt256 tmp(high_, low_);
+    if (*this == 0)
     {
-        bool add = false;
-        if (tmp.low_ >> 127 == 1)
-        {
-            add = true;
-        }
-        tmp.low_ <<= 1;
-        tmp.high_ <<= 1;
-        if (add)
-        {
-            tmp.high_++;
-        }
+        return tmp;
+    }
+
+    __uint128_t mask = ULLONG_MAX;
+    while (shift > 0)
+    {
+        __uint128_t high_high = tmp.high_ >> 64;
+        __uint128_t high_low = tmp.high_ & mask;
+        __uint128_t low_high = tmp.low_ >> 64;
+        __uint128_t low_low = tmp.low_ & mask;
+        high_high <<= ((shift > 64) ? 64 : shift);
+        high_low <<= ((shift > 64) ? 64 : shift);
+        low_high <<= ((shift > 64) ? 64 : shift);
+        low_low <<= ((shift > 64) ? 64 : shift);
+        shift -= 64;
+        tmp.high_ = ((high_high << 64) + high_low + (low_high >> 64));
+        tmp.low_ = ((low_high << 64) + low_low);
     }
     return tmp;
 }
 
 UInt256 UInt256::operator>>(int shift) const
 {
-    UInt256 tmp;
-    tmp.high_ = high_;
-    tmp.low_ = low_;
-    __uint128_t mask = 1;
-    __uint128_t digitAdder = 1;
-    digitAdder <<= 127;
-
-    for (int i = 0; i < shift; i++)
+    
+    UInt256 tmp(high_, low_);
+    if (*this == 0)
     {
-        bool add = false;
-        if (tmp.high_ & mask == 1)
-        {
-            add = true;
-        }
-        tmp.high_ >>= 1;
-        tmp.low_ >>= 1;
-        if (add)
-        {
-            tmp.low_ |= digitAdder;
-        }
+        return tmp;
+    }
+    __uint128_t mask = ULLONG_MAX;
+    mask <<= 64;
+    while (shift > 0)
+    {
+        __uint128_t high_high = tmp.high_ & mask;
+        __uint128_t high_low = tmp.high_  << 64;
+        __uint128_t low_high = tmp.low_ & mask;
+        __uint128_t low_low = tmp.low_  << 64;
+        high_high >>= ((shift > 64) ? 64 : shift);
+        high_low >>= ((shift > 64) ? 64 : shift);
+        low_high >>= ((shift > 64) ? 64 : shift);
+        low_low >>= ((shift > 64) ? 64 : shift);
+        shift -= 64;
+        tmp.high_ = (high_high + (high_low >> 64));
+        tmp.low_ = ((high_low << 64) + low_high + (low_low >> 64));
     }
     return tmp;
 }
@@ -190,6 +195,7 @@ UInt256 UInt256::GetBitwiseAndValue()
     tmp |= ULLONG_MAX;
     return UInt256(0, tmp);
 }
+
 __uint128_t UInt256::high() const
 {
     return high_;
@@ -221,7 +227,7 @@ bool UInt256::operator()(const UInt256 &other, const UInt256 &other2) const
     return other < other2;
 }
 
-string addStringDec256(string base, string add)
+string addStringDec(string base, string add)
 {
     string currentValue = "";
     int carry = 0;
@@ -260,9 +266,9 @@ ostream &operator<<(ostream &os, const UInt256 &obj)
     {
         if (set[i] == 1)
         {
-            currentValue = addStringDec256(currentValue, currentAdd);
+            currentValue = addStringDec(currentValue, currentAdd);
         }
-        currentAdd = addStringDec256(currentAdd, currentAdd);
+        currentAdd = addStringDec(currentAdd, currentAdd);
     }
     reverse(currentValue.begin(), currentValue.end());
     os << currentValue;

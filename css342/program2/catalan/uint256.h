@@ -4,7 +4,10 @@
 #include <bitset>
 using namespace std;
 
-const bool KDEBUG = false;
+const bool KDEBUG = true;
+
+string addStringDec(string base, string add);
+
 class UInt256
 {
 public:

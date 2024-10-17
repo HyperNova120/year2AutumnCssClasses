@@ -27,11 +27,12 @@ class GreedyRobot
 public:
     int CalculateShortestPossibleDistance(Point from, Point to);
     void CalculatePaths(int max_distance, Point from, Point to);
-    void findPaths(Point from, Point to, string curPath, Direction lastDir, int sameStepsRemaining);
     
     set<string> knownPaths();
 private:
     set<string> knownPaths_;
+    Direction FindLeastLikelyDirection(Point from, Point to);
+    void findPaths(Point from, Point to, string curPath, Direction lastDir, int sameStepsRemaining);
     int max_path_length_;
     int max_move_distance_;
 };

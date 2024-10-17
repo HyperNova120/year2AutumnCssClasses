@@ -19,11 +19,11 @@ public:
     bool operator()(const UInt512 &other, const UInt512 &other2) const;
 
     UInt512 &operator+=(const UInt512 &other);
-    UInt512 &operator+(const UInt512 &other) const;
+    UInt512 operator+(const UInt512 &other) const;
     UInt512 &operator++(int value);
 
-    UInt512 &operator-(const UInt512 &other);
-    UInt512 &operator+(const UInt256 value);
+    UInt512 operator-(const UInt512 &other);
+    UInt512 operator+(const UInt256 value);
 
     bool operator==(const UInt512 &other) const;
     bool operator==(const UInt256 value) const;
@@ -32,7 +32,7 @@ public:
 
     UInt512 operator*(const UInt512 &other);
 
-    friend ostream &operator<<(ostream &os, UInt512 &obj);
+    friend ostream &operator<<(ostream &os, const UInt512 &obj);
 
     UInt512 operator<<(int shift) const;
     UInt512 operator>>(int shift) const;

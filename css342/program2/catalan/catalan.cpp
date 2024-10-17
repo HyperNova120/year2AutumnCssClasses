@@ -8,6 +8,8 @@
 using namespace std;
 
 map<UInt512, UInt512> knownNumbers_;
+long calculations = 0;
+long lookups = 0;
 
 UInt512 FindCatalanNumber(unsigned long long n)
 {
@@ -18,9 +20,10 @@ UInt512 FindCatalanNumber(unsigned long long n)
     if (knownNumbers_.find(n) != knownNumbers_.end())
     {
         // cout << "known number" << endl;
+        lookups++;
         return knownNumbers_[n];
     }
-
+    calculations++;
     UInt512 sum_ = 0;
     for (unsigned long long i = 0; i < n; i++)
     {
@@ -34,7 +37,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        cout << "Catalan: Malformed Input; Missing Input Parameter" << endl;
+        cout << "Catalan: Malformed Input; Missing/Too-Many Input Parameter(s)" << endl;
         return -1;
     }
 
@@ -48,11 +51,15 @@ int main(int argc, char *argv[])
         cout << "Catalan: Malformed Input; Cannot Be Negative" << endl;
         return -1;
     }
-    else if (n > 262) // yes this has been tested, 512bit is big enough and correct until n=262
+    else if (n > 262 && !KDEBUG) // yes this has been tested, 512bit is big enough to be correct until n=262
     {
         cout << "Catalan: Input Too Large, Will Cause Overflow" << endl;
         return -1;
     }
     UInt512 result = FindCatalanNumber(n);
+    if (KDEBUG)
+    {
+        cout << "lookups to Calculations:" << lookups << "/" << calculations << " Ratio:" << ((double)lookups/(double)calculations) << ":1" << endl;
+    }
     cout << result << endl;
-}
+} 
