@@ -103,66 +103,89 @@ UInt256 UInt256::operator*(const UInt256 &other)
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
-    __uint128_t carry = TU_OU + (TU_OL >> 64) + (OU_TL >> 64);
+    __uint128_t carry = (TU_OU) + (TU_OL >> 64) + (OU_TL >> 64);
     return UInt256(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
 }
 
 UInt256 UInt256::operator<<(int shift) const
 {
     UInt256 tmp(high_, low_);
-    if (*this == 0)
+    if (shift < 128)
     {
-        return tmp;
+        tmp.high_ <<= shift;
+        tmp.high_ |= (tmp.low_ >> (128 - shift));
+        tmp.low_ <<= shift;
     }
-
-    __uint128_t mask = ULLONG_MAX;
-    while (shift > 0)
+    else
     {
-        __uint128_t high_high = tmp.high_ >> 64;
-        __uint128_t high_low = tmp.high_ & mask;
-        __uint128_t low_high = tmp.low_ >> 64;
-        __uint128_t low_low = tmp.low_ & mask;
-        high_high <<= ((shift > 64) ? 64 : shift);
-        high_low <<= ((shift > 64) ? 64 : shift);
-        low_high <<= ((shift > 64) ? 64 : shift);
-        low_low <<= ((shift > 64) ? 64 : shift);
-        shift -= 64;
-        tmp.high_ = ((high_high << 64) + high_low + (low_high >> 64));
-        tmp.low_ = ((low_high << 64) + low_low);
+        tmp.high_ = tmp.low_;
+        tmp.high_ <<= shift - 128;
+        tmp.low_ = 0;
     }
     return tmp;
 }
 
 UInt256 UInt256::operator>>(int shift) const
 {
-    
     UInt256 tmp(high_, low_);
-    if (*this == 0)
+    if (shift < 128)
     {
-        return tmp;
+        tmp.low_ >>= shift;
+        tmp.low_ |= (tmp.high_ << (128 - shift));
+        tmp.low_ <<= shift;
     }
-    __uint128_t mask = ULLONG_MAX;
-    mask <<= 64;
-    while (shift > 0)
+    else
     {
-        __uint128_t high_high = tmp.high_ & mask;
-        __uint128_t high_low = tmp.high_  << 64;
-        __uint128_t low_high = tmp.low_ & mask;
-        __uint128_t low_low = tmp.low_  << 64;
-        high_high >>= ((shift > 64) ? 64 : shift);
-        high_low >>= ((shift > 64) ? 64 : shift);
-        low_high >>= ((shift > 64) ? 64 : shift);
-        low_low >>= ((shift > 64) ? 64 : shift);
-        shift -= 64;
-        tmp.high_ = (high_high + (high_low >> 64));
-        tmp.low_ = ((high_low << 64) + low_high + (low_low >> 64));
+        tmp.low_ = tmp.high_;
+        tmp.low_ >>= shift - 128;
+        tmp.high_ = 0;
     }
     return tmp;
+}
+
+UInt256 &UInt256::operator<<=(int shift)
+{
+    if (shift < 128)
+    {
+        high_ <<= shift;
+        high_ |= (low_ >> (128 - shift));
+        low_ <<= shift;
+    }
+    else
+    {
+        high_ = low_;
+        high_ <<= shift - 128;
+        low_ = 0;
+    }
+    return *this;
+}
+
+UInt256 &UInt256::operator>>=(int shift)
+{
+    if (shift < 128)
+    {
+        low_ >>= shift;
+        low_ |= (high_ << (128 - shift));
+        low_ <<= shift;
+    }
+    else
+    {
+        low_ = high_;
+        low_ >>= shift - 128;
+        high_ = 0;
+    }
+    return *this;
 }
 
 UInt256 UInt256::operator&(const UInt256 &other) const
 {
     return UInt256(high_ & other.high_, low_ & other.low_);
+}
+
+UInt256 &UInt256::operator|=(const UInt256 &other)
+{
+    high_ |= other.high_;
+    low_ |= other.low_;
 }
 
 bitset<256> UInt256::GetBitSet() const

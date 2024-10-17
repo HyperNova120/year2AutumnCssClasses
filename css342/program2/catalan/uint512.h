@@ -3,6 +3,8 @@
 #include <iostream>
 #include <bitset>
 #include "uint256.h"
+#include <chrono>
+#include <ctime> 
 using namespace std;
 
 class UInt512
@@ -34,9 +36,12 @@ public:
 
     friend ostream &operator<<(ostream &os, const UInt512 &obj);
 
-    UInt512 operator<<(int shift) const;
+    UInt512 operator<<(int shift) const; 
     UInt512 operator>>(int shift) const;
     UInt512 operator&(const UInt512 &other) const;
+    UInt512 &operator<<=(int shift);
+    UInt512 &operator>>=(int shift);
+    UInt512 &operator|=(const UInt512 &other);
 
     bitset<512> GetBitSet() const;
 

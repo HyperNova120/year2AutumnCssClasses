@@ -52,12 +52,12 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    /* string tmp = "";
+    string tmp = "";
     for (string s : gr.knownPaths())
     {
         tmp += s + "\n";
     }
-    cout << tmp; */
+    cout << tmp;
 
     cout << "Number of paths: " << gr.knownPaths().size() << endl;
 }

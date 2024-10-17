@@ -92,7 +92,7 @@ UInt512 UInt512::operator*(const UInt512 &other)
     // high bits 128 least significant bits
     UInt256 other_low_Lower = other.low_ & mask;
 
-    UInt256 TU_OU = low_Upper * other_low_Upper;
+    //UInt256 TU_OU = low_Upper * other_low_Upper;
     UInt256 TU_OL = low_Upper * other_low_Lower;
     UInt256 OU_TL = other_low_Upper * low_Lower;
     UInt256 OL_TL = other_low_Lower * low_Lower;
@@ -103,18 +103,11 @@ UInt512 UInt512::operator*(const UInt512 &other)
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
-    UInt256 carry = TU_OU;
+    UInt256 carry = low_Upper * other_low_Upper;
     carry += (TU_OL >> 128);
     carry += (OU_TL >> 128);
 
-    UInt256 tempHigh(this->high_ * other.low_);
-    tempHigh += (this->low_ * other.high_);
-    tempHigh += carry;
-    tempHigh += cc;
-    UInt256 tempLow(tmp);
-    tempLow += OL_TL;
-
-    return UInt512(tempHigh, tempLow);
+    return UInt512((this->high_ * other.low_) + (this->low_ * other.high_) + carry + cc, tmp += OL_TL);
 }
 
 UInt512 UInt512::operator&(const UInt512 &other) const

@@ -41,7 +41,10 @@ public:
 
     UInt256 operator<<(int shift) const;
     UInt256 operator>>(int shift) const;
+    UInt256 &operator<<=(int shift);
+    UInt256 &operator>>=(int shift);
     UInt256 operator&(const UInt256 &other) const;
+    UInt256 &operator|=(const UInt256 &other);
 
     bitset<256> GetBitSet() const;
 
