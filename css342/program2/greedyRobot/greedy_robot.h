@@ -28,11 +28,11 @@ public:
     int CalculateShortestPossibleDistance(Point from, Point to);
     void CalculatePaths(int max_distance, Point from, Point to);
     
-    set<string> knownPaths();
+    set<string> known_paths();
 private:
-    set<string> knownPaths_;
+    set<string> known_paths_;
     Direction FindLeastLikelyDirection(Point from, Point to);
-    void findPaths(Point from, Point to, string curPath, Direction lastDir, int sameStepsRemaining);
+    void findPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining);
     int max_path_length_;
     int max_move_distance_;
 };

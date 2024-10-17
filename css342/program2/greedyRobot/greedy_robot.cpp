@@ -42,24 +42,22 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    GreedyRobot gr;
-    gr.CalculatePaths(max__move_distance_, robot_pos, target_pos);
+    GreedyRobot greedy_robot;
+    greedy_robot.CalculatePaths(max__move_distance_, robot_pos, target_pos);
 
-    if (gr.knownPaths().size() == 0)
+    if (greedy_robot.known_paths().size() == 0)
     {
-        cout << "NP" << endl;
-        cout << "Number of paths: " << gr.knownPaths().size() << endl;
+        cout << "No Valid Paths" << endl;
+        // cout << "Number of paths: " << greedy_robot.known_paths().size() << endl;
         return 0;
     }
 
-    string tmp = "";
-    for (string s : gr.knownPaths())
+    for (string s : greedy_robot.known_paths())
     {
-        tmp += s + "\n";
+        cout << s << endl;
     }
-    cout << tmp;
 
-    cout << "Number of paths: " << gr.knownPaths().size() << endl;
+    cout << "Number of paths: " << greedy_robot.known_paths().size() << endl;
 }
 
 int GreedyRobot::CalculateShortestPossibleDistance(Point from, Point to)
@@ -74,30 +72,30 @@ void GreedyRobot::CalculatePaths(int max_move_distance, Point from, Point to)
     findPaths(from, to, "", NA, max_move_distance);
 }
 
-void GreedyRobot::findPaths(Point from, Point to, string curPath, Direction lastDir, int sameStepsRemaining)
+void GreedyRobot::findPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining)
 {
-    if (curPath.length() > max_path_length_                                                   // checks if the path we have taken is longer than possible
-        || sameStepsRemaining < 0                                                             // checks if we have moved passed allowed moves in same direction
-        || curPath.length() + CalculateShortestPossibleDistance(from, to) > max_path_length_) // checks if this path is even possible in best case scenario
+    if (current_path.length() > max_path_length_                                                   // checks if the path we have taken is longer than possible
+        || same_steps_remaining < 0                                                                // checks if we have moved passed allowed moves in same direction
+        || current_path.length() + CalculateShortestPossibleDistance(from, to) > max_path_length_) // checks if this path is even possible in best case scenario
     {
         return;
     }
     if (from == to)
     {
         // found path
-        knownPaths_.insert(curPath);
+        known_paths_.insert(current_path);
         return;
     }
-    Direction leastLikely = FindLeastLikelyDirection(from, to);
+    Direction least_likely = FindLeastLikelyDirection(from, to);
 
-    if (leastLikely != N && lastDir != S)
-        findPaths(Point(from.x_, from.y_ + 1), to, curPath + "N", N, (lastDir == N) ? sameStepsRemaining - 1 : max_move_distance_ - 1);
-    if (leastLikely != S && lastDir != N)
-        findPaths(Point(from.x_, from.y_ - 1), to, curPath + "S", S, (lastDir == S) ? sameStepsRemaining - 1 : max_move_distance_ - 1);
-    if (leastLikely != E && lastDir != W)
-        findPaths(Point(from.x_ + 1, from.y_), to, curPath + "E", E, (lastDir == E) ? sameStepsRemaining - 1 : max_move_distance_ - 1);
-    if (leastLikely != W && lastDir != E)
-        findPaths(Point(from.x_ - 1, from.y_), to, curPath + "W", W, (lastDir == W) ? sameStepsRemaining - 1 : max_move_distance_ - 1);
+    if (least_likely != N && last_direction != S)
+        findPaths(Point(from.x_, from.y_ + 1), to, current_path + "N", N, (last_direction == N) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    if (least_likely != S && last_direction != N)
+        findPaths(Point(from.x_, from.y_ - 1), to, current_path + "S", S, (last_direction == S) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    if (least_likely != E && last_direction != W)
+        findPaths(Point(from.x_ + 1, from.y_), to, current_path + "E", E, (last_direction == E) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    if (least_likely != W && last_direction != E)
+        findPaths(Point(from.x_ - 1, from.y_), to, current_path + "W", W, (last_direction == W) ? same_steps_remaining - 1 : max_move_distance_ - 1);
 }
 
 Point::Point(int x, int y)
@@ -117,9 +115,9 @@ bool Point::operator==(const Point &other)
     return x_ == other.x_ && y_ == other.y_;
 }
 
-set<string> GreedyRobot::knownPaths()
+set<string> GreedyRobot::known_paths()
 {
-    return knownPaths_;
+    return known_paths_;
 }
 
 Direction GreedyRobot::FindLeastLikelyDirection(Point from, Point to)
