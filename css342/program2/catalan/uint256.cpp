@@ -16,7 +16,7 @@ UInt256::UInt256(const UInt256 &other)
     high_ = other.high_;
 }
 
-UInt256::UInt256(__uint128_t value)
+UInt256::UInt256(KBase_Type value)
 {
     low_ = value;
     high_ = 0;
@@ -27,14 +27,14 @@ bool UInt256::operator<(const UInt256 &other) const
     return (high_ == other.high_) ? low_ < other.low_ : high_ < other.high_;
 }
 
-bool UInt256::operator<(const __uint128_t value) const
+bool UInt256::operator<(const KBase_Type value) const
 {
     return low_ < value;
 }
 
 UInt256 &UInt256::operator+=(const UInt256 &other)
 {
-    __uint128_t old_low = low_;
+    KBase_Type old_low = low_;
     low_ += other.low_;
     high_ += other.high_;
     if (low_ < old_low)
@@ -50,7 +50,7 @@ UInt256 UInt256::operator+(const UInt256 &other) const
     return tmp += other;
 }
 
-UInt256 UInt256::operator+(const __uint128_t &value) const
+UInt256 UInt256::operator+(const KBase_Type &value) const
 {
     UInt256 tmp(*this + UInt256(value));
     return tmp;
@@ -62,12 +62,12 @@ UInt256 &UInt256::operator++(int value)
     return *this;
 }
 
-UInt256 UInt256::operator+(const __uint128_t value)
+UInt256 UInt256::operator+(const KBase_Type value)
 {
     return *this += UInt256(value);
 }
 
-bool UInt256::operator==(const __uint128_t value) const
+bool UInt256::operator==(const KBase_Type value) const
 {
     return high_ == 0 && low_ == value;
 }
@@ -81,45 +81,45 @@ UInt256 UInt256::operator*(const UInt256 &other)
 {
 
     // low bits
-    // low bits 64 most significant bits
-    __uint128_t low_Upper = low_ >> 64;
-    // low bits 64 least significant bits
-    __uint128_t low_Lower = low_ & 0xFFFFFFFFFFFFFFFF;
+    // low bits (KBase_Size / 2) most significant bits
+    KBase_Type low_Upper = low_ >> (KBase_Size / 2);
+    // low bits (KBase_Size / 2) least significant bits
+    KBase_Type low_Lower = low_ & 0xFFFFFFFFFFFFFFFF;
 
     // other low bits
-    // high bits 64 most significant bits
-    __uint128_t other_low_Upper = other.low_ >> 64;
-    // high bits 64 least significant bits
-    __uint128_t other_low_Lower = other.low_ & 0xFFFFFFFFFFFFFFFF;
+    // high bits (KBase_Size / 2) most significant bits
+    KBase_Type other_low_Upper = other.low_ >> (KBase_Size / 2);
+    // high bits (KBase_Size / 2) least significant bits
+    KBase_Type other_low_Lower = other.low_ & 0xFFFFFFFFFFFFFFFF;
 
-    __uint128_t TU_OU = low_Upper * other_low_Upper;
-    __uint128_t TU_OL = low_Upper * other_low_Lower;
-    __uint128_t OU_TL = other_low_Upper * low_Lower;
-    __uint128_t OL_TL = other_low_Lower * low_Lower;
+    KBase_Type TU_OU = low_Upper * other_low_Upper;
+    KBase_Type TU_OL = low_Upper * other_low_Lower;
+    KBase_Type OU_TL = other_low_Upper * low_Lower;
+    KBase_Type OL_TL = other_low_Lower * low_Lower;
 
-    __uint128_t tmp = (TU_OL & 0xFFFFFFFFFFFFFFFF) << 64;
-    __uint128_t tmp2 = (OU_TL & 0xFFFFFFFFFFFFFFFF) << 64;
+    KBase_Type tmp = (TU_OL & 0xFFFFFFFFFFFFFFFF) << (KBase_Size / 2);
+    KBase_Type tmp2 = (OU_TL & 0xFFFFFFFFFFFFFFFF) << (KBase_Size / 2);
 
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
-    __uint128_t carry = (TU_OU) + (TU_OL >> 64) + (OU_TL >> 64);
+    KBase_Type carry = (TU_OU) + (TU_OL >> (KBase_Size / 2)) + (OU_TL >> (KBase_Size / 2));
     return UInt256(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
 }
 
 UInt256 UInt256::operator<<(int shift) const
 {
     UInt256 tmp(high_, low_);
-    if (shift < 128)
+    if (shift < KBase_Size)
     {
         tmp.high_ <<= shift;
-        tmp.high_ |= (tmp.low_ >> (128 - shift));
+        tmp.high_ |= (tmp.low_ >> (KBase_Size - shift));
         tmp.low_ <<= shift;
     }
     else
     {
         tmp.high_ = tmp.low_;
-        tmp.high_ <<= shift - 128;
+        tmp.high_ <<= shift - KBase_Size;
         tmp.low_ = 0;
     }
     return tmp;
@@ -128,16 +128,16 @@ UInt256 UInt256::operator<<(int shift) const
 UInt256 UInt256::operator>>(int shift) const
 {
     UInt256 tmp(high_, low_);
-    if (shift < 128)
+    if (shift < KBase_Size)
     {
         tmp.low_ >>= shift;
-        tmp.low_ |= (tmp.high_ << (128 - shift));
+        tmp.low_ |= (tmp.high_ << (KBase_Size - shift));
         tmp.low_ <<= shift;
     }
     else
     {
         tmp.low_ = tmp.high_;
-        tmp.low_ >>= shift - 128;
+        tmp.low_ >>= shift - KBase_Size;
         tmp.high_ = 0;
     }
     return tmp;
@@ -145,16 +145,16 @@ UInt256 UInt256::operator>>(int shift) const
 
 UInt256 &UInt256::operator<<=(int shift)
 {
-    if (shift < 128)
+    if (shift < KBase_Size)
     {
         high_ <<= shift;
-        high_ |= (low_ >> (128 - shift));
+        high_ |= (low_ >> (KBase_Size - shift));
         low_ <<= shift;
     }
     else
     {
         high_ = low_;
-        high_ <<= shift - 128;
+        high_ <<= shift - KBase_Size;
         low_ = 0;
     }
     return *this;
@@ -162,16 +162,16 @@ UInt256 &UInt256::operator<<=(int shift)
 
 UInt256 &UInt256::operator>>=(int shift)
 {
-    if (shift < 128)
+    if (shift < KBase_Size)
     {
         low_ >>= shift;
-        low_ |= (high_ << (128 - shift));
+        low_ |= (high_ << (KBase_Size - shift));
         low_ <<= shift;
     }
     else
     {
         low_ = high_;
-        low_ >>= shift - 128;
+        low_ >>= shift - KBase_Size;
         high_ = 0;
     }
     return *this;
@@ -190,17 +190,17 @@ UInt256 &UInt256::operator|=(const UInt256 &other)
 
 bitset<256> UInt256::GetBitSet() const
 {
-    unsigned long long high_highPart = high_ >> 64;
+    unsigned long long high_highPart = high_ >> (KBase_Size / 2);
     unsigned long long high_LowPart = high_ & 0xFFFFFFFFFFFFFFFF;
-    unsigned long long low_highPart = low_ >> 64;
+    unsigned long long low_highPart = low_ >> (KBase_Size / 2);
     unsigned long long low_LowPart = low_ & 0xFFFFFFFFFFFFFFFF;
     bitset<256> tmp;
     tmp |= high_highPart;
-    tmp <<= 64;
+    tmp <<= (KBase_Size / 2);
     tmp |= high_LowPart;
-    tmp <<= 64;
+    tmp <<= (KBase_Size / 2);
     tmp |= low_highPart;
-    tmp <<= 64;
+    tmp <<= (KBase_Size / 2);
     tmp |= low_LowPart;
 
     /* if (KDEBUG)
@@ -213,23 +213,23 @@ bitset<256> UInt256::GetBitSet() const
 
 UInt256 UInt256::GetBitwiseAndValue()
 {
-    __uint128_t tmp = ULLONG_MAX;
-    tmp <<= 64;
+    KBase_Type tmp = ULLONG_MAX;
+    tmp <<= (KBase_Size / 2);
     tmp |= ULLONG_MAX;
     return UInt256(0, tmp);
 }
 
-__uint128_t UInt256::high() const
+UInt256::KBase_Type UInt256::high() const
 {
     return high_;
 }
 
-__uint128_t UInt256::low() const
+UInt256::KBase_Type UInt256::low() const
 {
     return low_;
 }
 
-UInt256::UInt256(__uint128_t high, __uint128_t low)
+UInt256::UInt256(KBase_Type high, KBase_Type low)
 {
     high_ = high;
     low_ = low;
@@ -240,7 +240,7 @@ bool UInt256::operator!=(const UInt256 &other) const
     return !(*this == other);
 }
 
-bool UInt256::operator!=(const __uint128_t value) const
+bool UInt256::operator!=(const KBase_Type value) const
 {
     return !(*this == value);
 }
