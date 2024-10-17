@@ -1,8 +1,5 @@
 #include "uint512.h"
-#include <iomanip>
 #include <bitset>
-#include <cmath>
-#include <climits>
 #include <algorithm>
 UInt512::UInt512()
 {
@@ -16,7 +13,7 @@ UInt512::UInt512(const UInt512 &other)
     high_ = other.high_;
 }
 
-UInt512::UInt512(UInt256 value)
+UInt512::UInt512(KBase_Type value)
 {
     low_ = value;
     high_ = 0;
@@ -25,7 +22,13 @@ UInt512::UInt512(UInt256 value)
 UInt512::UInt512(__uint128_t value)
 {
     high_ = 0;
-    low_ = UInt256(value);
+    low_ = KBase_Type(value);
+}
+
+UInt512::UInt512(KBase_Type high, KBase_Type low)
+{
+    high_ = high;
+    low_ = low;
 }
 
 bool UInt512::operator<(const UInt512 &other) const
@@ -33,14 +36,14 @@ bool UInt512::operator<(const UInt512 &other) const
     return (high_ == other.high_) ? low_ < other.low_ : high_ < other.high_;
 }
 
-bool UInt512::operator<(const UInt256 value) const
+bool UInt512::operator<(const __uint128_t value) const
 {
     return low_ < value;
 }
 
 UInt512 &UInt512::operator+=(const UInt512 &other)
 {
-    UInt256 old_low = low_;
+    KBase_Type old_low = low_;
     low_ += other.low_;
     high_ += other.high_;
     if (low_ < old_low)
@@ -50,75 +53,43 @@ UInt512 &UInt512::operator+=(const UInt512 &other)
     return *this;
 }
 
-UInt512 UInt512::operator+(const UInt512 &other) const
-{
-    UInt512 tmp(*this);
-    return tmp += other;
-}
-
-UInt512 &UInt512::operator++(int value)
-{
-    *this += UInt512(1);
-    return *this;
-}
-
-UInt512 UInt512::operator+(const UInt256 value)
-{
-    return *this += UInt512(value);
-}
-
-bool UInt512::operator==(const UInt256 value) const
-{
-    return high_ == 0 && low_ == value;
-}
-
-bool UInt512::operator==(const UInt512 &other) const
-{
-    return high_ == other.high_ && low_ == other.low_;
-}
-
 UInt512 UInt512::operator*(const UInt512 &other)
 {
-    UInt256 mask = UInt256::GetBitwiseAndValue();
+    KBase_Type mask = KBase_Type::GetBitwiseAndValue();
     // low bits
-    // low bits 128 most significant bits
-    UInt256 low_Upper = low_ >> 128;
-    // low bits 128 least significant bits
-    UInt256 low_Lower = low_ & mask;
+    // low bits (KBase_Size / 2) most significant bits
+    KBase_Type low_Upper = low_ >> (KBase_Size / 2);
+    // low bits (KBase_Size / 2) least significant bits
+    KBase_Type low_Lower = low_ & mask;
 
     // other low bits
-    // high bits 128 most significant bits
-    UInt256 other_low_Upper = other.low_ >> 128;
-    // high bits 128 least significant bits
-    UInt256 other_low_Lower = other.low_ & mask;
+    // high bits (KBase_Size / 2) most significant bits
+    KBase_Type other_low_Upper = other.low_ >> (KBase_Size / 2);
+    // high bits (KBase_Size / 2) least significant bits
+    KBase_Type other_low_Lower = other.low_ & mask;
 
-    //UInt256 TU_OU = low_Upper * other_low_Upper;
-    UInt256 TU_OL = low_Upper * other_low_Lower;
-    UInt256 OU_TL = other_low_Upper * low_Lower;
-    UInt256 OL_TL = other_low_Lower * low_Lower;
+    // KBase_Type TU_OU = low_Upper * other_low_Upper;
+    KBase_Type TU_OL = low_Upper * other_low_Lower;
+    KBase_Type OU_TL = other_low_Upper * low_Lower;
+    KBase_Type OL_TL = other_low_Lower * low_Lower;
 
-    UInt256 tmp = (TU_OL & mask) << 128;
-    UInt256 tmp2 = (OU_TL & mask) << 128;
+    KBase_Type tmp = (TU_OL & mask) << (KBase_Size / 2);
+    KBase_Type tmp2 = (OU_TL & mask) << (KBase_Size / 2);
 
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
-    UInt256 carry = low_Upper * other_low_Upper;
-    carry += (TU_OL >> 128);
-    carry += (OU_TL >> 128);
+    KBase_Type carry = low_Upper * other_low_Upper;
+    carry += (TU_OL >> (KBase_Size / 2));
+    carry += (OU_TL >> (KBase_Size / 2));
 
     return UInt512((this->high_ * other.low_) + (this->low_ * other.high_) + carry + cc, tmp += OL_TL);
 }
 
-UInt512 UInt512::operator&(const UInt512 &other) const
-{
-    return UInt512(high_ & other.high_, low_ & other.low_);
-}
-
 bitset<512> UInt512::GetBitSet() const
 {
-    bitset<256> lowerBitSet(low_.GetBitSet());
-    bitset<256> HigherBitSet(high_.GetBitSet());
+    bitset<KBase_Size> lowerBitSet(low_.GetBitSet());
+    bitset<KBase_Size> HigherBitSet(high_.GetBitSet());
     bitset<512> tmp;
     for (int i = 0; i < lowerBitSet.size(); i++)
     {
@@ -127,43 +98,20 @@ bitset<512> UInt512::GetBitSet() const
 
     for (int i = 0; i < HigherBitSet.size(); i++)
     {
-        tmp[i + 256] = HigherBitSet[i];
+        tmp[i + KBase_Size] = HigherBitSet[i];
     }
     return tmp;
 }
 
-UInt512 UInt512::GetBitAndValue()
-{
-    UInt256 tmp(ULLONG_MAX, ULLONG_MAX);
-    return UInt512(0, tmp);
-}
-
-UInt256 UInt512::high() const
+UInt512::KBase_Type UInt512::high() const
 {
     return high_;
 }
 
-UInt256 UInt512::low() const
+UInt512::KBase_Type UInt512::low() const
 {
     return low_;
 }
-
-UInt512::UInt512(UInt256 high, UInt256 low)
-{
-    high_ = high;
-    low_ = low;
-}
-
-bool UInt512::operator!=(const UInt512 &other) const
-{
-    return !(*this == other);
-}
-
-bool UInt512::operator!=(const UInt256 value) const
-{
-    return !(*this == value);
-}
-
 bool UInt512::operator()(const UInt512 &other, const UInt512 &other2) const
 {
     return other < other2;

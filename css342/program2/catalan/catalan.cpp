@@ -5,7 +5,7 @@
 #include "uint256.h"
 #include "uint512.h"
 #include <chrono>
-#include <ctime> 
+#include <ctime>
 
 using namespace std;
 
@@ -62,8 +62,8 @@ int main(int argc, char *argv[])
     UInt512 result = FindCatalanNumber(n);
     if (KDEBUG)
     {
-        cout << "lookups to Calculations:" << lookups << "/" << calculations << " Ratio:" << ((double)lookups/(double)calculations) << ":1" << endl;
-        cout << "Calculation Time:" << (chrono::system_clock::now() - start).count()/1000000 << "ms" << endl;
+        cout << "lookups to Calculations:" << lookups << "/" << calculations << " Ratio:" << ((double)lookups / (double)calculations) << ":1" << endl;
+        cout << "Calculation Time:" << (chrono::system_clock::now() - start).count() / 1000000 << "ms" << endl;
     }
     cout << result << endl;
-} 
+}

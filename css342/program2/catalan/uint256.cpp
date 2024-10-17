@@ -22,6 +22,12 @@ UInt256::UInt256(KBase_Type value)
     high_ = 0;
 }
 
+UInt256::UInt256(KBase_Type high, KBase_Type low)
+{
+    high_ = high;
+    low_ = low;
+}
+
 bool UInt256::operator<(const UInt256 &other) const
 {
     return (high_ == other.high_) ? low_ < other.low_ : high_ < other.high_;
@@ -186,6 +192,7 @@ UInt256 &UInt256::operator|=(const UInt256 &other)
 {
     high_ |= other.high_;
     low_ |= other.low_;
+    return *this;
 }
 
 bitset<256> UInt256::GetBitSet() const
@@ -202,12 +209,6 @@ bitset<256> UInt256::GetBitSet() const
     tmp |= low_highPart;
     tmp <<= (KBase_Size / 2);
     tmp |= low_LowPart;
-
-    /* if (KDEBUG)
-    {
-        cout << "Hex Value:" << hex << setw(16) << setfill('0') << high_highPart << setw(16) << setfill('0') << high_LowPart;
-        cout << hex << setw(16) << setfill('0') << low_highPart << setw(16) << setfill('0') << low_LowPart << "\n";
-    } */
     return tmp;
 }
 
@@ -227,12 +228,6 @@ UInt256::KBase_Type UInt256::high() const
 UInt256::KBase_Type UInt256::low() const
 {
     return low_;
-}
-
-UInt256::UInt256(KBase_Type high, KBase_Type low)
-{
-    high_ = high;
-    low_ = low;
 }
 
 bool UInt256::operator!=(const UInt256 &other) const
