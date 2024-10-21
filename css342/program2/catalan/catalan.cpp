@@ -37,9 +37,14 @@ UInt512 FindCatalanNumber(int n)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc < 2)
     {
-        cout << "Catalan: Malformed Input; Missing/Too-Many Input Parameter(s)" << endl;
+        cout << "Catalan: Malformed Input; Missing Input Parameters" << endl;
+        return -1;
+    }
+    else if (argc > 2)
+    {
+        cout << "Catalan: Malformed Input; Too Many Input Parameters" << endl;
         return -1;
     }
 
@@ -64,8 +69,14 @@ int main(int argc, char *argv[])
 
     if (KDEBUG)
     {
+        int testSize = (n <= 262) ? 10 : 1;
+        for (int i = 0; i < testSize - 1; i++)
+        {
+            known_numbers_.clear();
+            UInt512 resultTMP = FindCatalanNumber(n);
+        }
         cout << "lookups to Calculations:" << lookups << "/" << calculations << " Ratio:" << ((double)lookups / (double)calculations) << ":1" << endl;
-        cout << "Calculation Time:" << (chrono::system_clock::now() - start).count() / 1000000 << "ms" << endl;
+        cout << "Average Calculation Time:" << ((chrono::system_clock::now() - start).count() / 1000000) / (double)testSize << "ms" << endl;
     }
 
     cout << result << endl;

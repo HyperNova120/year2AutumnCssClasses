@@ -32,7 +32,7 @@ public:
 private:
     set<string> known_paths_;
     Direction FindLeastLikelyDirection(Point from, Point to);
-    void findPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining);
+    void FindPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining);
     int max_path_length_;
     int max_move_distance_;
 };

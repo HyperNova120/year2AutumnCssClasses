@@ -13,6 +13,7 @@ class UInt256
 public:
     using Kbase_type_ = __uint128_t;
     static const int Kbase_size_ = 128;
+    static const int half_base_size = Kbase_size_ / 2;
     UInt256();
     UInt256(const UInt256 &other);
     UInt256(Kbase_type_ value);

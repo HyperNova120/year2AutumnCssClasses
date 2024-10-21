@@ -12,6 +12,7 @@ class UInt512
 public:
     using Kbase_type_ = UInt256;
     static const int Kbase_size_ = 256;
+    static const int half_base_size = Kbase_size_ / 2;
 
     UInt512();
     UInt512(const UInt512 &other);
