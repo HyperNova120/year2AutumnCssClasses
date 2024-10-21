@@ -58,13 +58,13 @@ UInt512 UInt512::operator*(const UInt512 &other)
     Kbase_type_ mask = Kbase_type_::GetBitwiseAndValue();
     // low bits
     // low bits (KBase_Size / 2) most significant bits
-    Kbase_type_ low_upper = low_ >> half_base_size;
+    Kbase_type_ low_upper = low_ >> Khalf_base_size;
     // low bits (KBase_Size / 2) least significant bits
     Kbase_type_ low_lower = low_ & mask;
 
     // other low bits
     // high bits (KBase_Size / 2) most significant bits
-    Kbase_type_ other_low_upper = other.low_ >> half_base_size;
+    Kbase_type_ other_low_upper = other.low_ >> Khalf_base_size;
     // high bits (KBase_Size / 2) least significant bits
     Kbase_type_ other_low_lower = other.low_ & mask;
 
@@ -73,15 +73,15 @@ UInt512 UInt512::operator*(const UInt512 &other)
     Kbase_type_ OU_TL = other_low_upper * low_lower;
     Kbase_type_ OL_TL = other_low_lower * low_lower;
 
-    Kbase_type_ tmp = (TU_OL & mask) << half_base_size;
-    Kbase_type_ tmp2 = (OU_TL & mask) << half_base_size;
+    Kbase_type_ tmp = (TU_OL & mask) << Khalf_base_size;
+    Kbase_type_ tmp2 = (OU_TL & mask) << Khalf_base_size;
 
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
     Kbase_type_ carry = low_upper * other_low_upper;
-    carry += (TU_OL >> half_base_size);
-    carry += (OU_TL >> half_base_size);
+    carry += (TU_OL >> Khalf_base_size);
+    carry += (OU_TL >> Khalf_base_size);
 
     return UInt512((this->high_ * other.low_) + (this->low_ * other.high_) + carry + cc, tmp += OL_TL);
 }
