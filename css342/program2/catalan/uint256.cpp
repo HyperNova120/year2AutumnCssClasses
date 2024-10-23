@@ -194,13 +194,13 @@ UInt256 &UInt256::operator|=(const UInt256 &other)
     return *this;
 }
 
-bitset<256> UInt256::GetBitSet() const
+bitset<UInt256::Kbase_size_ * 2> UInt256::GetBitSet() const
 {
     unsigned long long high_high_part = high_ >> Khalf_base_size;
     unsigned long long high_Low_part = high_ & 0xFFFFFFFFFFFFFFFF;
     unsigned long long low_high_part = low_ >> Khalf_base_size;
     unsigned long long low_low_part = low_ & 0xFFFFFFFFFFFFFFFF;
-    bitset<256> tmp;
+    bitset<Kbase_size_ * 2> tmp;
     tmp |= high_high_part;
     tmp <<= Khalf_base_size;
     tmp |= high_Low_part;
@@ -272,7 +272,7 @@ string addStringDec(string base, string add)
 
 ostream &operator<<(ostream &os, const UInt256 &obj)
 {
-    bitset<256> set = obj.GetBitSet();
+    bitset<UInt256::Kbase_size_ * 2> set = obj.GetBitSet();
     if (KDEBUG)
     {
         os << "set after bitops:" << set << "\n";

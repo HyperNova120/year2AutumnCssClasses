@@ -90,11 +90,11 @@ UInt512 UInt512::operator*(const UInt512 &other)
     return UInt512((this->high_ * other.low_) + (this->low_ * other.high_) + carry + cc, tmp += OL_TL);
 }
 
-bitset<512> UInt512::GetBitSet() const
+bitset<UInt512::Kbase_size_ * 2> UInt512::GetBitSet() const
 {
     bitset<Kbase_size_> lower_bit_set(low_.GetBitSet());
     bitset<Kbase_size_> higher_bit_set(high_.GetBitSet());
-    bitset<512> tmp;
+    bitset<Kbase_size_ * 2> tmp;
     for (ulong i = 0; i < lower_bit_set.size(); i++)
     {
         tmp[i] = lower_bit_set[i];
@@ -122,7 +122,7 @@ bool UInt512::operator()(const UInt512 &other, const UInt512 &other2) const
 }
 ostream &operator<<(ostream &os, const UInt512 &obj)
 {
-    bitset<512> set = obj.GetBitSet();
+    bitset<UInt512::Kbase_size_ * 2> set = obj.GetBitSet();
     if (KDEBUG)
     {
         os << "Bits:" << set << "\n";

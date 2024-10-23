@@ -29,7 +29,7 @@ public:
 
     friend ostream &operator<<(ostream &os, const UInt512 &obj);
 
-    bitset<512> GetBitSet() const;
+    bitset<Kbase_size_ * 2> GetBitSet() const;
 
     Kbase_type_ high() const;
     Kbase_type_ low() const;

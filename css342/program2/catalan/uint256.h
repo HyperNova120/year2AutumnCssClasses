@@ -50,7 +50,7 @@ public:
     UInt256 operator&(const UInt256 &other) const;
     UInt256 &operator|=(const UInt256 &other);
 
-    bitset<256> GetBitSet() const;
+    bitset<Kbase_size_ * 2> GetBitSet() const;
 
     static UInt256 GetBitwiseAndValue();
 
