@@ -5,62 +5,6 @@
 #include "greedy_robot.h"
 using namespace std;
 
-int main(int argc, char *argv[])
-{
-    if (argc != 6)
-    {
-        cout << "Malformed Input, Incorrect Number Of Parameters:" << argc << endl;
-    }
-
-    int max__move_distance_ = 0;
-
-    stringstream ss;
-    ss << argv[1];
-    ss >> max__move_distance_;
-
-    stringstream ss2;
-    stringstream ss3;
-    ss2 << argv[2];
-    ss3 << argv[3];
-    Point robot_pos;
-    ss2 >> robot_pos.x_;
-    ss3 >> robot_pos.y_;
-
-    stringstream ss4;
-    stringstream ss5;
-    ss4 << argv[4];
-    ss5 << argv[5];
-    Point target_pos;
-    ss4 >> target_pos.x_;
-    ss5 >> target_pos.y_;
-
-    // cout << "MaxDist:" << max__move_distance_ << " robot:(" << robot_pos.x_ << "," << robot_pos.y_ << ") target:(" << target_pos.x_ << "," << target_pos.y_ << ")" << endl;
-
-    if (target_pos == robot_pos)
-    {
-        cout << "Already There" << endl;
-        cout << "Number of paths: 0" << endl;
-        return 0;
-    }
-
-    GreedyRobot greedy_robot;
-    greedy_robot.CalculatePaths(max__move_distance_, robot_pos, target_pos);
-
-    if (greedy_robot.known_paths().size() == 0)
-    {
-        cout << "No Valid Paths" << endl;
-        cout << "Number of paths: 0" << endl;
-        return 0;
-    }
-
-    for (string s : greedy_robot.known_paths())
-    {
-        cout << s << endl;
-    }
-
-    cout << "Number of paths: " << greedy_robot.known_paths().size() << endl;
-}
-
 int GreedyRobot::CalculateShortestPossibleDistance(Point from, Point to)
 {
     return abs(from.x_ - to.x_) + abs(from.y_ - to.y_);
@@ -151,4 +95,28 @@ Direction GreedyRobot::FindLeastLikelyDirection(Point from, Point to)
         return S;
     }
     return N;
+}
+
+GreedyRobot::GreedyRobot(Point robot_pos, Point target_pos, int max__move_distance_)
+{
+    if (target_pos == robot_pos)
+    {
+        cout << "Already There" << endl;
+        cout << "Number of paths: 0" << endl;
+        return;
+    }
+    CalculatePaths(max__move_distance_, robot_pos, target_pos);
+
+    if (known_paths().size() == 0)
+    {
+        cout << "No Valid Paths" << endl;
+        cout << "Number of paths: 0" << endl;
+        return;
+    }
+
+    for (string s : known_paths())
+    {
+        cout << s << endl;
+    }
+    cout << "Number of paths: " << known_paths().size() << endl;
 }

@@ -30,26 +30,14 @@ public:
     UInt512 operator+(const Kbase_type_ &value) const;
     UInt512 &operator++(int value);
 
-    UInt512 operator-(const UInt512 &other);
-    UInt512 operator+(const __uint128_t value); 
+    UInt512 operator-(const UInt512 &other) const;
+    UInt512 operator+(const __uint128_t value) const; 
     
     UInt512 &operator=(const UInt512 &other);
-
-    bool operator==(const UInt512 &other) const;
-    bool operator==(const __uint128_t value) const;
-    bool operator!=(const UInt512 &other) const;
-    bool operator!=(const __uint128_t value) const;
 
     UInt512 operator*(const UInt512 &other);
 
     friend ostream &operator<<(ostream &os, const UInt512 &obj);
-    
-    UInt512 operator<<(int shift) const;
-    UInt512 operator>>(int shift) const;
-    UInt512 &operator<<=(int shift);
-    UInt512 &operator>>=(int shift);
-    UInt512 operator&(const UInt512 &other) const;
-    UInt512 &operator|=(const UInt512 &other);
 
     bitset<Kbase_size_ * 2> GetBitSet() const;
 

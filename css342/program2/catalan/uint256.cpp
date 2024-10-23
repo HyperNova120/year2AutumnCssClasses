@@ -71,12 +71,6 @@ UInt256 &UInt256::operator++(int value)
     *this += UInt256(1);
     return *this;
 }
-
-UInt256 UInt256::operator+(const Kbase_type_ value)
-{
-    return *this += UInt256(value);
-}
-
 bool UInt256::operator==(const Kbase_type_ value) const
 {
     return high_ == 0 && low_ == value;
@@ -87,7 +81,7 @@ bool UInt256::operator==(const UInt256 &other) const
     return high_ == other.high_ && low_ == other.low_;
 }
 
-UInt256 UInt256::operator*(const UInt256 &other)
+UInt256 UInt256::operator*(const UInt256 &other) const
 {
     // low bits
     // low bits (KBase_Size / 2) most significant bits
@@ -101,7 +95,7 @@ UInt256 UInt256::operator*(const UInt256 &other)
     // high bits (KBase_Size / 2) least significant bits
     Kbase_type_ other_low_lower = other.low_ & bitwise_and_mask_;
 
-    Kbase_type_ TU_OU = low_upper * other_low_upper;
+    //Kbase_type_ TU_OU = low_upper * other_low_upper;
     Kbase_type_ TU_OL = low_upper * other_low_lower;
     Kbase_type_ OU_TL = other_low_upper * low_lower;
     Kbase_type_ OL_TL = other_low_lower * low_lower;
@@ -109,11 +103,12 @@ UInt256 UInt256::operator*(const UInt256 &other)
     Kbase_type_ tmp = (TU_OL & bitwise_and_mask_) << Khalf_base_size;
     Kbase_type_ tmp2 = (OU_TL & bitwise_and_mask_) << Khalf_base_size;
 
-    long cc = ((tmp + tmp2) < tmp);
+    
+    long small_carry = ((tmp + tmp2) < tmp);
     tmp += tmp2;
-    cc += ((tmp + OL_TL) < tmp);
-    Kbase_type_ carry = (TU_OU) + (TU_OL >> Khalf_base_size) + (OU_TL >> Khalf_base_size);
-    return UInt256(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
+    small_carry += ((tmp + OL_TL) < tmp);
+    Kbase_type_ carry = (low_upper * other_low_upper) + (TU_OL >> Khalf_base_size) + (OU_TL >> Khalf_base_size);
+    return UInt256((high_ * other.low_) + (low_ * other.high_) + carry + small_carry, tmp + OL_TL);
 }
 
 UInt256 UInt256::operator<<(int shift) const
@@ -300,5 +295,12 @@ UInt256 &UInt256::operator=(const UInt256 &other)
 {
     low_ = other.low_;
     high_ = other.high_;
+    return *this;
+}
+
+UInt256 &UInt256::operator=(const __uint128_t &value)
+{
+    low_ = value;
+    high_ = 0;
     return *this;
 }

@@ -1,6 +1,6 @@
 
 #include <iostream>
-
+#include <vector>
 using namespace std;
 
 long recursiveFunc(long h, long b)
@@ -9,12 +9,11 @@ long recursiveFunc(long h, long b)
     {
         return 1;
     }
-    return b * recursiveFunc(h-1,b);
+    return b * recursiveFunc(h - 1, b);
 }
-
-
 
 int main()
 {
-    cout << recursiveFunc(5, 5) << endl;
+    vector<int> vec = {1,4,5,6,7,43,64,24,65,24,76,2145};
+    int target = 222;
 }

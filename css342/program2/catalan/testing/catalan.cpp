@@ -7,6 +7,7 @@
 #include "uint1024.h"
 #include <chrono>
 #include <ctime>
+#include "catalan.h"
 
 using namespace std;
 

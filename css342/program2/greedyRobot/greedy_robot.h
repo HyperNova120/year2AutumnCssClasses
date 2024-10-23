@@ -21,15 +21,16 @@ enum Direction
     NA
 };
 
-
 class GreedyRobot
 {
 public:
+    GreedyRobot(Point robot_pos, Point target_pos, int max__move_distance_);
+
+    set<string> known_paths();
+
+private:
     int CalculateShortestPossibleDistance(Point from, Point to);
     void CalculatePaths(int max_distance, Point from, Point to);
-    
-    set<string> known_paths();
-private:
     Direction FindLeastLikelyDirection(Point from, Point to);
     void FindPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining);
     set<string> known_paths_;

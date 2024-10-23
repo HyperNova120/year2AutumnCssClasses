@@ -4,7 +4,7 @@
 #include <bitset>
 using namespace std;
 
-const bool KDEBUG = true;
+const static bool KDEBUG = true;
 
 string addStringDec(string base, string add);
 
@@ -29,17 +29,17 @@ public:
     UInt256 operator+(const Kbase_type_ &other) const;
     UInt256 &operator++(int value);
 
-    UInt256 operator-(const UInt256 &other);
-    UInt256 operator+(const Kbase_type_ value);
+    UInt256 operator-(const UInt256 &other) const;
 
     UInt256 &operator=(const UInt256 &other);
+    UInt256 &operator=(const __uint128_t &value);
 
     bool operator==(const UInt256 &other) const;
     bool operator==(const Kbase_type_ value) const;
     bool operator!=(const UInt256 &other) const;
     bool operator!=(const Kbase_type_ value) const;
 
-    UInt256 operator*(const UInt256 &other);
+    UInt256 operator*(const UInt256 &other) const;
 
     friend ostream &operator<<(ostream &os, const UInt256 &obj);
 
