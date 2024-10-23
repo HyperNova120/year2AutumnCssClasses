@@ -5,30 +5,35 @@ UInt512::UInt512()
 {
     low_ = 0;
     high_ = 0;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
 UInt512::UInt512(const UInt512 &other)
 {
     low_ = other.low_;
     high_ = other.high_;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
 UInt512::UInt512(Kbase_type_ value)
 {
     low_ = value;
     high_ = 0;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
 UInt512::UInt512(__uint128_t value)
 {
     high_ = 0;
     low_ = Kbase_type_(value);
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
 UInt512::UInt512(Kbase_type_ high, Kbase_type_ low)
 {
     high_ = high;
     low_ = low;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
 bool UInt512::operator<(const UInt512 &other) const
@@ -55,26 +60,25 @@ UInt512 &UInt512::operator+=(const UInt512 &other)
 
 UInt512 UInt512::operator*(const UInt512 &other)
 {
-    Kbase_type_ mask = Kbase_type_::GetBitwiseAndValue();
     // low bits
     // low bits (KBase_Size / 2) most significant bits
     Kbase_type_ low_upper = low_ >> Khalf_base_size;
     // low bits (KBase_Size / 2) least significant bits
-    Kbase_type_ low_lower = low_ & mask;
+    Kbase_type_ low_lower = low_ & bitwise_and_mask_;
 
     // other low bits
     // high bits (KBase_Size / 2) most significant bits
     Kbase_type_ other_low_upper = other.low_ >> Khalf_base_size;
     // high bits (KBase_Size / 2) least significant bits
-    Kbase_type_ other_low_lower = other.low_ & mask;
+    Kbase_type_ other_low_lower = other.low_ & bitwise_and_mask_;
 
     // KBase_Type TU_OU = low_Upper * other_low_Upper;
     Kbase_type_ TU_OL = low_upper * other_low_lower;
     Kbase_type_ OU_TL = other_low_upper * low_lower;
     Kbase_type_ OL_TL = other_low_lower * low_lower;
 
-    Kbase_type_ tmp = (TU_OL & mask) << Khalf_base_size;
-    Kbase_type_ tmp2 = (OU_TL & mask) << Khalf_base_size;
+    Kbase_type_ tmp = (TU_OL & bitwise_and_mask_) << Khalf_base_size;
+    Kbase_type_ tmp2 = (OU_TL & bitwise_and_mask_) << Khalf_base_size;
 
     long cc = ((tmp + tmp2) < tmp);
     tmp += tmp2;
@@ -91,12 +95,12 @@ bitset<512> UInt512::GetBitSet() const
     bitset<Kbase_size_> lower_bit_set(low_.GetBitSet());
     bitset<Kbase_size_> higher_bit_set(high_.GetBitSet());
     bitset<512> tmp;
-    for (int i = 0; i < lower_bit_set.size(); i++)
+    for (ulong i = 0; i < lower_bit_set.size(); i++)
     {
         tmp[i] = lower_bit_set[i];
     }
 
-    for (int i = 0; i < higher_bit_set.size(); i++)
+    for (ulong i = 0; i < higher_bit_set.size(); i++)
     {
         tmp[i + Kbase_size_] = higher_bit_set[i];
     }
@@ -125,7 +129,7 @@ ostream &operator<<(ostream &os, const UInt512 &obj)
     }
     string current_add = "1";
     string current_value = "0";
-    for (int i = 0; i < set.size(); i++)
+    for (ulong i = 0; i < set.size(); i++)
     {
         if (set[i] == 1)
         {

@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
     if (target_pos == robot_pos)
     {
         cout << "Already There" << endl;
+        cout << "Number of paths: 0" << endl;
         return 0;
     }
 
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
     if (greedy_robot.known_paths().size() == 0)
     {
         cout << "No Valid Paths" << endl;
-        // cout << "Number of paths: " << greedy_robot.known_paths().size() << endl;
+        cout << "Number of paths: 0" << endl;
         return 0;
     }
 
@@ -86,16 +87,29 @@ void GreedyRobot::FindPaths(Point from, Point to, string current_path, Direction
         known_paths_.insert(current_path);
         return;
     }
+
     Direction least_likely = FindLeastLikelyDirection(from, to);
 
     if (least_likely != N && last_direction != S)
-        FindPaths(Point(from.x_, from.y_ + 1), to, current_path + "N", N, (last_direction == N) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    {
+        FindPaths(Point(from.x_, from.y_ + 1), to, current_path + "N", N,
+                  (last_direction == N) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    }
     if (least_likely != S && last_direction != N)
-        FindPaths(Point(from.x_, from.y_ - 1), to, current_path + "S", S, (last_direction == S) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    {
+        FindPaths(Point(from.x_, from.y_ - 1), to, current_path + "S", S,
+                  (last_direction == S) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    }
     if (least_likely != E && last_direction != W)
-        FindPaths(Point(from.x_ + 1, from.y_), to, current_path + "E", E, (last_direction == E) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    {
+        FindPaths(Point(from.x_ + 1, from.y_), to, current_path + "E", E,
+                  (last_direction == E) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    }
     if (least_likely != W && last_direction != E)
-        FindPaths(Point(from.x_ - 1, from.y_), to, current_path + "W", W, (last_direction == W) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    {
+        FindPaths(Point(from.x_ - 1, from.y_), to, current_path + "W", W,
+                  (last_direction == W) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+    }
 }
 
 Point::Point(int x, int y)

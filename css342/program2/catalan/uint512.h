@@ -37,6 +37,7 @@ public:
 private:
     Kbase_type_ low_;
     Kbase_type_ high_;
+    Kbase_type_ bitwise_and_mask_;
 };
 
 #endif // UInt512_H_

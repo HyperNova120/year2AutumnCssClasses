@@ -10,8 +10,8 @@
 using namespace std;
 
 map<UInt512, UInt512> known_numbers_;
-long calculations = 0;
-long lookups = 0;
+long debug_calculations = 0;
+long debug_lookups = 0;
 
 UInt512 FindCatalanNumber(int n)
 {
@@ -22,10 +22,10 @@ UInt512 FindCatalanNumber(int n)
     if (known_numbers_.find(n) != known_numbers_.end())
     {
         // cout << "known number" << endl;
-        lookups++;
+        debug_lookups++;
         return known_numbers_[n];
     }
-    calculations++;
+    debug_calculations++;
     UInt512 sum_ = 0;
     for (int i = 0; i < n; i++)
     {
@@ -65,18 +65,13 @@ int main(int argc, char *argv[])
     }
 
     chrono::system_clock::time_point start = chrono::system_clock::now();
+    
     UInt512 result = FindCatalanNumber(n);
 
     if (KDEBUG)
     {
-        int testSize = (n <= 262) ? 10 : 1;
-        for (int i = 0; i < testSize - 1; i++)
-        {
-            known_numbers_.clear();
-            UInt512 resultTMP = FindCatalanNumber(n);
-        }
-        cout << "lookups to Calculations:" << lookups << "/" << calculations << " Ratio:" << ((double)lookups / (double)calculations) << ":1" << endl;
-        cout << "Average Calculation Time:" << ((chrono::system_clock::now() - start).count() / 1000000) / (double)testSize << "ms" << endl;
+        cout << "lookups to Calculations:" << debug_lookups << "/" << debug_calculations << " Ratio:" << ((double)debug_lookups / (double)debug_calculations) << ":1" << endl;
+        cout << "Calculation Time:" << ((chrono::system_clock::now() - start).count() / 1000000.0) << "ms" << endl;
     }
 
     cout << result << endl;
