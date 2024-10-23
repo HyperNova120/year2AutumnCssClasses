@@ -25,14 +25,15 @@ public:
     bool operator()(const UInt256 &other, const UInt256 &other2) const;
 
     UInt256 &operator+=(const UInt256 &other);
+    UInt256 &operator+=(const __uint128_t &value);
     UInt256 operator+(const UInt256 &other) const;
     UInt256 operator+(const Kbase_type_ &other) const;
     UInt256 &operator++(int value);
 
     UInt256 operator-(const UInt256 &other);
-    UInt256 operator+(const Kbase_type_ value);
 
     UInt256 &operator=(const UInt256 &other);
+    UInt256 &operator=(const __uint128_t &value);
 
     bool operator==(const UInt256 &other) const;
     bool operator==(const Kbase_type_ value) const;

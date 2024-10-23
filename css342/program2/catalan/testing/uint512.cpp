@@ -1,48 +1,49 @@
 #include "uint256.h"
+#include "uint512.h"
 #include <iomanip>
 #include <bitset>
 #include <cmath>
 #include <climits>
 #include <algorithm>
-UInt256::UInt256()
+UInt512::UInt512()
 {
     low_ = 0;
     high_ = 0;
-    bitwise_and_mask_ = 0xFFFFFFFFFFFFFFFF;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
-UInt256::UInt256(const UInt256 &other)
+UInt512::UInt512(const UInt512 &other)
 {
     low_ = other.low_;
     high_ = other.high_;
-    bitwise_and_mask_ = 0xFFFFFFFFFFFFFFFF;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
-UInt256::UInt256(Kbase_type_ value)
+UInt512::UInt512(__uint128_t value)
 {
     low_ = value;
     high_ = 0;
-    bitwise_and_mask_ = 0xFFFFFFFFFFFFFFFF;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
-UInt256::UInt256(Kbase_type_ high, Kbase_type_ low)
+UInt512::UInt512(Kbase_type_ high, Kbase_type_ low)
 {
     high_ = high;
     low_ = low;
-    bitwise_and_mask_ = 0xFFFFFFFFFFFFFFFF;
+    bitwise_and_mask_ = Kbase_type_::GetBitwiseAndValue();
 }
 
-bool UInt256::operator<(const UInt256 &other) const
+bool UInt512::operator<(const UInt512 &other) const
 {
     return (high_ == other.high_) ? low_ < other.low_ : high_ < other.high_;
 }
 
-bool UInt256::operator<(const Kbase_type_ value) const
+bool UInt512::operator<(const __uint128_t value) const
 {
     return high_ == 0 && low_ < value;
 }
 
-UInt256 &UInt256::operator+=(const UInt256 &other)
+UInt512 &UInt512::operator+=(const UInt512 &other)
 {
     Kbase_type_ old_low = low_;
     low_ += other.low_;
@@ -54,40 +55,41 @@ UInt256 &UInt256::operator+=(const UInt256 &other)
     return *this;
 }
 
-UInt256 UInt256::operator+(const UInt256 &other) const
+UInt512 UInt512::operator+(const UInt512 &other) const
 {
-    UInt256 tmp(*this);
+    UInt512 tmp(*this);
     return tmp += other;
 }
 
-UInt256 UInt256::operator+(const Kbase_type_ &value) const
+UInt512 &UInt512::operator+=(const __uint128_t &value)
 {
-    UInt256 tmp(*this + UInt256(value));
-    return tmp;
-}
-
-UInt256 &UInt256::operator++(int value)
-{
-    *this += UInt256(1);
+    low_ += value;
     return *this;
 }
 
-UInt256 UInt256::operator+(const Kbase_type_ value)
+UInt512 UInt512::operator+(const __uint128_t &value) const
 {
-    return *this += UInt256(value);
+    UInt512 tmp(*this + UInt512(value));
+    return tmp;
 }
 
-bool UInt256::operator==(const Kbase_type_ value) const
+UInt512 &UInt512::operator++(int value)
+{
+    *this += UInt512(1);
+    return *this;
+}
+
+bool UInt512::operator==(const __uint128_t value) const
 {
     return high_ == 0 && low_ == value;
 }
 
-bool UInt256::operator==(const UInt256 &other) const
+bool UInt512::operator==(const UInt512 &other) const
 {
     return high_ == other.high_ && low_ == other.low_;
 }
 
-UInt256 UInt256::operator*(const UInt256 &other)
+UInt512 UInt512::operator*(const UInt512 &other)
 {
     // low bits
     // low bits (KBase_Size / 2) most significant bits
@@ -113,12 +115,12 @@ UInt256 UInt256::operator*(const UInt256 &other)
     tmp += tmp2;
     cc += ((tmp + OL_TL) < tmp);
     Kbase_type_ carry = (TU_OU) + (TU_OL >> Khalf_base_size) + (OU_TL >> Khalf_base_size);
-    return UInt256(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
+    return UInt512(this->high_ * other.low_ + this->low_ * other.high_ + carry + cc, tmp + OL_TL);
 }
 
-UInt256 UInt256::operator<<(int shift) const
+UInt512 UInt512::operator<<(int shift) const
 {
-    UInt256 tmp(high_, low_);
+    UInt512 tmp(high_, low_);
     if (shift < Kbase_size_)
     {
         tmp.high_ <<= shift;
@@ -134,9 +136,9 @@ UInt256 UInt256::operator<<(int shift) const
     return tmp;
 }
 
-UInt256 UInt256::operator>>(int shift) const
+UInt512 UInt512::operator>>(int shift) const
 {
-    UInt256 tmp(high_, low_);
+    UInt512 tmp(high_, low_);
     if (shift < Kbase_size_)
     {
         tmp.low_ >>= shift;
@@ -152,7 +154,7 @@ UInt256 UInt256::operator>>(int shift) const
     return tmp;
 }
 
-UInt256 &UInt256::operator<<=(int shift)
+UInt512 &UInt512::operator<<=(int shift)
 {
     if (shift < Kbase_size_)
     {
@@ -169,7 +171,7 @@ UInt256 &UInt256::operator<<=(int shift)
     return *this;
 }
 
-UInt256 &UInt256::operator>>=(int shift)
+UInt512 &UInt512::operator>>=(int shift)
 {
     if (shift < Kbase_size_)
     {
@@ -186,97 +188,67 @@ UInt256 &UInt256::operator>>=(int shift)
     return *this;
 }
 
-UInt256 UInt256::operator&(const UInt256 &other) const
+UInt512 UInt512::operator&(const UInt512 &other) const
 {
-    return UInt256(high_ & other.high_, low_ & other.low_);
+    return UInt512(high_ & other.high_, low_ & other.low_);
 }
 
-UInt256 &UInt256::operator|=(const UInt256 &other)
+UInt512 &UInt512::operator|=(const UInt512 &other)
 {
     high_ |= other.high_;
     low_ |= other.low_;
     return *this;
 }
 
-bitset<UInt256::Kbase_size_ * 2> UInt256::GetBitSet() const
+bitset<UInt512::Kbase_size_ * 2> UInt512::GetBitSet() const
 {
-    unsigned long long high_high_part = high_ >> Khalf_base_size;
-    unsigned long long high_Low_part = high_ & bitwise_and_mask_;
-    unsigned long long low_high_part = low_ >> Khalf_base_size;
-    unsigned long long low_low_part = low_ & bitwise_and_mask_;
+    bitset<Kbase_size_> lower_bit_set(low_.GetBitSet());
+    bitset<Kbase_size_> higher_bit_set(high_.GetBitSet());
     bitset<Kbase_size_ * 2> tmp;
-    tmp |= high_high_part;
-    tmp <<= Khalf_base_size;
-    tmp |= high_Low_part;
-    tmp <<= Khalf_base_size;
-    tmp |= low_high_part;
-    tmp <<= Khalf_base_size;
-    tmp |= low_low_part;
+    for (ulong i = 0; i < lower_bit_set.size(); i++)
+    {
+        tmp[i] = lower_bit_set[i];
+        tmp[i + Kbase_size_] = higher_bit_set[i];
+    }
     return tmp;
 }
 
-UInt256 UInt256::GetBitwiseAndValue()
+UInt512 UInt512::GetBitwiseAndValue()
 {
-    Kbase_type_ tmp = ULLONG_MAX;
-    tmp <<= Khalf_base_size;
+    __uint128_t tmp = ULLONG_MAX;
+    tmp <<= 64;
     tmp |= ULLONG_MAX;
-    return UInt256(0, tmp);
+    return UInt512(0, UInt256(tmp,tmp));
 }
 
-UInt256::Kbase_type_ UInt256::high() const
+UInt512::Kbase_type_ UInt512::high() const
 {
     return high_;
 }
 
-UInt256::Kbase_type_ UInt256::low() const
+UInt512::Kbase_type_ UInt512::low() const
 {
     return low_;
 }
 
-bool UInt256::operator!=(const UInt256 &other) const
+bool UInt512::operator!=(const UInt512 &other) const
 {
     return !(*this == other);
 }
 
-bool UInt256::operator!=(const Kbase_type_ value) const
+bool UInt512::operator!=(const __uint128_t value) const
 {
     return !(*this == value);
 }
 
-bool UInt256::operator()(const UInt256 &other, const UInt256 &other2) const
+bool UInt512::operator()(const UInt512 &other, const UInt512 &other2) const
 {
     return other < other2;
 }
 
-string addStringDec(string base, string add)
+ostream &operator<<(ostream &os, const UInt512 &obj)
 {
-    string current_value = "";
-    int carry = 0;
-    int max_length = max(base.length(), add.length());
-    for (int i = 0; i < max_length; i++)
-    {
-        int base_at = (i < base.length()) ? base[i] - '0' : 0;
-        int add_at = (i < add.length()) ? add[i] - '0' : 0;
-
-        int tmp = base_at + add_at + carry;
-        carry = 0;
-        if (tmp > 9)
-        {
-            tmp -= 10;
-            carry++;
-        }
-        current_value = current_value + to_string(tmp);
-    }
-    if (carry != 0)
-    {
-        current_value = current_value + "1";
-    }
-    return current_value;
-}
-
-ostream &operator<<(ostream &os, const UInt256 &obj)
-{
-    bitset<UInt256::Kbase_size_ * 2> set = obj.GetBitSet();
+    bitset<UInt512::Kbase_size_ * 2> set = obj.GetBitSet();
     if (KDEBUG)
     {
         os << "set after bitops:" << set << "\n";
@@ -288,6 +260,10 @@ ostream &operator<<(ostream &os, const UInt256 &obj)
         if (set[i] == 1)
         {
             current_value = addStringDec(current_value, current_add);
+            if (KDEBUG)
+            {
+                cout << "ADD VALUE:" << i << endl;
+            }
         }
         current_add = addStringDec(current_add, current_add);
     }
@@ -296,9 +272,17 @@ ostream &operator<<(ostream &os, const UInt256 &obj)
     return os;
 }
 
-UInt256 &UInt256::operator=(const UInt256 &other)
+UInt512 &UInt512::operator=(const UInt512 &other)
 {
     low_ = other.low_;
     high_ = other.high_;
     return *this;
 }
+
+UInt512 &UInt512::operator=(const __uint128_t &value)
+{
+    high_ = 0;
+    low_ = value;
+    return *this;
+}
+

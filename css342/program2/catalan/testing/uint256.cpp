@@ -54,6 +54,13 @@ UInt256 &UInt256::operator+=(const UInt256 &other)
     return *this;
 }
 
+
+UInt256 &UInt256::operator+=(const __uint128_t &value)
+{
+    low_ += value;
+    return *this;
+}
+
 UInt256 UInt256::operator+(const UInt256 &other) const
 {
     UInt256 tmp(*this);
@@ -70,11 +77,6 @@ UInt256 &UInt256::operator++(int value)
 {
     *this += UInt256(1);
     return *this;
-}
-
-UInt256 UInt256::operator+(const Kbase_type_ value)
-{
-    return *this += UInt256(value);
 }
 
 bool UInt256::operator==(const Kbase_type_ value) const
@@ -218,7 +220,7 @@ bitset<UInt256::Kbase_size_ * 2> UInt256::GetBitSet() const
 UInt256 UInt256::GetBitwiseAndValue()
 {
     Kbase_type_ tmp = ULLONG_MAX;
-    tmp <<= Khalf_base_size;
+    tmp <<= 64;
     tmp |= ULLONG_MAX;
     return UInt256(0, tmp);
 }
@@ -300,5 +302,12 @@ UInt256 &UInt256::operator=(const UInt256 &other)
 {
     low_ = other.low_;
     high_ = other.high_;
+    return *this;
+}
+
+UInt256 &UInt256::operator=(const __uint128_t &value)
+{
+    low_ = value;
+    high_ = 0;
     return *this;
 }

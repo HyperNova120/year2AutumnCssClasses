@@ -43,7 +43,7 @@ bool UInt512::operator<(const UInt512 &other) const
 
 bool UInt512::operator<(const __uint128_t value) const
 {
-    return low_ < value;
+    return high_ == 0 && low_ < value;
 }
 
 UInt512 &UInt512::operator+=(const UInt512 &other)
@@ -56,6 +56,56 @@ UInt512 &UInt512::operator+=(const UInt512 &other)
         high_++;
     }
     return *this;
+}
+
+UInt512 UInt512::operator+(const UInt512 &other) const
+{
+    UInt512 tmp(*this);
+    return tmp += other;
+}
+
+UInt512 UInt512::operator+(const Kbase_type_ &value) const
+{
+    UInt512 tmp(*this);
+    return tmp += value;
+}
+
+UInt512 &UInt512::operator++(int value)
+{
+    *this += UInt512(1);
+    return *this;
+}
+
+UInt512 UInt512::operator+(const __uint128_t value)
+{
+    return *this += UInt512(value);
+}
+
+UInt512 &UInt512::operator=(const UInt512 &other)
+{
+    low_ = other.low_;
+    high_ = other.high_;
+    return *this;
+}
+
+bool UInt512::operator==(const UInt512 &other) const
+{
+    return high_ == other.high_ && low_ == other.low_;
+}
+
+bool UInt512::operator==(const __uint128_t value) const
+{
+    return high_ == 0 && low_ == value;
+}
+
+bool UInt512::operator!=(const UInt512 &other) const
+{
+    return !(*this == other);
+}
+
+bool UInt512::operator!=(const __uint128_t value) const
+{
+    return !(*this == value);
 }
 
 UInt512 UInt512::operator*(const UInt512 &other)
@@ -90,6 +140,88 @@ UInt512 UInt512::operator*(const UInt512 &other)
     return UInt512((this->high_ * other.low_) + (this->low_ * other.high_) + carry + cc, tmp += OL_TL);
 }
 
+UInt512 UInt512::operator<<(int shift) const
+{
+    UInt512 tmp(high_, low_);
+    if (shift < Kbase_size_)
+    {
+        tmp.high_ <<= shift;
+        tmp.high_ |= (tmp.low_ >> (Kbase_size_ - shift));
+        tmp.low_ <<= shift;
+    }
+    else
+    {
+        tmp.high_ = tmp.low_;
+        tmp.high_ <<= shift - Kbase_size_;
+        tmp.low_ = 0;
+    }
+    return tmp;
+}
+
+UInt512 UInt512::operator>>(int shift) const
+{
+    UInt512 tmp(high_, low_);
+    if (shift < Kbase_size_)
+    {
+        tmp.low_ >>= shift;
+        tmp.low_ |= (tmp.high_ << (Kbase_size_ - shift));
+        tmp.high_ >>= shift;
+    }
+    else
+    {
+        tmp.low_ = tmp.high_;
+        tmp.low_ >>= shift - Kbase_size_;
+        tmp.high_ = 0;
+    }
+    return tmp;
+}
+
+UInt512 &UInt512::operator<<=(int shift)
+{
+    if (shift < Kbase_size_)
+    {
+        high_ <<= shift;
+        high_ |= (low_ >> (Kbase_size_ - shift));
+        low_ <<= shift;
+    }
+    else
+    {
+        high_ = low_;
+        high_ <<= shift - Kbase_size_;
+        low_ = 0;
+    }
+    return *this;
+}
+
+UInt512 &UInt512::operator>>=(int shift)
+{
+    if (shift < Kbase_size_)
+    {
+        low_ >>= shift;
+        low_ |= (high_ << (Kbase_size_ - shift));
+        high_ >>= shift;
+    }
+    else
+    {
+        low_ = high_;
+        low_ >>= shift - Kbase_size_;
+        high_ = 0;
+    }
+    return *this;
+}
+
+UInt512 UInt512::operator&(const UInt512 &other) const
+{
+    return UInt512(high_ & other.high_, low_ & other.low_);
+}
+
+UInt512 &UInt512::operator|=(const UInt512 &other)
+{
+    high_ |= other.high_;
+    low_ |= other.low_;
+    return *this;
+}
+
 bitset<UInt512::Kbase_size_ * 2> UInt512::GetBitSet() const
 {
     bitset<Kbase_size_> lower_bit_set(low_.GetBitSet());
@@ -98,13 +230,17 @@ bitset<UInt512::Kbase_size_ * 2> UInt512::GetBitSet() const
     for (ulong i = 0; i < lower_bit_set.size(); i++)
     {
         tmp[i] = lower_bit_set[i];
-    }
-
-    for (ulong i = 0; i < higher_bit_set.size(); i++)
-    {
         tmp[i + Kbase_size_] = higher_bit_set[i];
     }
     return tmp;
+}
+
+UInt512 UInt512::GetBitwiseAndValue()
+{
+    __uint128_t tmp = ULLONG_MAX;
+    tmp <<= 64;
+    tmp |= ULLONG_MAX;
+    return UInt512(0, UInt256(tmp, tmp));
 }
 
 UInt512::Kbase_type_ UInt512::high() const
