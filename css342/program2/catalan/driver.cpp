@@ -16,10 +16,16 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    stringstream ss;
-    ss << argv[1];
     int n;
-    ss >> n;
+    try
+    {
+        n = stoi(argv[1]);
+    }
+    catch(const std::exception& e)
+    {
+        cout << "Catalan: Malformed Input; Input Must Be Integer" << endl;
+    }
+    
 
     Catalan finder(n);
 

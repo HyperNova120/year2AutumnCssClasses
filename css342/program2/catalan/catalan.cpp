@@ -26,7 +26,6 @@ UInt512 Catalan::FindCatalanNumber(int n)
 
 Catalan::Catalan(int n)
 {
-
     if (n < 0)
     {
         cout << "Catalan: Malformed Input; Cannot Be Negative" << endl;

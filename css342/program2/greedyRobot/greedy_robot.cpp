@@ -99,6 +99,11 @@ Direction GreedyRobot::FindLeastLikelyDirection(Point from, Point to)
 
 GreedyRobot::GreedyRobot(Point robot_pos, Point target_pos, int max__move_distance_)
 {
+    if (max__move_distance_ <= 0)
+    {
+        cout << "Max Move Distance Must Be > 0" << endl;
+        return;
+    }
     if (target_pos == robot_pos)
     {
         cout << "Already There" << endl;
