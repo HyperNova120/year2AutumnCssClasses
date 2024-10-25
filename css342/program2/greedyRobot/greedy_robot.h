@@ -32,9 +32,10 @@ private:
     int CalculateShortestPossibleDistance(const Point &from, const Point &to) const;
     void CalculatePaths(const int max_distance, const Point from, const Point to);
     Direction FindLeastLikelyDirection(const Point &from, const Point &to) const;
-    void FindPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining);
+    void FindPaths(const Point &from, const string &current_path, const Direction &last_direction, const int &same_steps_remaining);
     int known_paths_ = 0;
     int max_path_length_ = 0;
     int max_move_distance_ = 0;
+    Point target_;
 };
 #endif // GREEDY_ROBOT_H_

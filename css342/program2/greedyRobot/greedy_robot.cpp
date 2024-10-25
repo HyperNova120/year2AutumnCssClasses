@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <string>
 #include <vector>
 #include "greedy_robot.h"
 using namespace std;
@@ -14,18 +15,17 @@ void GreedyRobot::CalculatePaths(const int max_move_distance, const Point from, 
 {
     max_move_distance_ = max_move_distance;
     max_path_length_ = CalculateShortestPossibleDistance(from, to);
-    FindPaths(from, to, "", NA, max_move_distance);
+    target_ = to;
+    FindPaths(from, "", NA, max_move_distance);
 }
 
-void GreedyRobot::FindPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining)
+void GreedyRobot::FindPaths(const Point &from, const string &current_path, const Direction &last_direction, const int &same_steps_remaining)
 {
-    if (current_path.length() > max_path_length_                                                   // checks if the path we have taken is longer than possible
-        || same_steps_remaining < 0                                                                // checks if we have moved passed allowed moves in same direction
-        || current_path.length() + CalculateShortestPossibleDistance(from, to) > max_path_length_) // checks if this path is even possible in best case scenario
+    if (current_path.length() + CalculateShortestPossibleDistance(from, target_) > max_path_length_) // checks if this path is even possible in best case scenario
     {
         return;
     }
-    if (from == to)
+    if (from == target_)
     {
         // found path
         //cout << current_path << endl;
@@ -33,27 +33,42 @@ void GreedyRobot::FindPaths(Point from, Point to, string current_path, Direction
         return;
     }
 
-    Direction least_likely = FindLeastLikelyDirection(from, to);
+    if (target_.x_ > from.x_)
+    {
+        // east
+        if ( !((last_direction == E) && same_steps_remaining == 0))
+        {
+            FindPaths(Point(from.x_ + 1, from.y_), current_path + "E", E,
+                      (last_direction == E) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+        }
+    }
+    else if ((target_.x_ < from.x_))
+    {
+        // west
+        if (!((last_direction == W) && same_steps_remaining == 0))
+        {
+            FindPaths(Point(from.x_ - 1, from.y_), current_path + "W", W,
+                      (last_direction == W) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+        }
+    }
 
-    if (least_likely != N && last_direction != S)
+    if (target_.y_ > from.y_)
     {
-        FindPaths(Point(from.x_, from.y_ + 1), to, current_path + "N", N,
-                  (last_direction == N) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+        // north
+        if (!((last_direction == N) && same_steps_remaining == 0))
+        {
+            FindPaths(Point(from.x_, from.y_ + 1), current_path + "N", N,
+                      (last_direction == N) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+        }
     }
-    if (least_likely != S && last_direction != N)
+    else if (target_.y_ < from.y_)
     {
-        FindPaths(Point(from.x_, from.y_ - 1), to, current_path + "S", S,
-                  (last_direction == S) ? same_steps_remaining - 1 : max_move_distance_ - 1);
-    }
-    if (least_likely != E && last_direction != W)
-    {
-        FindPaths(Point(from.x_ + 1, from.y_), to, current_path + "E", E,
-                  (last_direction == E) ? same_steps_remaining - 1 : max_move_distance_ - 1);
-    }
-    if (least_likely != W && last_direction != E)
-    {
-        FindPaths(Point(from.x_ - 1, from.y_), to, current_path + "W", W,
-                  (last_direction == W) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+        // south
+        if (!((last_direction == S) && same_steps_remaining == 0))
+        {
+            FindPaths(Point(from.x_, from.y_ - 1), current_path + "S", S,
+                      (last_direction == S) ? same_steps_remaining - 1 : max_move_distance_ - 1);
+        }
     }
 }
 
@@ -81,7 +96,7 @@ int GreedyRobot::known_paths() const
 
 Direction GreedyRobot::FindLeastLikelyDirection(const Point &from, const Point &to) const
 {
-    if (abs(to.x_ - from.x_))
+    if (abs(to.x_ - from.x_) > abs(to.y_ - from.y_))
     {
         // x largest dir
         if (to.x_ - from.x_ > 0)
@@ -90,8 +105,7 @@ Direction GreedyRobot::FindLeastLikelyDirection(const Point &from, const Point &
         }
         return E;
     }
-
-    if (to.y_ - from.y_ > 0)
+    else if (to.y_ - from.y_ > 0)
     {
         return S;
     }

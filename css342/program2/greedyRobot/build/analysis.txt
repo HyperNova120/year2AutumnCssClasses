@@ -2,26 +2,25 @@ Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
- time   seconds   seconds    calls  ms/call  ms/call  name    
- 50.14      0.05     0.05        1    50.14    80.23  GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int)
- 20.06      0.07     0.02  8371010     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
- 10.03      0.08     0.01  8371010     0.00     0.00  Point::Point(int, int)
- 10.03      0.09     0.01        2     5.01     5.01  Point::Point()
- 10.03      0.10     0.01        1    10.03    90.26  GreedyRobot::CalculatePaths(int, Point, Point)
-  0.00      0.10     0.00  7114368     0.00     0.00  GreedyRobot::CalculateShortestPossibleDistance(Point, Point) const
-  0.00      0.10     0.00  4280404     0.00     0.00  Point::operator==(Point const&) const
-  0.00      0.10     0.00  3420261     0.00     0.00  GreedyRobot::FindLeastLikelyDirection(Point, Point) const
-  0.00      0.10     0.00        5     0.00     0.00  int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)
-  0.00      0.10     0.00        5     0.00     0.00  std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int)
-  0.00      0.10     0.00        5     0.00     0.00  __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>)
-  0.00      0.10     0.00        5     0.00     0.00  __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno()
-  0.00      0.10     0.00        5     0.00     0.00  __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno()
-  0.00      0.10     0.00        2     0.00     0.00  GreedyRobot::known_paths() const
-  0.00      0.10     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceE5PointS0_
-  0.00      0.10     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
-  0.00      0.10     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
-  0.00      0.10     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
-  0.00      0.10     0.00        1     0.00    90.26  GreedyRobot::GreedyRobot(Point, Point, int)
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 53.78      4.95     4.95        1     4.95     8.70  GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&)
+ 26.18      7.36     2.41 341563909     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  5.55      7.88     0.51 280018718     0.00     0.00  Point::operator==(Point const&) const
+  4.79      8.32     0.44 341563909     0.00     0.00  Point::Point(int, int)
+  4.14      8.70     0.38 341563911     0.00     0.00  GreedyRobot::CalculateShortestPossibleDistance(Point const&, Point const&) const
+  2.29      8.91     0.21        3     0.07     0.07  Point::Point()
+  1.52      9.05     0.14        5     0.03     0.03  int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)
+  1.31      9.17     0.12        1     0.12     8.82  GreedyRobot::CalculatePaths(int, Point, Point)
+  0.71      9.23     0.07        1     0.07     0.07  _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceERK5PointS2_
+  0.00      9.23     0.00        5     0.00     0.03  std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int)
+  0.00      9.23     0.00        5     0.00     0.00  __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>)
+  0.00      9.23     0.00        5     0.00     0.00  __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno()
+  0.00      9.23     0.00        5     0.00     0.00  __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno()
+  0.00      9.23     0.00        2     0.00     0.00  GreedyRobot::known_paths() const
+  0.00      9.23     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
+  0.00      9.23     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      9.23     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      9.23     0.00        1     0.00     8.89  GreedyRobot::GreedyRobot(Point, Point, int)
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -59,90 +58,93 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 9.97% of 0.10 seconds
+granularity: each sample hit covers 2 byte(s) for 0.11% of 9.23 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]    100.0    0.00    0.10                 main [1]
-                0.00    0.09       1/1           GreedyRobot::GreedyRobot(Point, Point, int) [3]
-                0.01    0.00       2/2           Point::Point() [7]
-                0.00    0.00       5/5           std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) [18]
+[1]     99.3    0.00    9.17                 main [1]
+                0.00    8.89       1/1           GreedyRobot::GreedyRobot(Point, Point, int) [2]
+                0.00    0.14       5/5           std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) [11]
+                0.14    0.00       2/3           Point::Point() [9]
 -----------------------------------------------
-                0.01    0.08       1/1           GreedyRobot::GreedyRobot(Point, Point, int) [3]
-[2]     90.0    0.01    0.08       1         GreedyRobot::CalculatePaths(int, Point, Point) [2]
-                0.05    0.03       1/1           GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-                0.00    0.00       1/7114368     GreedyRobot::CalculateShortestPossibleDistance(Point, Point) const [14]
+                0.00    8.89       1/1           main [1]
+[2]     96.3    0.00    8.89       1         GreedyRobot::GreedyRobot(Point, Point, int) [2]
+                0.12    8.70       1/1           GreedyRobot::CalculatePaths(int, Point, Point) [3]
+                0.07    0.00       1/3           Point::Point() [9]
+                0.00    0.00       1/280018718     Point::operator==(Point const&) const [6]
+                0.00    0.00       2/2           GreedyRobot::known_paths() const [23]
 -----------------------------------------------
-                0.00    0.09       1/1           main [1]
-[3]     90.0    0.00    0.09       1         GreedyRobot::GreedyRobot(Point, Point, int) [3]
-                0.01    0.08       1/1           GreedyRobot::CalculatePaths(int, Point, Point) [2]
-                0.00    0.00       2/2           GreedyRobot::known_paths() const [22]
-                0.00    0.00       1/4280404     Point::operator==(Point const&) const [15]
+                0.12    8.70       1/1           GreedyRobot::GreedyRobot(Point, Point, int) [2]
+[3]     95.5    0.12    8.70       1         GreedyRobot::CalculatePaths(int, Point, Point) [3]
+                4.95    3.74       1/1           GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
+                0.00    0.00       1/341563911     GreedyRobot::CalculateShortestPossibleDistance(Point const&, Point const&) const [8]
 -----------------------------------------------
-                             8371010             GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-                0.05    0.03       1/1           GreedyRobot::CalculatePaths(int, Point, Point) [2]
-[4]     80.0    0.05    0.03       1+8371010 GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-                0.02    0.00 8371010/8371010     std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [5]
-                0.01    0.00 8371010/8371010     Point::Point(int, int) [6]
-                0.00    0.00 7114367/7114368     GreedyRobot::CalculateShortestPossibleDistance(Point, Point) const [14]
-                0.00    0.00 4280403/4280404     Point::operator==(Point const&) const [15]
-                0.00    0.00 3420261/3420261     GreedyRobot::FindLeastLikelyDirection(Point, Point) const [16]
-                             8371010             GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
+                             341563909             GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
+                4.95    3.74       1/1           GreedyRobot::CalculatePaths(int, Point, Point) [3]
+[4]     94.2    4.95    3.74       1+341563909 GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
+                2.41    0.00 341563909/341563909     std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [5]
+                0.51    0.00 280018717/280018718     Point::operator==(Point const&) const [6]
+                0.44    0.00 341563909/341563909     Point::Point(int, int) [7]
+                0.38    0.00 341563910/341563911     GreedyRobot::CalculateShortestPossibleDistance(Point const&, Point const&) const [8]
+                             341563909             GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
 -----------------------------------------------
-                0.02    0.00 8371010/8371010     GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-[5]     20.0    0.02    0.00 8371010         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [5]
+                2.41    0.00 341563909/341563909     GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
+[5]     26.1    2.41    0.00 341563909         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [5]
 -----------------------------------------------
-                0.01    0.00 8371010/8371010     GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-[6]     10.0    0.01    0.00 8371010         Point::Point(int, int) [6]
+                0.00    0.00       1/280018718     GreedyRobot::GreedyRobot(Point, Point, int) [2]
+                0.51    0.00 280018717/280018718     GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
+[6]      5.5    0.51    0.00 280018718         Point::operator==(Point const&) const [6]
 -----------------------------------------------
-                0.01    0.00       2/2           main [1]
-[7]     10.0    0.01    0.00       2         Point::Point() [7]
+                0.44    0.00 341563909/341563909     GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
+[7]      4.8    0.44    0.00 341563909         Point::Point(int, int) [7]
 -----------------------------------------------
-                0.00    0.00       1/7114368     GreedyRobot::CalculatePaths(int, Point, Point) [2]
-                0.00    0.00 7114367/7114368     GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-[14]     0.0    0.00    0.00 7114368         GreedyRobot::CalculateShortestPossibleDistance(Point, Point) const [14]
+                0.00    0.00       1/341563911     GreedyRobot::CalculatePaths(int, Point, Point) [3]
+                0.38    0.00 341563910/341563911     GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [4]
+[8]      4.1    0.38    0.00 341563911         GreedyRobot::CalculateShortestPossibleDistance(Point const&, Point const&) const [8]
 -----------------------------------------------
-                0.00    0.00       1/4280404     GreedyRobot::GreedyRobot(Point, Point, int) [3]
-                0.00    0.00 4280403/4280404     GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-[15]     0.0    0.00    0.00 4280404         Point::operator==(Point const&) const [15]
+                0.07    0.00       1/3           GreedyRobot::GreedyRobot(Point, Point, int) [2]
+                0.14    0.00       2/3           main [1]
+[9]      2.3    0.21    0.00       3         Point::Point() [9]
 -----------------------------------------------
-                0.00    0.00 3420261/3420261     GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [4]
-[16]     0.0    0.00    0.00 3420261         GreedyRobot::FindLeastLikelyDirection(Point, Point) const [16]
+                0.14    0.00       5/5           std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) [11]
+[10]     1.5    0.14    0.00       5         int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [10]
+                0.00    0.00       5/5           __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno() [21]
+                0.00    0.00       5/5           __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>) [20]
+                0.00    0.00       5/5           __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno() [22]
 -----------------------------------------------
-                0.00    0.00       5/5           std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) [18]
-[17]     0.0    0.00    0.00       5         int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [17]
-                0.00    0.00       5/5           __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno() [20]
-                0.00    0.00       5/5           __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>) [19]
-                0.00    0.00       5/5           __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno() [21]
+                0.00    0.14       5/5           main [1]
+[11]     1.5    0.00    0.14       5         std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) [11]
+                0.14    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [10]
 -----------------------------------------------
-                0.00    0.00       5/5           main [1]
-[18]     0.0    0.00    0.00       5         std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) [18]
-                0.00    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [17]
------------------------------------------------
-                0.00    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [17]
-[19]     0.0    0.00    0.00       5         __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>) [19]
------------------------------------------------
-                0.00    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [17]
-[20]     0.0    0.00    0.00       5         __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno() [20]
------------------------------------------------
-                0.00    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [17]
-[21]     0.0    0.00    0.00       5         __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno() [21]
------------------------------------------------
-                0.00    0.00       2/2           GreedyRobot::GreedyRobot(Point, Point, int) [3]
-[22]     0.0    0.00    0.00       2         GreedyRobot::known_paths() const [22]
------------------------------------------------
-                0.00    0.00       1/1           __libc_csu_init [32]
-[23]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceE5PointS0_ [23]
+                0.07    0.00       1/1           __libc_csu_init [13]
+[12]     0.7    0.07    0.00       1         _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceERK5PointS2_ [12]
                 0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [26]
 -----------------------------------------------
-                0.00    0.00       1/1           __libc_csu_init [32]
+                                                 <spontaneous>
+[13]     0.7    0.00    0.07                 __libc_csu_init [13]
+                0.07    0.00       1/1           _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceERK5PointS2_ [12]
+                0.00    0.00       1/1           _GLOBAL__sub_I_main [24]
+-----------------------------------------------
+                0.00    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [10]
+[20]     0.0    0.00    0.00       5         __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>) [20]
+-----------------------------------------------
+                0.00    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [10]
+[21]     0.0    0.00    0.00       5         __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno() [21]
+-----------------------------------------------
+                0.00    0.00       5/5           int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [10]
+[22]     0.0    0.00    0.00       5         __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno() [22]
+-----------------------------------------------
+                0.00    0.00       2/2           GreedyRobot::GreedyRobot(Point, Point, int) [2]
+[23]     0.0    0.00    0.00       2         GreedyRobot::known_paths() const [23]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [13]
 [24]     0.0    0.00    0.00       1         _GLOBAL__sub_I_main [24]
                 0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [25]
 -----------------------------------------------
                 0.00    0.00       1/1           _GLOBAL__sub_I_main [24]
 [25]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [25]
 -----------------------------------------------
-                0.00    0.00       1/1           _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceE5PointS0_ [23]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceERK5PointS2_ [12]
 [26]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [26]
 -----------------------------------------------
 
@@ -236,10 +238,9 @@ notice and this notice are preserved.
 
 Index by function name
 
-  [23] _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceE5PointS0_ [6] Point::Point(int, int) [18] std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int)
-  [24] _GLOBAL__sub_I_main     [7] Point::Point()          [5] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
-  [25] __static_initialization_and_destruction_0(int, int) [17] int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [19] __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>)
-  [26] __static_initialization_and_destruction_0(int, int) [22] GreedyRobot::known_paths() const [20] __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno()
-   [2] GreedyRobot::CalculatePaths(int, Point, Point) [16] GreedyRobot::FindLeastLikelyDirection(Point, Point) const [21] __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno()
-   [4] GreedyRobot::FindPaths(Point, Point, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Direction, int) [14] GreedyRobot::CalculateShortestPossibleDistance(Point, Point) const
-   [3] GreedyRobot::GreedyRobot(Point, Point, int) [15] Point::operator==(Point const&) const
+  [12] _GLOBAL__sub_I__ZNK11GreedyRobot33CalculateShortestPossibleDistanceERK5PointS2_ [2] GreedyRobot::GreedyRobot(Point, Point, int) [6] Point::operator==(Point const&) const
+  [24] _GLOBAL__sub_I_main     [7] Point::Point(int, int) [11] std::__cxx11::stoi(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int)
+  [25] __static_initialization_and_destruction_0(int, int) [9] Point::Point() [5] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  [26] __static_initialization_and_destruction_0(int, int) [10] int __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int) [20] __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Range_chk::_S_chk(long, std::integral_constant<bool, true>)
+   [3] GreedyRobot::CalculatePaths(int, Point, Point) [23] GreedyRobot::known_paths() const [21] __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::_Save_errno()
+   [4] GreedyRobot::FindPaths(Point const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Direction const&, int const&) [8] GreedyRobot::CalculateShortestPossibleDistance(Point const&, Point const&) const [22] __gnu_cxx::__stoa<long, int, char, int>(long (*)(char const*, char**, int), char const*, char const*, unsigned long*, int)::_Save_errno::~_Save_errno()
