@@ -132,14 +132,6 @@ bitset<UInt512::Kbase_size_ * 2> UInt512::GetBitSet() const
     return tmp;
 }
 
-UInt512 UInt512::GetBitwiseAndValue()
-{
-    __uint128_t tmp = ULLONG_MAX;
-    tmp <<= 64;
-    tmp |= ULLONG_MAX;
-    return UInt512(0, UInt256(tmp, tmp));
-}
-
 UInt512::Kbase_type_ UInt512::high() const
 {
     return high_;

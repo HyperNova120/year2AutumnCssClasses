@@ -4,7 +4,7 @@
 #include <bitset>
 using namespace std;
 
-const static bool KDEBUG = true;
+const static bool KDEBUG = false;
 
 string addStringDec(string base, string add);
 

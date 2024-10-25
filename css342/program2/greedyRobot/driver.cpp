@@ -20,12 +20,13 @@ int main(int argc, char *argv[])
         max__move_distance_ = stoi(argv[1]);
         robot_pos.x_ = stoi(argv[2]);
         robot_pos.y_ = stoi(argv[3]);
-        target_pos.x_ = stoi(argv[2]);
-        target_pos.y_ = stoi(argv[3]);
+        target_pos.x_ = stoi(argv[4]);
+        target_pos.y_ = stoi(argv[5]);
     }
     catch (const std::exception &e)
     {
         cout << "Malformed Input, Parameters Must Be Int" << endl;
+        return -1;
     }
 
     GreedyRobot(robot_pos, target_pos, max__move_distance_);

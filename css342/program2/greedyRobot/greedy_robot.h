@@ -10,7 +10,7 @@ struct Point
     int y_;
     Point();
     Point(int x, int y);
-    bool operator==(const Point &other);
+    bool operator==(const Point &other) const;
 };
 enum Direction
 {
@@ -24,17 +24,17 @@ enum Direction
 class GreedyRobot
 {
 public:
-    GreedyRobot(Point robot_pos, Point target_pos, int max__move_distance_);
+    GreedyRobot(const Point robot_pos, const Point target_pos, const int max__move_distance_);
 
-    set<string> known_paths();
+    int known_paths() const;
 
 private:
-    int CalculateShortestPossibleDistance(Point from, Point to);
-    void CalculatePaths(int max_distance, Point from, Point to);
-    Direction FindLeastLikelyDirection(Point from, Point to);
+    int CalculateShortestPossibleDistance(const Point &from, const Point &to) const;
+    void CalculatePaths(const int max_distance, const Point from, const Point to);
+    Direction FindLeastLikelyDirection(const Point &from, const Point &to) const;
     void FindPaths(Point from, Point to, string current_path, Direction last_direction, int same_steps_remaining);
-    set<string> known_paths_;
-    int max_path_length_;
-    int max_move_distance_;
+    int known_paths_ = 0;
+    int max_path_length_ = 0;
+    int max_move_distance_ = 0;
 };
 #endif // GREEDY_ROBOT_H_

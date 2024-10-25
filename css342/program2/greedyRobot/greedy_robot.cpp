@@ -5,12 +5,12 @@
 #include "greedy_robot.h"
 using namespace std;
 
-int GreedyRobot::CalculateShortestPossibleDistance(Point from, Point to)
+int GreedyRobot::CalculateShortestPossibleDistance(const Point &from, const Point &to) const
 {
     return abs(from.x_ - to.x_) + abs(from.y_ - to.y_);
 }
 
-void GreedyRobot::CalculatePaths(int max_move_distance, Point from, Point to)
+void GreedyRobot::CalculatePaths(const int max_move_distance, const Point from, const Point to)
 {
     max_move_distance_ = max_move_distance;
     max_path_length_ = CalculateShortestPossibleDistance(from, to);
@@ -28,7 +28,8 @@ void GreedyRobot::FindPaths(Point from, Point to, string current_path, Direction
     if (from == to)
     {
         // found path
-        known_paths_.insert(current_path);
+        //cout << current_path << endl;
+        known_paths_++;
         return;
     }
 
@@ -68,17 +69,17 @@ Point::Point()
     y_ = 0;
 }
 
-bool Point::operator==(const Point &other)
+bool Point::operator==(const Point &other) const
 {
     return x_ == other.x_ && y_ == other.y_;
 }
 
-set<string> GreedyRobot::known_paths()
+int GreedyRobot::known_paths() const
 {
     return known_paths_;
 }
 
-Direction GreedyRobot::FindLeastLikelyDirection(Point from, Point to)
+Direction GreedyRobot::FindLeastLikelyDirection(const Point &from, const Point &to) const
 {
     if (abs(to.x_ - from.x_))
     {
@@ -97,7 +98,7 @@ Direction GreedyRobot::FindLeastLikelyDirection(Point from, Point to)
     return N;
 }
 
-GreedyRobot::GreedyRobot(Point robot_pos, Point target_pos, int max__move_distance_)
+GreedyRobot::GreedyRobot(const Point robot_pos, const Point target_pos, const int max__move_distance_)
 {
     if (max__move_distance_ <= 0)
     {
@@ -112,16 +113,11 @@ GreedyRobot::GreedyRobot(Point robot_pos, Point target_pos, int max__move_distan
     }
     CalculatePaths(max__move_distance_, robot_pos, target_pos);
 
-    if (known_paths().size() == 0)
+    if (known_paths() == 0)
     {
         cout << "No Valid Paths" << endl;
         cout << "Number of paths: 0" << endl;
         return;
     }
-
-    for (string s : known_paths())
-    {
-        cout << s << endl;
-    }
-    cout << "Number of paths: " << known_paths().size() << endl;
+    cout << "Number of paths: " << known_paths() << endl;
 }

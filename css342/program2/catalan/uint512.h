@@ -41,8 +41,6 @@ public:
 
     bitset<Kbase_size_ * 2> GetBitSet() const;
 
-    static UInt512 GetBitwiseAndValue();
-
     Kbase_type_ high() const;
     Kbase_type_ low() const;
 
