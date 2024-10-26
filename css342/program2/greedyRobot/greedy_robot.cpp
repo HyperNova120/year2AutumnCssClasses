@@ -29,7 +29,7 @@ void GreedyRobot::FindPaths(const Point &from, const string &current_path, const
     if (from == target_)
     {
         // found path
-        cout << current_path << endl;
+        //cout << current_path << endl;
         known_paths_++;
         return;
     }
