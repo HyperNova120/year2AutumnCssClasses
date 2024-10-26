@@ -25,3 +25,36 @@ echo :   Testing c 0 0 0
 ./greedy_robot c 0 0 0  
 echo :   Testing 2 c c c c C
 ./greedy_robot 2 c c c c C
+
+echo more tests
+./greedy_robot 2 0 0 20 20
+./greedy_robot 2 0 0 -20 20
+./greedy_robot 2 0 0 -20 -20
+./greedy_robot 2 0 0 20 -20
+
+./greedy_robot 2 20 20 0 0
+./greedy_robot 2 20 -20 0 0
+./greedy_robot 2 -20 -20 0 0
+./greedy_robot 2 -20 20 0 0
+
+./greedy_robot 2 20 0 0 0
+./greedy_robot 2 0 20 0 0
+./greedy_robot 2 0 0 20 0
+./greedy_robot 2 0 0 0 20
+
+./greedy_robot 4 5 0 0 0
+./greedy_robot 4 0 5 0 0
+./greedy_robot 4 0 0 5 0
+./greedy_robot 4 0 0 0 5
+
+
+./greedy_robot 5 5 0 0 0
+./greedy_robot 5 0 5 0 0
+./greedy_robot 5 0 0 5 0
+./greedy_robot 5 0 0 0 5
+
+
+./greedy_robot 5 -5 0 0 0
+./greedy_robot 5 0 -5 0 0
+./greedy_robot 5 0 0 -5 0
+./greedy_robot 5 0 0 0 -5

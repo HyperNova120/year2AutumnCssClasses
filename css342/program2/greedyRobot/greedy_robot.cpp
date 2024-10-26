@@ -21,14 +21,14 @@ void GreedyRobot::CalculatePaths(const int max_move_distance, const Point from, 
 
 void GreedyRobot::FindPaths(const Point &from, const string &current_path, const Direction &last_direction, const int &same_steps_remaining)
 {
-    if (current_path.length() + CalculateShortestPossibleDistance(from, target_) > max_path_length_) // checks if this path is even possible in best case scenario
+    if (current_path.length() > max_path_length_ )
     {
         return;
     }
     if (from == target_)
     {
         // found path
-        //cout << current_path << endl;
+        cout << current_path << endl;
         known_paths_++;
         return;
     }
@@ -36,13 +36,13 @@ void GreedyRobot::FindPaths(const Point &from, const string &current_path, const
     if (target_.x_ > from.x_)
     {
         // east
-        if ( !((last_direction == E) && same_steps_remaining == 0))
+        if (!((last_direction == E) && same_steps_remaining == 0))
         {
             FindPaths(Point(from.x_ + 1, from.y_), current_path + "E", E,
                       (last_direction == E) ? same_steps_remaining - 1 : max_move_distance_ - 1);
         }
     }
-    else if ((target_.x_ < from.x_))
+    else if (target_.x_ < from.x_)
     {
         // west
         if (!((last_direction == W) && same_steps_remaining == 0))
@@ -92,24 +92,6 @@ bool Point::operator==(const Point &other) const
 int GreedyRobot::known_paths() const
 {
     return known_paths_;
-}
-
-Direction GreedyRobot::FindLeastLikelyDirection(const Point &from, const Point &to) const
-{
-    if (abs(to.x_ - from.x_) > abs(to.y_ - from.y_))
-    {
-        // x largest dir
-        if (to.x_ - from.x_ > 0)
-        {
-            return W;
-        }
-        return E;
-    }
-    else if (to.y_ - from.y_ > 0)
-    {
-        return S;
-    }
-    return N;
 }
 
 GreedyRobot::GreedyRobot(const Point robot_pos, const Point target_pos, const int max__move_distance_)
