@@ -23,6 +23,7 @@ void GreedyRobot::FindPaths(const Point &from, const string &current_path, const
 {
     if (current_path.length() > max_path_length_ )
     {
+        //path too long/invalid
         return;
     }
     if (from == target_)
@@ -33,6 +34,8 @@ void GreedyRobot::FindPaths(const Point &from, const string &current_path, const
         return;
     }
 
+
+    //only move in the direction towards the target point
     if (target_.x_ > from.x_)
     {
         // east
