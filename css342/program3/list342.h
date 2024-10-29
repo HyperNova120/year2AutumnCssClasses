@@ -98,7 +98,6 @@ bool List342<T>::Insert(T *obj)
     {
         // not unique
         delete buffer;
-        buffer = nullptr;
         return false;
     }
 
@@ -257,7 +256,7 @@ inline bool List342<T>::operator!=(const List342<T> &other) const
 template <typename U>
 ostream &operator<<(ostream &os, const List342<U> &obj)
 {
-    typename List342<U>::Node *current_node = obj.head_; // auto works but if i manually declare current_node as the same type that auto makes it when you look at it in debug, gcc suddenly doesnt know wtf im talking about.... WTF
+    typename List342<U>::Node *current_node = obj.head_;
     while (current_node != nullptr)
     {
         if (current_node->data != nullptr)
