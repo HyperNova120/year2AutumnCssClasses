@@ -10,6 +10,7 @@ int main()
         c7("Hank", "Aaron", 3), c8("Madison", "Fife", 7);
     Child c9("Miles", "Davis", 65), c10("John", "Zorn", 4), c11;
     List342<Child> class1, class2, soccer, chess;
+
     int a = 1, b = -1, c = 13;
     class1.Insert(&c1);
     class1.Insert(&c2);
@@ -70,4 +71,8 @@ int main()
     {
         cout << "File Children: " << fileChildren << endl;
     }
+    class1.Size();
+    class2.Size();
+    soccer.Size();
+    chess.Size();
 }

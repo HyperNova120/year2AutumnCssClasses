@@ -35,13 +35,14 @@ public:
     int Size() const;
 
 private:
+
     struct Node
     {
         T *data = nullptr;
         Node *next = nullptr;
     };
-
     Node *head_ = nullptr;
+    int size_ = 0;
 };
 
 template <typename T>
@@ -88,24 +89,17 @@ bool List342<T>::Insert(T *obj)
     buffer->next = head_;
 
     Node *current = buffer;
-    while (current->next != nullptr)
+    while (current->next != nullptr && *(current->next->data) < *obj)
     {
-        if (*(current->next->data) >= *obj)
-        {
-            break;
-        }
         current = current->next;
     }
 
-    if (current->next != nullptr)
+    if (current->next != nullptr && *(current->next->data) == *obj)
     {
-        if (*(current->next->data) == *obj)
-        {
-            // not unique
-            delete buffer;
-            buffer = nullptr;
-            return false;
-        }
+        // not unique
+        delete buffer;
+        buffer = nullptr;
+        return false;
     }
 
     Node *tmp = new Node;
@@ -115,8 +109,9 @@ bool List342<T>::Insert(T *obj)
     current->next = tmp;
     head_ = buffer->next;
 
+    size_++;
+
     delete buffer;
-    buffer = nullptr;
     return true;
 }
 
@@ -131,20 +126,19 @@ bool List342<T>::Remove(T target, T &result)
         if (*(current->next->data) == target)
         {
             result = *(current->next->data);
-            current->next->data = nullptr;
             Node *tmp = current->next;
             current->next = current->next->next;
-            delete tmp;
-            tmp = nullptr;
             head_ = buffer->next;
+            size_--;
+
+            delete tmp->data;
+            delete tmp;
             delete buffer;
-            buffer = nullptr;
             return true;
         }
         current = current->next;
     }
     delete buffer;
-    buffer = nullptr;
     return false;
 }
 
@@ -167,6 +161,7 @@ bool List342<T>::Peek(T target, T &result)
 template <typename T>
 void List342<T>::DeleteList()
 {
+    size_ = 0;
     while (head_ != nullptr)
     {
         Node *tmp = head_->next;
@@ -190,7 +185,6 @@ bool List342<T>::Merge(List342<T> &list1)
         list1.Remove(*(list1.head_->data), target);
         Insert(&target);
     }
-
     return true;
 }
 
@@ -218,6 +212,7 @@ template <typename T>
 List342<T> &List342<T>::operator=(const List342<T> &other)
 {
     DeleteList();
+    size_ = other.size_;
     Node *other_current = other.head_;
     Node *buffer = new Node();
     Node *current = buffer;
@@ -232,7 +227,6 @@ List342<T> &List342<T>::operator=(const List342<T> &other)
     }
     head_ = buffer->next;
     delete buffer;
-    buffer = nullptr;
     return *this;
 }
 
@@ -243,11 +237,7 @@ bool List342<T>::operator==(const List342<T> &other) const
     Node *other_current = other.head_;
     while (this_current != nullptr && other_current != nullptr)
     {
-        if ((this_current->data == nullptr) != (other_current->data == nullptr))
-        {
-            return false;
-        }
-        else if (*(this_current->data) != *(other_current->data))
+        if ((this_current->data == nullptr) != (other_current->data == nullptr) || *(this_current->data) != *(other_current->data))
         {
             return false;
         }
@@ -267,7 +257,7 @@ inline bool List342<T>::operator!=(const List342<T> &other) const
 template <typename U>
 ostream &operator<<(ostream &os, const List342<U> &obj)
 {
-    auto current_node = obj.head_; // auto works but if i manually declare current_node as the same type that auto makes it when you look at it in debug, gcc suddenly doesnt know wtf im talking about.... WTF
+    typename List342<U>::Node *current_node = obj.head_; // auto works but if i manually declare current_node as the same type that auto makes it when you look at it in debug, gcc suddenly doesnt know wtf im talking about.... WTF
     while (current_node != nullptr)
     {
         if (current_node->data != nullptr)
@@ -282,14 +272,7 @@ ostream &operator<<(ostream &os, const List342<U> &obj)
 template <typename T>
 int List342<T>::Size() const
 {
-    Node *current = head_;
-    int size = 0;
-    while (current != nullptr)
-    {
-        size++;
-        current = current->next;
-    }
-    return size;
+    return size_;
 }
 
 #endif // LIST342_H_
