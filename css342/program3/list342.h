@@ -42,9 +42,6 @@ private:
     };
 
     Node *head_ = nullptr;
-
-public:
-    Node *head() const;
 };
 
 template <typename T>
@@ -65,16 +62,20 @@ List342<T>::~List342()
 template <typename T>
 bool List342<T>::BuildList(string file_name)
 {
-    ifstream ifs(file_name);
-    if (!ifs)
+    ifstream ifs;
+    ifs.open(file_name);
+    if (!ifs.is_open())
     {
         ifs.close();
         return false;
     }
-    while (ifs)
+
+    T obj;
+    while (ifs >> obj)
     {
-        T tmp;
-        Insert(ifs >> tmp);
+        T *tmp = new T(obj);
+        Insert(tmp);
+        delete tmp;
     }
     ifs.close();
     return true;
@@ -83,11 +84,9 @@ bool List342<T>::BuildList(string file_name)
 template <typename T>
 bool List342<T>::Insert(T *obj)
 {
-    Node *tmp = new Node();
-    tmp->data = new T(*obj);
-
     Node *buffer = new Node();
     buffer->next = head_;
+
     Node *current = buffer;
     while (current->next != nullptr)
     {
@@ -98,27 +97,27 @@ bool List342<T>::Insert(T *obj)
         current = current->next;
     }
 
-    if (current->next == nullptr)
+    if (current->next != nullptr)
     {
-        current->next = tmp;
-        head_ = buffer->next;
-        delete buffer;
-        tmp = nullptr;
-        return true;
+        if (*(current->next->data) == *obj)
+        {
+            // not unique
+            delete buffer;
+            buffer = nullptr;
+            return false;
+        }
     }
-    else if (*(current->next->data) > *obj)
-    {
-        tmp->next = current->next;
-        current->next = tmp;
-        head_ = buffer->next;
-        delete buffer;
-        tmp = nullptr;
-        return true;
-    }
-    
+
+    Node *tmp = new Node;
+    tmp->data = new T(*obj);
+    tmp->next = current->next;
+
+    current->next = tmp;
+    head_ = buffer->next;
+
     delete buffer;
-    delete tmp;
-    return false;
+    buffer = nullptr;
+    return true;
 }
 
 template <typename T>
@@ -136,33 +135,32 @@ bool List342<T>::Remove(T target, T &result)
             Node *tmp = current->next;
             current->next = current->next->next;
             delete tmp;
+            tmp = nullptr;
             head_ = buffer->next;
             delete buffer;
+            buffer = nullptr;
             return true;
         }
         current = current->next;
     }
     delete buffer;
+    buffer = nullptr;
     return false;
 }
 
 template <typename T>
 bool List342<T>::Peek(T target, T &result)
 {
-    Node *buffer = new Node();
-    buffer->next = head_;
-    Node *current = buffer;
-    while (current->next != nullptr)
+    Node *current = head_;
+    while (current != nullptr)
     {
-        if (*(current->next->data) == target)
+        if (*(current->data) == target)
         {
-            result = *(current->next->data);
-            delete buffer;
+            result = *(current->data);
             return true;
         }
         current = current->next;
     }
-    delete buffer;
     return false;
 }
 
@@ -181,18 +179,18 @@ void List342<T>::DeleteList()
 template <typename T>
 bool List342<T>::Merge(List342<T> &list1)
 {
-    if (*this == list1)
+    if (this == &list1)
     {
         return false;
     }
 
     while (list1.head_ != nullptr)
     {
-        T *target = list1.head_->data;
-        T tmp;
-        list1.Remove(*target, tmp);
-        Insert(target);
+        T target;
+        list1.Remove(*(list1.head_->data), target);
+        Insert(&target);
     }
+
     return true;
 }
 
@@ -220,12 +218,21 @@ template <typename T>
 List342<T> &List342<T>::operator=(const List342<T> &other)
 {
     DeleteList();
-    Node *current = other.head_;
-    while (current != nullptr)
+    Node *other_current = other.head_;
+    Node *buffer = new Node();
+    Node *current = buffer;
+    while (other_current != nullptr)
     {
-        Insert(current->data);
+        Node *tmp = new Node();
+        tmp->data = new T(*(other_current->data));
+        current->next = tmp;
+
+        other_current = other_current->next;
         current = current->next;
     }
+    head_ = buffer->next;
+    delete buffer;
+    buffer = nullptr;
     return *this;
 }
 
@@ -257,10 +264,10 @@ inline bool List342<T>::operator!=(const List342<T> &other) const
     return !(*this == other);
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, const List342<T> &obj)
+template <typename U>
+ostream &operator<<(ostream &os, const List342<U> &obj)
 {
-    auto current_node = obj.head_; //auto works but if i manually declare current_node as the same type that auto makes it when you look at it in debug, gcc suddenly doesnt know wtf im talking about.... WTF
+    auto current_node = obj.head_; // auto works but if i manually declare current_node as the same type that auto makes it when you look at it in debug, gcc suddenly doesnt know wtf im talking about.... WTF
     while (current_node != nullptr)
     {
         if (current_node->data != nullptr)

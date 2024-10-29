@@ -64,4 +64,10 @@ int main()
     numbers.Insert(&c);
     cout << "These are the numbers: " << numbers << endl;
     numbers.DeleteList();
+
+    List342<Child> fileChildren;
+    if (fileChildren.BuildList("testfile.txt"))
+    {
+        cout << "File Children: " << fileChildren << endl;
+    }
 }
