@@ -35,7 +35,6 @@ public:
     int Size() const;
 
 private:
-
     struct Node
     {
         T *data = nullptr;
@@ -124,7 +123,7 @@ bool List342<T>::Remove(T target, T &result)
     {
         if (*(current->next->data) == target)
         {
-            result = *(current->next->data);
+            result = T(*(current->next->data));
             Node *tmp = current->next;
             current->next = current->next->next;
             head_ = buffer->next;
@@ -149,7 +148,7 @@ bool List342<T>::Peek(T target, T &result)
     {
         if (*(current->data) == target)
         {
-            result = *(current->data);
+            result = T(*(current->data));
             return true;
         }
         current = current->next;
