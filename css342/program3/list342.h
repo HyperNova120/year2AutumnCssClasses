@@ -73,9 +73,7 @@ bool List342<T>::BuildList(string file_name)
     T obj;
     while (ifs >> obj)
     {
-        T *tmp = new T(obj);
-        Insert(tmp);
-        delete tmp;
+        Insert(&obj);
     }
     ifs.close();
     return true;
@@ -123,7 +121,7 @@ bool List342<T>::Remove(T target, T &result)
     {
         if (*(current->next->data) == target)
         {
-            result = T(*(current->next->data));
+            result = *(current->next->data);
             Node *tmp = current->next;
             current->next = current->next->next;
             head_ = buffer->next;
@@ -189,26 +187,61 @@ bool List342<T>::Merge(List342<T> &list1)
 template <typename T>
 List342<T> List342<T>::operator+(const List342<T> &other) const
 {
-    List342<T> tmp = List342(*this);
-    tmp += other;
+    List342<T> tmp = List342();
+
+    Node *current = head_;
+    Node *other_current = other.head_;
+
+    Node *buffer = new Node();
+    Node *tmp_current = buffer;
+    while (current != nullptr || other_current != nullptr)
+    {
+        T obj;
+        if ((current == nullptr && other_current != nullptr) ||
+            ((current != nullptr && other_current != nullptr) && (*(current->data) > *(other_current->data))))
+        {
+            // this is at end of list while other still has more
+            obj = *(other_current->data);
+            other_current = other_current->next;
+        }
+        else if ((current != nullptr && other_current == nullptr) ||
+                 ((current != nullptr && other_current != nullptr) && (*(current->data) <= *(other_current->data))))
+        {
+            // other is at end of list while this still has more
+            obj = *(current->data);
+            if (*(current->data) == *(other_current->data))
+            {
+                other_current = other_current->next;
+            }
+            current = current->next;
+        }
+        // set tmp next element
+        Node *tmp_node = new Node();
+        tmp_node->data = new T(obj);
+        tmp_current->next = tmp_node;
+
+        tmp_current = tmp_current->next;
+    }
+
+    tmp.head_ = buffer->next;
+    delete buffer;
     return tmp;
 }
 
 template <typename T>
 List342<T> &List342<T>::operator+=(const List342<T> &other)
 {
-    Node *current = other.head_;
-    while (current != nullptr)
-    {
-        Insert(current->data);
-        current = current->next;
-    }
+    *this = *this + other;
     return *this;
 }
 
 template <typename T>
 List342<T> &List342<T>::operator=(const List342<T> &other)
 {
+    if (this == &other)
+    {
+        return *this;
+    }
     DeleteList();
     size_ = other.size_;
     Node *other_current = other.head_;
