@@ -175,12 +175,8 @@ bool List342<T>::Merge(List342<T> &list1)
         return false;
     }
 
-    while (list1.head_ != nullptr)
-    {
-        T target;
-        list1.Remove(*(list1.head_->data), target);
-        Insert(&target);
-    }
+    *this += list1;
+    list1.DeleteList();
     return true;
 }
 
