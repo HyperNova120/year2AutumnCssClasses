@@ -213,7 +213,7 @@ List342<T> List342<T>::operator+(const List342<T> &other) const
         }
         else
         {
-            cerr << "How did we get here?" << endl;
+            cerr << "How did we even get here?" << endl;
         }
         // set tmp next element
         Node *tmp_node = new Node();
@@ -243,6 +243,7 @@ List342<T> &List342<T>::operator=(const List342<T> &other)
         return *this;
     }
     DeleteList();
+
     size_ = other.size_;
     Node *other_current = other.head_;
     Node *buffer = new Node();
@@ -306,8 +307,6 @@ int List342<T>::Size() const
     return size_;
 }
 
-#endif // LIST342_H_
-
 template <typename T>
 inline List342<T>::Node::~Node()
 {
@@ -315,3 +314,5 @@ inline List342<T>::Node::~Node()
     // assumed deletion of node is not intented to chain
     delete data;
 }
+
+#endif // LIST342_H_
