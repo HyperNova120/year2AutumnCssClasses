@@ -70,9 +70,6 @@ int main()
     if (fileChildren.BuildList("testfile.txt"))
     {
         cout << "File Children: " << fileChildren << endl;
+        cout << "File Children Size: " << fileChildren.Size() << endl;
     }
-    class1.Size();
-    class2.Size();
-    soccer.Size();
-    chess.Size();
 }

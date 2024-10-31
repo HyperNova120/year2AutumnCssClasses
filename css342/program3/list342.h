@@ -122,13 +122,13 @@ bool List342<T>::Remove(T target, T &result)
         if (*(current->next->data) == target)
         {
             result = *(current->next->data);
-            Node *tmp = current->next;
+            Node *node_to_remove = current->next;
             current->next = current->next->next;
             head_ = buffer->next;
             size_--;
 
-            delete tmp->data;
-            delete tmp;
+            delete node_to_remove->data;
+            delete node_to_remove;
             delete buffer;
             return true;
         }
@@ -175,12 +175,8 @@ bool List342<T>::Merge(List342<T> &list1)
         return false;
     }
 
-    while (list1.head_ != nullptr)
-    {
-        T target;
-        list1.Remove(*(list1.head_->data), target);
-        Insert(&target);
-    }
+    *this += list1;
+    list1.DeleteList();
     return true;
 }
 
@@ -209,11 +205,16 @@ List342<T> List342<T>::operator+(const List342<T> &other) const
         {
             // other is at end of list while this still has more
             obj = *(current->data);
-            if (*(current->data) == *(other_current->data))
+            if ((current != nullptr && other_current != nullptr) && (*(current->data) == *(other_current->data)))
             {
+                //both lists have data and the data at each index is equal
                 other_current = other_current->next;
             }
             current = current->next;
+        }
+        else 
+        {
+            cerr << "How did we get here?" << endl;
         }
         // set tmp next element
         Node *tmp_node = new Node();
