@@ -37,6 +37,7 @@ public:
 private:
     struct Node
     {
+        ~Node();
         T *data = nullptr;
         Node *next = nullptr;
     };
@@ -127,7 +128,6 @@ bool List342<T>::Remove(T target, T &result)
             head_ = buffer->next;
             size_--;
 
-            delete node_to_remove->data;
             delete node_to_remove;
             delete buffer;
             return true;
@@ -161,7 +161,6 @@ void List342<T>::DeleteList()
     while (head_ != nullptr)
     {
         Node *tmp = head_->next;
-        delete head_->data;
         delete head_;
         head_ = tmp;
     }
@@ -207,12 +206,12 @@ List342<T> List342<T>::operator+(const List342<T> &other) const
             obj = *(current->data);
             if ((current != nullptr && other_current != nullptr) && (*(current->data) == *(other_current->data)))
             {
-                //both lists have data and the data at each index is equal
+                // both lists have data and the data at each index is equal
                 other_current = other_current->next;
             }
             current = current->next;
         }
-        else 
+        else
         {
             cerr << "How did we get here?" << endl;
         }
@@ -308,3 +307,11 @@ int List342<T>::Size() const
 }
 
 #endif // LIST342_H_
+
+template <typename T>
+inline List342<T>::Node::~Node()
+{
+    // next node deletion is handled externally
+    // assumed deletion of node is not intented to chain
+    delete data;
+}
