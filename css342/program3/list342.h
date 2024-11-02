@@ -182,7 +182,7 @@ bool List342<T>::Merge(List342<T> &list1)
 template <typename T>
 List342<T> List342<T>::operator+(const List342<T> &other) const
 {
-    List342<T> tmp = List342();
+    /* List342<T> tmp = List342();
 
     Node *current = head_;
     Node *other_current = other.head_;
@@ -225,13 +225,55 @@ List342<T> List342<T>::operator+(const List342<T> &other) const
 
     tmp.head_ = buffer->next;
     delete buffer;
+    return tmp; */
+
+    // in case of need to switch to this
+    List342<T> tmp = *this;
+    tmp += other;
     return tmp;
 }
 
 template <typename T>
 List342<T> &List342<T>::operator+=(const List342<T> &other)
 {
-    *this = *this + other;
+    /* *this = *this + other;
+    return *this; */
+
+    // in case of need to switch to this
+    Node *buffer = new Node();
+    buffer->next = head_;
+    Node *current = buffer;
+
+    Node *other_current = other.head_;
+
+    while (current->next != nullptr && other_current != nullptr)
+    {
+        while (*(other_current->data) < *(current->next->data))
+        {
+            Node *tmp = new Node();
+            tmp->data = new T(*(other_current->data));
+            tmp->next = current->next;
+            current->next = tmp;
+            current = current->next;
+            other_current = other_current->next;
+        }
+        while (other_current != nullptr && *(other_current->data) == *(current->next->data))
+        {
+            other_current = other_current->next;
+        }
+        current = current->next;
+    }
+    while (other_current != nullptr)
+    {
+        Node *tmp = new Node();
+        tmp->data = new T(*(other_current->data));
+        tmp->next = current->next;
+        current->next = tmp;
+        current = current->next;
+        other_current = other_current->next;
+    }
+    head_ = buffer->next;
+    delete buffer;
     return *this;
 }
 
