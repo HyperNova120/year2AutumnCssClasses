@@ -42,7 +42,6 @@ private:
         Node *next = nullptr;
     };
     Node *head_ = nullptr;
-    int size_ = 0;
 };
 
 template <typename T>
@@ -106,7 +105,6 @@ bool List342<T>::Insert(T *obj)
     current->next = tmp;
     head_ = buffer->next;
 
-    size_++;
 
     delete buffer;
     return true;
@@ -126,7 +124,6 @@ bool List342<T>::Remove(T target, T &result)
             Node *node_to_remove = current->next;
             current->next = current->next->next;
             head_ = buffer->next;
-            size_--;
 
             delete node_to_remove;
             delete buffer;
@@ -157,7 +154,6 @@ bool List342<T>::Peek(T target, T &result)
 template <typename T>
 void List342<T>::DeleteList()
 {
-    size_ = 0;
     while (head_ != nullptr)
     {
         Node *tmp = head_->next;
@@ -174,60 +170,41 @@ bool List342<T>::Merge(List342<T> &list1)
         return false;
     }
 
-    *this += list1;
-    list1.DeleteList();
+    Node *buffer = new Node();
+    buffer->next = head_;
+    Node *current = buffer;
+
+    while (current->next != nullptr && list1.head_ != nullptr)
+    {
+        while (*(list1.head_->data) < *(current->next->data))
+        {
+            Node *tmp = list1.head_;
+            list1.head_ = tmp->next;
+            tmp->next = current->next;
+            current->next = tmp;
+        }
+        while (list1.head_ != nullptr && *(list1.head_->data) == *(current->next->data))
+        {
+            Node *tmp = list1.head_;
+            list1.head_ = list1.head_->next;
+            delete tmp;
+        }
+        current = current->next;
+    }
+    if (list1.head_ != nullptr)
+    {
+        current->next = list1.head_;
+        list1.head_ = nullptr;
+    }
+    head_ = buffer->next;
+    delete buffer;
+
     return true;
 }
 
 template <typename T>
 List342<T> List342<T>::operator+(const List342<T> &other) const
 {
-    /* List342<T> tmp = List342();
-
-    Node *current = head_;
-    Node *other_current = other.head_;
-
-    Node *buffer = new Node();
-    Node *tmp_current = buffer;
-    while (current != nullptr || other_current != nullptr)
-    {
-        T obj;
-        if ((current == nullptr && other_current != nullptr) ||
-            ((current != nullptr && other_current != nullptr) && (*(current->data) > *(other_current->data))))
-        {
-            // this is at end of list while other still has more
-            obj = *(other_current->data);
-            other_current = other_current->next;
-        }
-        else if ((current != nullptr && other_current == nullptr) ||
-                 ((current != nullptr && other_current != nullptr) && (*(current->data) <= *(other_current->data))))
-        {
-            // other is at end of list while this still has more
-            obj = *(current->data);
-            if ((current != nullptr && other_current != nullptr) && (*(current->data) == *(other_current->data)))
-            {
-                // both lists have data and the data at each index is equal
-                other_current = other_current->next;
-            }
-            current = current->next;
-        }
-        else
-        {
-            cerr << "How did we even get here?" << endl;
-        }
-        // set tmp next element
-        Node *tmp_node = new Node();
-        tmp_node->data = new T(obj);
-        tmp_current->next = tmp_node;
-
-        tmp_current = tmp_current->next;
-    }
-
-    tmp.head_ = buffer->next;
-    delete buffer;
-    return tmp; */
-
-    // in case of need to switch to this
     List342<T> tmp = *this;
     tmp += other;
     return tmp;
@@ -236,10 +213,6 @@ List342<T> List342<T>::operator+(const List342<T> &other) const
 template <typename T>
 List342<T> &List342<T>::operator+=(const List342<T> &other)
 {
-    /* *this = *this + other;
-    return *this; */
-
-    // in case of need to switch to this
     Node *buffer = new Node();
     buffer->next = head_;
     Node *current = buffer;
@@ -286,7 +259,6 @@ List342<T> &List342<T>::operator=(const List342<T> &other)
     }
     DeleteList();
 
-    size_ = other.size_;
     Node *other_current = other.head_;
     Node *buffer = new Node();
     Node *current = buffer;
@@ -346,7 +318,14 @@ ostream &operator<<(ostream &os, const List342<U> &obj)
 template <typename T>
 int List342<T>::Size() const
 {
-    return size_;
+    int size = 0;
+    Node *tmp = head_;
+    while (tmp != nullptr)
+    {
+        size++;
+        tmp = tmp->next;
+    }
+    return size;
 }
 
 template <typename T>
