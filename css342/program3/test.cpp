@@ -42,6 +42,7 @@ int main()
     {
         cout << "Removed from class1, student " << c11 << endl;
     }
+    class1 += class1;
     cout << "class1: " << class1 << endl;
     soccer.Insert(&c6);
     soccer.Insert(&c4);
