@@ -105,7 +105,6 @@ bool List342<T>::Insert(T *obj)
     current->next = tmp;
     head_ = buffer->next;
 
-
     delete buffer;
     return true;
 }
