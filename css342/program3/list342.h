@@ -6,6 +6,7 @@
 
 using namespace std;
 
+//a templatized sorted linked list
 template <typename T>
 class List342
 {
@@ -86,6 +87,8 @@ bool List342<T>::Insert(T *obj)
     buffer->next = head_;
 
     Node *current = buffer;
+
+    //step forward until current->next >= obj
     while (current->next != nullptr && *(current->next->data) < *obj)
     {
         current = current->next;
@@ -331,7 +334,7 @@ template <typename T>
 inline List342<T>::Node::~Node()
 {
     // next node deletion is handled externally
-    // assumed deletion of node is not intented to chain
+    // deletion of node is not intented to chain
     delete data;
 }
 
