@@ -18,7 +18,7 @@ public:
     bool BuildList(string file_name);
     bool Insert(T *obj);
     bool Remove(T target, T &result);
-    bool Peek(T target, T &result);
+    bool Peek(T target, T &result) const;
     void DeleteList();
     bool Merge(List342<T> &list1);
 
@@ -138,7 +138,7 @@ bool List342<T>::Remove(T target, T &result)
 }
 
 template <typename T>
-bool List342<T>::Peek(T target, T &result)
+bool List342<T>::Peek(T target, T &result) const
 {
     Node *current = head_;
     while (current != nullptr)
