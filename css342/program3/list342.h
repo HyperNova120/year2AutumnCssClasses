@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//a templatized sorted linked list
+// a templatized sorted linked list
 template <typename T>
 class List342
 {
@@ -43,6 +43,7 @@ private:
         Node *next = nullptr;
     };
     Node *head_ = nullptr;
+    int size_ = 0;
 };
 
 template <typename T>
@@ -71,10 +72,19 @@ bool List342<T>::BuildList(string file_name)
         return false;
     }
 
-    T obj;
-    while (ifs >> obj)
+    try
     {
-        Insert(&obj);
+        T obj;
+        while (ifs >> obj)
+        {
+            Insert(&obj);
+        }
+    }
+    catch (exception &e)
+    {
+        DeleteList();
+        ifs.close();
+        return false;
     }
     ifs.close();
     return true;
@@ -88,7 +98,7 @@ bool List342<T>::Insert(T *obj)
 
     Node *current = buffer;
 
-    //step forward until current->next >= obj
+    // step forward until current->next >= obj
     while (current->next != nullptr && *(current->next->data) < *obj)
     {
         current = current->next;
@@ -107,6 +117,8 @@ bool List342<T>::Insert(T *obj)
 
     current->next = tmp;
     head_ = buffer->next;
+
+    size_++;
 
     delete buffer;
     return true;
@@ -129,6 +141,7 @@ bool List342<T>::Remove(T target, T &result)
 
             delete node_to_remove;
             delete buffer;
+            size_--;
             return true;
         }
         current = current->next;
@@ -162,6 +175,7 @@ void List342<T>::DeleteList()
         delete head_;
         head_ = tmp;
     }
+    size_ = 0;
 }
 
 template <typename T>
@@ -184,11 +198,14 @@ bool List342<T>::Merge(List342<T> &list1)
             list1.head_ = tmp->next;
             tmp->next = current->next;
             current->next = tmp;
+            size_++;
+            list1.size_--;
         }
         while (list1.head_ != nullptr && *(list1.head_->data) == *(current->next->data))
         {
             Node *tmp = list1.head_;
             list1.head_ = list1.head_->next;
+            list1.size_--;
             delete tmp;
         }
         current = current->next;
@@ -199,6 +216,7 @@ bool List342<T>::Merge(List342<T> &list1)
         list1.head_ = nullptr;
     }
     head_ = buffer->next;
+    size_ += list1.size_;
     delete buffer;
 
     return true;
@@ -231,6 +249,7 @@ List342<T> &List342<T>::operator+=(const List342<T> &other)
             current->next = tmp;
             current = current->next;
             other_current = other_current->next;
+            size_++;
         }
         while (other_current != nullptr && *(other_current->data) == *(current->next->data))
         {
@@ -246,6 +265,7 @@ List342<T> &List342<T>::operator+=(const List342<T> &other)
         current->next = tmp;
         current = current->next;
         other_current = other_current->next;
+        size_++;
     }
     head_ = buffer->next;
     delete buffer;
@@ -260,6 +280,8 @@ List342<T> &List342<T>::operator=(const List342<T> &other)
         return *this;
     }
     DeleteList();
+
+    size_ = other.size_;
 
     Node *other_current = other.head_;
     Node *buffer = new Node();
@@ -281,6 +303,10 @@ List342<T> &List342<T>::operator=(const List342<T> &other)
 template <typename T>
 bool List342<T>::operator==(const List342<T> &other) const
 {
+    if (size_ != other.size_)
+    {
+        return false;
+    }
     Node *this_current = head_;
     Node *other_current = other.head_;
     while (this_current != nullptr && other_current != nullptr)
@@ -320,14 +346,7 @@ ostream &operator<<(ostream &os, const List342<U> &obj)
 template <typename T>
 int List342<T>::Size() const
 {
-    int size = 0;
-    Node *tmp = head_;
-    while (tmp != nullptr)
-    {
-        size++;
-        tmp = tmp->next;
-    }
-    return size;
+    return size_;
 }
 
 template <typename T>

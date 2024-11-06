@@ -29,15 +29,18 @@ int main()
     class2.Insert(&c6);
     class2.Insert(&c7);
     class2.Insert(&c10);
+    class2.Size();
     cout << "Class2: " << class2 << endl;
     class1.Merge(class2);
     class2.Merge(class1);
     class1.Merge(class2);
     class1.Merge(class1);
+    class1.Size();
     cout << "class1 and 2 Merged: " << class1 << endl;
     class1.Remove(c4, c11);
     class1.Remove(c5, c11);
     class1.Remove(c11, c11);
+    class1.Size();
     if (class1.Remove(c1, c11))
     {
         cout << "Removed from class1, student " << c11 << endl;
@@ -47,8 +50,10 @@ int main()
     soccer.Insert(&c6);
     soccer.Insert(&c4);
     soccer.Insert(&c9);
+    soccer.Size();
     cout << "soccer: " << soccer << endl;
     soccer += class1;
+    soccer.Size();
     cout << "soccer += class1 : " << soccer << endl;
     List342<Child> football = soccer;
     if (football == soccer)
@@ -60,10 +65,13 @@ int main()
         cout << c11 << " is on the football team" << endl;
     }
     soccer.DeleteList();
+    
+    soccer.Size();
     List342<int> numbers;
     numbers.Insert(&a);
     numbers.Insert(&b);
     numbers.Insert(&c);
+    numbers.Size();
     cout << "These are the numbers: " << numbers << endl;
     numbers.DeleteList();
 
