@@ -217,6 +217,7 @@ bool List342<T>::Merge(List342<T> &list1)
     }
     head_ = buffer->next;
     size_ += list1.size_;
+    list1.size_ = 0;
     delete buffer;
 
     return true;
