@@ -1,9 +1,93 @@
 #include <iostream>
 #include "list342.h"
 #include "child.h"
+#include <vector>
 using namespace std;
+
+void stringTests()
+{
+    string s1 = "AA";
+    string s2 = "BB";
+    string s3 = "CC";
+    string s4 = "ZZ";
+    string s5 = "JJ";
+    List342<string> stringList1;
+    List342<string> stringList2;
+    stringList1.Insert(&s2);
+    stringList1.Insert(&s1);
+    stringList1.Insert(&s3);
+    stringList2.Insert(&s4);
+    stringList2.Insert(&s5);
+    cout<<"Printing Lists of strings:"<<endl;
+    cout<<stringList1<<endl;
+    cout<<stringList2<<endl;
+    cout<<"Testing peek"<<endl;
+    string result;
+    if(stringList1.Peek(s2, result)){
+        cout<<"It has found it"<<endl;
+    }
+    List342<string>stringList3;
+    stringList3 = stringList1+stringList2;
+    cout<<"Adding two lists"<<endl;
+    cout<<stringList3<<endl;
+    cout<<"Adding two lists but diferen order"<<endl;
+    List342<string>stringList4;
+    stringList4 = stringList2+stringList1;
+    cout<<stringList4<<endl;
+    cout<<"Are they equal?"<<endl;
+    if(stringList3==stringList4){
+        cout<<"they are!"<<endl;
+    }else{
+        cout<<"No they werent!"<<endl;
+    }
+    cout<<"Adding list2 into list1"<<endl;
+    stringList1 += stringList2;
+    cout<<stringList1<<endl;
+    cout<<"Deleting Lists 2-4"<<endl;
+    stringList2.DeleteList();
+    stringList3.DeleteList();
+    stringList4.DeleteList();
+    cout<<"Lets check their size"<<endl;
+    cout<<"List2 size "<<stringList2.Size()<<endl;
+    cout<<"List3 size "<<stringList3.Size()<<endl;
+    cout<<"List4 size "<<stringList4.Size()<<endl;
+    List342<string> stringList5;
+    string s6 = "MM";
+    string s7 = "11";
+    string s8 ="MM";
+    vector<string> vect;
+    vect.push_back(s7);
+    vect.push_back(s4);
+    vect.push_back(s3);
+    vect.push_back(s1);
+    vect.push_back(s5);
+    vect.push_back(s6);
+    vect.push_back(s2);
+    stringList5.Insert(&s6);
+    stringList5.Insert(&s7);
+    cout<<stringList5<<endl;
+    cout<<"Lets merge our List1 with out new list5"<<endl;
+    stringList1.Merge(stringList5);
+    cout<<stringList1<<endl;
+    cout<<"Whats list1's size?"<<endl;
+    cout<<stringList1.Size()<<endl;
+    cout<<stringList5<<endl;
+    cout<<"Lets add a duplicate"<<endl;
+    cout<<stringList1.Insert(&s8)<<endl;;
+    cout<<stringList1<<endl;
+    cout<<"Removing elements"<<endl;
+    for(int i = 0; i < vect.size();i++){
+        string temp;
+        stringList1.Remove(vect[i], temp);
+        cout<<temp<<endl;
+    }
+    cout<<stringList1.Size()<<endl;
+}
+
 int main()
 {
+    stringTests();
+    cout << "====================================================" << endl;
     Child c1("Angie", "Ham", 7), c2("Pradnya", "Dhala", 8),
         c3("Bill", "Vollmann", 13), c4("Cesar", "Ruiz", 6);
     Child c5("Piqi", "Tangi", 7), c6("Russell", "Wilson", 13),

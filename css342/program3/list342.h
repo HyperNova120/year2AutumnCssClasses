@@ -192,7 +192,7 @@ bool List342<T>::Merge(List342<T> &list1)
 
     while (current->next != nullptr && list1.head_ != nullptr)
     {
-        while (*(list1.head_->data) < *(current->next->data))
+        while (list1.head_ != nullptr && *(list1.head_->data) < *(current->next->data))
         {
             Node *tmp = list1.head_;
             list1.head_ = tmp->next;
@@ -217,6 +217,7 @@ bool List342<T>::Merge(List342<T> &list1)
     }
     head_ = buffer->next;
     size_ += list1.size_;
+    list1.size_ = 0;
     delete buffer;
 
     return true;
@@ -241,7 +242,7 @@ List342<T> &List342<T>::operator+=(const List342<T> &other)
 
     while (current->next != nullptr && other_current != nullptr)
     {
-        while (*(other_current->data) < *(current->next->data))
+        while (other_current != nullptr && *(other_current->data) < *(current->next->data))
         {
             Node *tmp = new Node();
             tmp->data = new T(*(other_current->data));
