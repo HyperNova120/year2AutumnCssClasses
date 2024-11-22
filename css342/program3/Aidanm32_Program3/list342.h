@@ -93,14 +93,10 @@ bool List342<T>::BuildList(string file_name)
 template <typename T>
 bool List342<T>::Insert(T *obj)
 {
-    if (obj == nullptr)
-    {
-        return false;
-    }
-    Node buffer = Node();
-    buffer.next = head_;
+    Node *buffer = new Node();
+    buffer->next = head_;
 
-    Node *current = &buffer;
+    Node *current = buffer;
 
     // step forward until current->next >= obj
     while (current->next != nullptr && *(current->next->data) < *obj)
@@ -111,6 +107,7 @@ bool List342<T>::Insert(T *obj)
     if (current->next != nullptr && *(current->next->data) == *obj)
     {
         // not unique
+        delete buffer;
         return false;
     }
 
@@ -119,19 +116,20 @@ bool List342<T>::Insert(T *obj)
     tmp->next = current->next;
 
     current->next = tmp;
-    head_ = buffer.next;
+    head_ = buffer->next;
 
     size_++;
 
+    delete buffer;
     return true;
 }
 
 template <typename T>
 bool List342<T>::Remove(T target, T &result)
 {
-    Node buffer = Node();
-    buffer.next = head_;
-    Node *current = &buffer;
+    Node *buffer = new Node();
+    buffer->next = head_;
+    Node *current = buffer;
     while (current->next != nullptr)
     {
         if (*(current->next->data) == target)
@@ -139,14 +137,16 @@ bool List342<T>::Remove(T target, T &result)
             result = *(current->next->data);
             Node *node_to_remove = current->next;
             current->next = current->next->next;
-            head_ = buffer.next;
+            head_ = buffer->next;
 
             delete node_to_remove;
+            delete buffer;
             size_--;
             return true;
         }
         current = current->next;
     }
+    delete buffer;
     return false;
 }
 
@@ -186,9 +186,9 @@ bool List342<T>::Merge(List342<T> &list1)
         return false;
     }
 
-    Node buffer = Node();
-    buffer.next = head_;
-    Node *current = &buffer;
+    Node *buffer = new Node();
+    buffer->next = head_;
+    Node *current = buffer;
 
     while (current->next != nullptr && list1.head_ != nullptr)
     {
@@ -215,9 +215,10 @@ bool List342<T>::Merge(List342<T> &list1)
         current->next = list1.head_;
         list1.head_ = nullptr;
     }
-    head_ = buffer.next;
+    head_ = buffer->next;
     size_ += list1.size_;
     list1.size_ = 0;
+    delete buffer;
 
     return true;
 }
@@ -233,9 +234,9 @@ List342<T> List342<T>::operator+(const List342<T> &other) const
 template <typename T>
 List342<T> &List342<T>::operator+=(const List342<T> &other)
 {
-    Node buffer = Node();
-    buffer.next = head_;
-    Node *current = &buffer;
+    Node *buffer = new Node();
+    buffer->next = head_;
+    Node *current = buffer;
 
     Node *other_current = other.head_;
 
@@ -267,7 +268,8 @@ List342<T> &List342<T>::operator+=(const List342<T> &other)
         other_current = other_current->next;
         size_++;
     }
-    head_ = buffer.next;
+    head_ = buffer->next;
+    delete buffer;
     return *this;
 }
 
@@ -283,8 +285,8 @@ List342<T> &List342<T>::operator=(const List342<T> &other)
     size_ = other.size_;
 
     Node *other_current = other.head_;
-    Node buffer = Node();
-    Node *current = &buffer;
+    Node *buffer = new Node();
+    Node *current = buffer;
     while (other_current != nullptr)
     {
         Node *tmp = new Node();
@@ -294,7 +296,8 @@ List342<T> &List342<T>::operator=(const List342<T> &other)
         other_current = other_current->next;
         current = current->next;
     }
-    head_ = buffer.next;
+    head_ = buffer->next;
+    delete buffer;
     return *this;
 }
 

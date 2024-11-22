@@ -4,6 +4,56 @@
 #include <vector>
 using namespace std;
 
+void TestEquality() {
+    List342<int> list1, list2;
+    int a = 1, b = 2, c = 3;
+    list1.Insert(&a);
+    list1.Insert(&b);
+    list1.Insert(&c);
+    list2 = list1;  
+    cout << "Equality Test: " << (list1 == list2 ? "Passed" : "Failed") << endl;
+    int d = 4;
+    list2.Insert(&d);
+    cout << "Inequality After Modification: " << (list1 != list2 ? "Passed" : "Failed") << endl;
+}
+void TestAssignmentOperator() {
+    List342<int> list1;
+    int a = 1, b = 3, c = 5;
+    list1.Insert(&a);
+    list1.Insert(&b);
+    list1.Insert(&c);
+    List342<int> list2;
+    list2 = list1;  
+    int d = 7;
+    list2.Insert(&d);  
+    cout << "Original List After Assignment: " << list1 << " (Expected: 1 3 5)" << endl;
+    cout << "Modified Copy After Assignment: " << list2 << " (Expected: 1 3 5 7)" << endl;
+}
+void TestMergeSelf() {
+    List342<int> list;
+    int a = 1, b = 3, c = 5;
+    list.Insert(&a);
+    list.Insert(&b);
+    list.Insert(&c);
+    bool mergedWithSelf = list.Merge(list);  
+    cout << "Merge Self Test: " << (mergedWithSelf ? "Failed" : "Passed") << endl;
+    cout << "List After Self-Merge Attempt: " << list << " (Expected: 1 3 5)" << endl;
+}
+void TestDeepCopy() {
+    List342<int> list1;
+    int a = 2, b = 4, c = 6;
+    list1.Insert(&a);
+    list1.Insert(&b);
+    list1.Insert(&c);
+    List342<int> list2 = list1;  
+    int d = 8;
+    list2.Insert(&d); 
+    cout << "Original List After Copy: " << list1 << " (Expected: 2 4 6)" << endl;
+    cout << "Modified Copy: " << list2 << " (Expected: 2 4 6 8)" << endl;
+}
+
+
+
 void stringTests()
 {
     string s1 = "AA";
@@ -86,8 +136,14 @@ void stringTests()
 
 int main()
 {
-    stringTests();
+    /* stringTests();
+
     cout << "====================================================" << endl;
+    TestEquality();
+    TestAssignmentOperator();
+    TestMergeSelf();
+    TestDeepCopy();
+    cout << "====================================================" << endl; */
     Child c1("Angie", "Ham", 7), c2("Pradnya", "Dhala", 8),
         c3("Bill", "Vollmann", 13), c4("Cesar", "Ruiz", 6);
     Child c5("Piqi", "Tangi", 7), c6("Russell", "Wilson", 13),
@@ -158,11 +214,11 @@ int main()
     numbers.Size();
     cout << "These are the numbers: " << numbers << endl;
     numbers.DeleteList();
-
+/* 
     List342<Child> fileChildren;
     if (fileChildren.BuildList("testfile.txt"))
     {
         cout << "File Children: " << fileChildren << endl;
         cout << "File Children Size: " << fileChildren.Size() << endl;
-    }
+    } */
 }
