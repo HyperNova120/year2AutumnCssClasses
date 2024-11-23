@@ -119,15 +119,15 @@ void runTest(int size)
 int main()
 {
 
-    vector<int> test;
-    for (int i = 0; i < 10; i++)
+    /* vector<int> test;
+    for (int i = 0; i < 20; i++)
     {
         test.push_back(rand() % 100);
     }
     print(test);
-    QuickSort(test, 0, test.size() - 1);
+    MergeSort(test, 0, test.size() - 1);
     print(test);
-    return 0;
+    return 0; */
 
     cout << ",QuickSort,IterativeMergeSort,MergeSort,ShellSort,InsertionSort,BubbleSort";
     for (int i = 100; i <= 1000; i += 100)
@@ -143,6 +143,12 @@ int main()
         runTest(i);
     }
     for (int i = 20000; i <= 100000; i += 10000)
+    {
+        cout << endl;
+        cout << i << ",";
+        runTest(i);
+    }
+    for (int i = 200000; i <= 1000000; i += 100000)
     {
         cout << endl;
         cout << i << ",";
