@@ -43,9 +43,21 @@ vector<int> GetMoneyMarketFundIDs()
     tmp.push_back(1);
     return tmp;
 };
+
+vector<int> GetBondFundIDs()
+{
+    vector<int> tmp = vector<int>();
+    tmp.push_back(2);
+    tmp.push_back(3);
+    return tmp;
+};
 bool IsMoneyMarketFund(int fund_id)
 {
     return fund_id == 0 || fund_id == 1;
+};
+bool IsBondFund(int fund_id)
+{
+    return fund_id == 2 || fund_id == 3;
 };
 
 #endif _SRC_FUNDS_H_;

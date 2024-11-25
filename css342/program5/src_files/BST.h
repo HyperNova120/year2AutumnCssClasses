@@ -180,6 +180,7 @@ inline bool BST<T>::Contains(const T &obj) const
 template <typename T>
 inline T &BST<T>::Get(const T &obj)
 {
+    //assumes contains was true
     Node *currentNode = head_;
     while (currentNode != nullptr)
     {

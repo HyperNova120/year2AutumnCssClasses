@@ -35,7 +35,7 @@ private:
     BST<Account> accounts_;
     bool DoesAccountExist(int uid);
     Account &GetAccount(int uid);
-    bool TransferFundsBetweenMoneyMarketToCover(Account *account, int amount, int fund_id);
+    bool TransferFundsBetweenElligibleFundsToCover(Account *account, int amount, int fund_id, vector<int> FundIDs);
 };
 
 Bank::Bank()
@@ -156,14 +156,26 @@ bool Bank::WithdrawFunds(int uid, int fund_id, long amount)
     if (account->GetFundAssets(fund_id) < amount)
     {
         // withdraw past account funds
-        if (!IsMoneyMarketFund(fund_id))
+
+        if (IsMoneyMarketFund(fund_id))
+        {
+            if (!TransferFundsBetweenElligibleFundsToCover(account, amount, fund_id, GetMoneyMarketFundIDs()))
+            {
+                cerr << "Account With ID: " << uid << " Has Insufficient Funds Within Money Market Funds To Cover" << endl;
+                return false;
+            }
+        }
+        else if (IsBondFund(fund_id))
+        {
+            if (!TransferFundsBetweenElligibleFundsToCover(account, amount, fund_id, GetBondFundIDs()))
+            {
+                cerr << "Account With ID: " << uid << " Has Insufficient Funds Within Bond Funds To Cover" << endl;
+                return false;
+            }
+        }
+        else
         {
             cerr << "Account With ID: " << uid << " Has Insufficient Funds Within Fund With ID: " << fund_id << endl;
-            return false;
-        }
-        if (!TransferFundsBetweenMoneyMarketToCover(account, amount, fund_id))
-        {
-            cerr << "Account With ID: " << uid << " Has Insufficient Funds Within Money Market Funds To Cover" << endl;
             return false;
         }
     }
@@ -190,14 +202,25 @@ bool Bank::TransferFunds(int uid_from, int fund_id_from, int uid_to, int fund_id
     Account *account_to = &GetAccount(uid_to);
     if (account_from->GetFundAssets(fund_id_from) < amount)
     {
-        if (!IsMoneyMarketFund(fund_id_from))
+        if (IsMoneyMarketFund(fund_id_from))
+        {
+            if (!TransferFundsBetweenElligibleFundsToCover(account_from, amount, fund_id_from, GetMoneyMarketFundIDs()))
+            {
+                cerr << "Account With ID: " << fund_id_from << " Has Insufficient Funds Within Money Market Funds To Cover" << endl;
+                return false;
+            }
+        }
+        else if (IsBondFund(fund_id_from))
+        {
+            if (!TransferFundsBetweenElligibleFundsToCover(account_from, amount, fund_id_from, GetBondFundIDs()))
+            {
+                cerr << "Account With ID: " << fund_id_from << " Has Insufficient Funds Within Bond Funds To Cover" << endl;
+                return false;
+            }
+        }
+        else
         {
             cerr << "Account With ID: " << fund_id_from << " Has Insufficient Funds Within Fund With ID: " << fund_id_from << endl;
-            return false;
-        }
-        else if (!TransferFundsBetweenMoneyMarketToCover(account_from, amount, fund_id_from))
-        {
-            cerr << "Account With ID: " << fund_id_from << " Has Insufficient Funds Within Money Market Funds To Cover" << endl;
             return false;
         }
     }
@@ -216,46 +239,44 @@ Account &Bank::GetAccount(int uid)
     return accounts_.Get(Account(uid));
 }
 
-bool Bank::TransferFundsBetweenMoneyMarketToCover(Account *account, int amount, int fund_id)
+bool Bank::TransferFundsBetweenElligibleFundsToCover(Account *account, int amount, int fund_id, vector<int> FundIDs)
 {
     int overDrawnBy = amount - account->GetFundAssets(fund_id);
 
-    vector<int> moneyMarketFundIDs = GetMoneyMarketFundIDs();
-
-    int totalMoneyMarketFunds = 0;
-    for (int i = 0; i < moneyMarketFundIDs.size(); i++)
+    int totalBondFunds = 0;
+    for (int i = 0; i < FundIDs.size(); i++)
     {
-        if (moneyMarketFundIDs[i] != fund_id)
+        if (FundIDs[i] != fund_id)
         {
-            totalMoneyMarketFunds += account->GetFundAssets(moneyMarketFundIDs[i]);
+            totalBondFunds += account->GetFundAssets(FundIDs[i]);
         }
     }
 
-    if (totalMoneyMarketFunds < overDrawnBy)
+    if (totalBondFunds < overDrawnBy)
     {
         // total money market funds is insufficient
         return false;
     }
 
     // transfer needed funds
-    for (int i = 0; i < moneyMarketFundIDs.size() && overDrawnBy > 0; i++)
+    for (int i = 0; i < FundIDs.size() && overDrawnBy > 0; i++)
     {
-        if (moneyMarketFundIDs[i] == fund_id)
+        if (FundIDs[i] == fund_id)
         {
             continue;
         }
 
-        if (account->GetFundAssets(moneyMarketFundIDs[i]) < overDrawnBy)
+        if (account->GetFundAssets(FundIDs[i]) < overDrawnBy)
         {
-            int transferAmount = account->GetFundAssets(moneyMarketFundIDs[i]);
+            int transferAmount = account->GetFundAssets(FundIDs[i]);
             account->DepositAssets(fund_id, transferAmount);
-            account->WithdrawAssets(moneyMarketFundIDs[i], transferAmount);
+            account->WithdrawAssets(FundIDs[i], transferAmount);
             overDrawnBy -= transferAmount;
         }
         else
         {
             account->DepositAssets(fund_id, overDrawnBy);
-            account->WithdrawAssets(moneyMarketFundIDs[i], overDrawnBy);
+            account->WithdrawAssets(FundIDs[i], overDrawnBy);
             overDrawnBy -= overDrawnBy;
         }
     }
