@@ -18,6 +18,9 @@ public:
 
     void RunTransaction(vector<string> transaction_order);
 
+    friend ostream &operator<<(ostream &os, const Bank &obj);
+
+private:
     void CreateAccount(int uid, string first_name, string last_name);
     void DeleteAccount(int uid, string first_name, string last_name);
 
@@ -29,13 +32,11 @@ public:
     vector<string> GetAccountTransactionHistory(int uid);
     vector<string> GetFundTransactionHistory(int uid, int fund_id);
 
-    friend ostream &operator<<(ostream &os, const Bank &obj);
-
-private:
-    BST<Account> accounts_;
     bool DoesAccountExist(int uid);
     Account &GetAccount(int uid);
     bool TransferFundsBetweenElligibleFundsToCover(Account *account, int amount, int fund_id, vector<int> FundIDs);
+
+    BST<Account> accounts_;
 };
 
 Bank::Bank()
