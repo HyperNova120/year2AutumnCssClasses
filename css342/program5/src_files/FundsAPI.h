@@ -1,5 +1,5 @@
-#ifndef _SRC_FUNDS_H_
-#define _SRC_FUNDS_H_
+#ifndef _SRC_FUNDSAPI_H_
+#define _SRC_FUNDSAPI_H_
 
 #include <vector>
 #include <string>
@@ -60,4 +60,4 @@ bool IsBondFund(int fund_id)
     return fund_id == 2 || fund_id == 3;
 };
 
-#endif _SRC_FUNDS_H_;
+#endif //_SRC_FUNDSAPI_H_;

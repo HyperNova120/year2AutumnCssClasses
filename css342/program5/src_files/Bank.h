@@ -3,7 +3,7 @@
 
 #include "BST.h"
 #include "Account.h"
-#include "Funds.h"
+#include "FundsAPI.h"
 
 #include <list>
 #include <iostream>

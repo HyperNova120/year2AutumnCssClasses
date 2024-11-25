@@ -8,7 +8,7 @@ using namespace std;
 template <typename T>
 class BST
 {
-public:
+private:
     class Node
     {
     public:
@@ -16,6 +16,8 @@ public:
         Node *left_ = nullptr;
         Node *right_ = nullptr;
     };
+
+public:
     BST();
     BST(const BST<T> &other);
     ~BST();
@@ -180,7 +182,7 @@ inline bool BST<T>::Contains(const T &obj) const
 template <typename T>
 inline T &BST<T>::Get(const T &obj) const
 {
-    //assumes contains was true
+    // assumes contains was true
     Node *currentNode = head_;
     while (currentNode != nullptr)
     {
@@ -255,7 +257,7 @@ string BST<T>::printMe(const BST<T>::Node *current) const
     if (current->left_ != nullptr)
     {
         returner += printMe(current->left_);
-        //returner += "\n";
+        // returner += "\n";
     }
     stringstream ss = stringstream();
     ss << *current->item_;
@@ -265,7 +267,7 @@ string BST<T>::printMe(const BST<T>::Node *current) const
     if (current->right_ != nullptr)
     {
         returner += printMe(current->right_);
-        //returner += "\n";
+        // returner += "\n";
     }
 
     return returner;
