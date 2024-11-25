@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 #include "Funds.h"
+#include <iostream>
 using namespace std;
 
 class Account
@@ -14,7 +15,7 @@ public:
     Account(string first_name, string last_name, int uid, map<int, long> accountFunds);
     Account(const Account &other);
 
-    void AddTransaction(string transaction);
+    void AddTransaction(int fund_id, string transaction);
 
     long GetFundAssets(int fund_id) const;
 
@@ -35,13 +36,14 @@ public:
     int uid() const;
     string first_name() const;
     string last_name() const;
+    map<int, vector<string>> transaction_history() const;
 
 private:
     int uid_ = 0;
     string first_name_ = "";
     string last_name_ = "";
     map<int, long> accountFunds_;
-    list<string> transaction_history_;
+    map<int, vector<string>> transaction_history_;
 };
 
 Account::Account(int uid)
@@ -62,9 +64,9 @@ Account::Account(const Account &other)
     *this = other;
 }
 
-void Account::AddTransaction(string transaction)
+void Account::AddTransaction(int fund_id, string transaction)
 {
-    transaction_history_.push_back(transaction);
+    transaction_history_[fund_id].push_back(transaction);
 }
 
 long Account::GetFundAssets(int fund_id) const
@@ -168,4 +170,8 @@ string Account::last_name() const
     return last_name_;
 }
 
+map<int, vector<string>>  Account::transaction_history() const
+{
+    return transaction_history_;
+}
 #endif //_SRC_ACCOUNT_H_

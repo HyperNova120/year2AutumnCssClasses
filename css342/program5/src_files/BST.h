@@ -27,7 +27,7 @@ public:
     bool operator==(const BST<T> &other);
     bool operator!=(const BST<T> &other);
 
-    T &Get(const T &obj);
+    T &Get(const T &obj) const;
 
     void DeleteBST(BST<T>::Node *currentNode);
 
@@ -178,7 +178,7 @@ inline bool BST<T>::Contains(const T &obj) const
 }
 
 template <typename T>
-inline T &BST<T>::Get(const T &obj)
+inline T &BST<T>::Get(const T &obj) const
 {
     //assumes contains was true
     Node *currentNode = head_;
@@ -255,7 +255,7 @@ string BST<T>::printMe(const BST<T>::Node *current) const
     if (current->left_ != nullptr)
     {
         returner += printMe(current->left_);
-        returner += "\n";
+        //returner += "\n";
     }
     stringstream ss = stringstream();
     ss << *current->item_;
@@ -265,7 +265,7 @@ string BST<T>::printMe(const BST<T>::Node *current) const
     if (current->right_ != nullptr)
     {
         returner += printMe(current->right_);
-        returner += "\n";
+        //returner += "\n";
     }
 
     return returner;

@@ -32,9 +32,11 @@ private:
     vector<string> GetAccountTransactionHistory(int uid);
     vector<string> GetFundTransactionHistory(int uid, int fund_id);
 
-    bool DoesAccountExist(int uid);
-    Account &GetAccount(int uid);
+    bool DoesAccountExist(int uid) const;
+    Account &GetAccount(int uid) const;
     bool TransferFundsBetweenElligibleFundsToCover(Account *account, int amount, int fund_id, vector<int> FundIDs);
+    void PrintAccountTransactionHistory(int uid) const;
+    void PrintAccountTransactionHistory(int uid, int fund_id) const;
 
     BST<Account> accounts_;
 };
@@ -90,7 +92,8 @@ inline void Bank::RunTransaction(vector<string> transaction_order)
             return;
         }
         // TODO implement
-        cerr << "NEED TO IMPLEMENT THIS" << endl;
+        // cerr << "NEED TO IMPLEMENT THIS" << endl;
+        PrintAccountTransactionHistory(stoi(transaction_order[1]));
     }
     else if (transaction_order[0] == "F")
     {
@@ -100,7 +103,8 @@ inline void Bank::RunTransaction(vector<string> transaction_order)
             return;
         }
         // TODO implement
-        cerr << "NEED TO IMPLEMENT THIS" << endl;
+        //cerr << "NEED TO IMPLEMENT THIS" << endl;
+        PrintAccountTransactionHistory(stoi(transaction_order[1]), stoi(transaction_order[2]));
     }
     else
     {
@@ -139,6 +143,7 @@ bool Bank::DepositFunds(int uid, int fund_id, long amount)
     }
     Account *account = &GetAccount(uid);
     account->DepositAssets(fund_id, amount);
+    account->AddTransaction(fund_id, "D " + to_string(account->uid()) + " " + to_string(fund_id) + " " + to_string(amount));
     return true;
 }
 
@@ -153,6 +158,8 @@ bool Bank::WithdrawFunds(int uid, int fund_id, long amount)
     {
         cerr << "Fund With ID: " << fund_id << " Does Not Exists" << endl;
     }
+
+    string transaction_string = "D " + to_string(uid) + " " + to_string(fund_id) + " " + to_string(amount);
     Account *account = &GetAccount(uid);
     if (account->GetFundAssets(fund_id) < amount)
     {
@@ -163,6 +170,7 @@ bool Bank::WithdrawFunds(int uid, int fund_id, long amount)
             if (!TransferFundsBetweenElligibleFundsToCover(account, amount, fund_id, GetMoneyMarketFundIDs()))
             {
                 cerr << "Account With ID: " << uid << " Has Insufficient Funds Within Money Market Funds To Cover" << endl;
+                account->AddTransaction(fund_id, transaction_string + " (FAILED)");
                 return false;
             }
         }
@@ -171,23 +179,27 @@ bool Bank::WithdrawFunds(int uid, int fund_id, long amount)
             if (!TransferFundsBetweenElligibleFundsToCover(account, amount, fund_id, GetBondFundIDs()))
             {
                 cerr << "Account With ID: " << uid << " Has Insufficient Funds Within Bond Funds To Cover" << endl;
+                account->AddTransaction(fund_id, transaction_string + " (FAILED)");
                 return false;
             }
         }
         else
         {
             cerr << "Account With ID: " << uid << " Has Insufficient Funds Within Fund With ID: " << fund_id << endl;
+            account->AddTransaction(fund_id, transaction_string + " (FAILED)");
             return false;
         }
     }
 
     account->WithdrawAssets(fund_id, amount);
+    account->AddTransaction(fund_id, transaction_string);
 
     return true;
 }
 
 bool Bank::TransferFunds(int uid_from, int fund_id_from, int uid_to, int fund_id_to, long amount)
 {
+    string transaction_string = "T " + to_string(uid_from) + " " + to_string(fund_id_from) + " " + to_string(uid_to) + " " + to_string(fund_id_to) + " " + to_string(amount);
     if (!DoesAccountExist(uid_from) || !DoesAccountExist(uid_to))
     {
         cerr << "Account With ID: " << ((!DoesAccountExist(uid_from)) ? uid_from : uid_to) << " Does Not Exist" << endl;
@@ -208,6 +220,8 @@ bool Bank::TransferFunds(int uid_from, int fund_id_from, int uid_to, int fund_id
             if (!TransferFundsBetweenElligibleFundsToCover(account_from, amount, fund_id_from, GetMoneyMarketFundIDs()))
             {
                 cerr << "Account With ID: " << fund_id_from << " Has Insufficient Funds Within Money Market Funds To Cover" << endl;
+                account_from->AddTransaction(fund_id_from, transaction_string + " (Failed)");
+                account_to->AddTransaction(fund_id_to, transaction_string + " (Failed)");
                 return false;
             }
         }
@@ -216,26 +230,34 @@ bool Bank::TransferFunds(int uid_from, int fund_id_from, int uid_to, int fund_id
             if (!TransferFundsBetweenElligibleFundsToCover(account_from, amount, fund_id_from, GetBondFundIDs()))
             {
                 cerr << "Account With ID: " << fund_id_from << " Has Insufficient Funds Within Bond Funds To Cover" << endl;
+                account_from->AddTransaction(fund_id_from, transaction_string + " (Failed)");
+                account_to->AddTransaction(fund_id_to, transaction_string + " (Failed)");
                 return false;
             }
         }
         else
         {
             cerr << "Account With ID: " << fund_id_from << " Has Insufficient Funds Within Fund With ID: " << fund_id_from << endl;
+            account_from->AddTransaction(fund_id_from, transaction_string + " (Failed)");
+            account_to->AddTransaction(fund_id_to, transaction_string + " (Failed)");
             return false;
         }
     }
     account_from->WithdrawAssets(fund_id_from, amount);
     account_to->DepositAssets(fund_id_to, amount);
+
+    account_from->AddTransaction(fund_id_from, transaction_string);
+    account_to->AddTransaction(fund_id_to, transaction_string);
+
     return true;
 }
 
-bool Bank::DoesAccountExist(int uid)
+bool Bank::DoesAccountExist(int uid) const
 {
     return accounts_.Contains(Account(uid));
 }
 
-Account &Bank::GetAccount(int uid)
+Account &Bank::GetAccount(int uid) const
 {
     return accounts_.Get(Account(uid));
 }
@@ -288,6 +310,51 @@ ostream &operator<<(ostream &os, const Bank &obj)
 {
     os << obj.accounts_;
     return os;
+}
+
+void Bank::PrintAccountTransactionHistory(int uid) const
+{
+    if (!DoesAccountExist(uid))
+    {
+        cerr << "Account With ID: " << to_string(uid) << " Does Not Exist" << endl;
+        return;
+    }
+
+    Account *account = &GetAccount(uid);
+    map<int, std::vector<std::__cxx11::string>> history = account->transaction_history();
+    cout << "Transaction History For " << account->first_name() << " " << account->last_name() << endl;
+    for (int i : GetAllFundIDs())
+    {
+        cout << GetFundName(i) << ": $" << account->GetFundAssets(i) << endl;
+        for (string s : history[i])
+        {
+            cout << "   " << s << endl;
+        }
+    }
+    cout << endl;
+}
+
+void Bank::PrintAccountTransactionHistory(int uid, int fund_id) const
+{
+    if (!DoesAccountExist(uid))
+    {
+        cerr << "Account With ID: " << to_string(uid) << " Does Not Exist" << endl;
+        return;
+    }
+    else if (!DoesFundExist(fund_id))
+    {
+        cerr << "Fund With ID: " << fund_id << " Does Not Exists" << endl;
+    }
+
+    Account *account = &GetAccount(uid);
+    map<int, std::vector<std::__cxx11::string>> history = account->transaction_history();
+    cout << "Transaction History For " << account->first_name() << " " << account->last_name() << " " << GetFundName(fund_id) << " Fund: $" << account->GetFundAssets(fund_id) << endl;
+
+    for (string s : history[fund_id])
+    {
+        cout << "   " << s << endl;
+    }
+    cout << endl;
 }
 
 #endif //_SRC_BANK_H_
