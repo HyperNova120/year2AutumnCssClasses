@@ -20,11 +20,11 @@ bool isValidSortRange(vector<T> &vec, int start, int end)
 }
 
 template <typename T>
-void QuickSort(vector<T> &items, int start_index, int end_index)
+bool QuickSort(vector<T> &items, int start_index, int end_index)
 {
     if (!isValidSortRange(items, start_index, end_index))
     {
-        return;
+        return false;
     }
 
     int middle = 0;
@@ -52,14 +52,15 @@ void QuickSort(vector<T> &items, int start_index, int end_index)
     }
     QuickSort(items, start_index, middle);
     QuickSort(items, middle + 1, end_index);
+    return true;
 };
 
 template <typename T>
-void MergeSort(vector<T> &items, int start_index, int end_index)
+bool MergeSort(vector<T> &items, int start_index, int end_index)
 {
     if (!isValidSortRange(items, start_index, end_index))
     {
-        return;
+        return false;
     }
     int middle = (end_index - start_index) / 2;
     middle += start_index;
@@ -107,14 +108,15 @@ void MergeSort(vector<T> &items, int start_index, int end_index)
         items[index] = second[index2];
         index++;
     }
+    return true;
 };
 
 template <typename T>
-void IterativeMergeSort(vector<T> &items, int start_index, int end_index)
+bool IterativeMergeSort(vector<T> &items, int start_index, int end_index)
 {
     if (!isValidSortRange(items, start_index, end_index))
     {
-        return;
+        return false;
     }
     vector<T> tmp = items;
     for (int block_size = 1; block_size <= end_index - 1; block_size *= 2)
@@ -160,14 +162,16 @@ void IterativeMergeSort(vector<T> &items, int start_index, int end_index)
         }
         items = tmp;
     }
+
+    return true;
 };
 
 template <typename T>
-void BubbleSort(vector<T> &items, int start_index, int end_index)
+bool BubbleSort(vector<T> &items, int start_index, int end_index)
 {
     if (!isValidSortRange(items, start_index, end_index))
     {
-        return;
+        return false;
     }
     for (int i = start_index; i < end_index; i++)
     {
@@ -179,14 +183,15 @@ void BubbleSort(vector<T> &items, int start_index, int end_index)
             }
         }
     }
+    return true;
 };
 
 template <typename T>
-void InsertionSort(vector<T> &items, int start_index, int end_index)
+bool InsertionSort(vector<T> &items, int start_index, int end_index)
 {
     if (!isValidSortRange(items, start_index, end_index))
     {
-        return;
+        return false;
     }
     for (int i = start_index + 1; i <= end_index; i++)
     {
@@ -206,14 +211,15 @@ void InsertionSort(vector<T> &items, int start_index, int end_index)
             }
         }
     }
+    return true;
 };
 
 template <typename T>
-void ShellSort(vector<T> &items, int start_index, int end_index)
+bool ShellSort(vector<T> &items, int start_index, int end_index)
 {
     if (!isValidSortRange(items, start_index, end_index))
     {
-        return;
+        return false;
     }
     int n = end_index - start_index + 1;
     for (int inter = n / 2; inter > 0; inter /= 2)
@@ -231,6 +237,8 @@ void ShellSort(vector<T> &items, int start_index, int end_index)
             // items.at(j) = tmp;
         }
     }
+
+    return true;
 };
 
 #endif // SORTS_H_

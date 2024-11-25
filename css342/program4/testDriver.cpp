@@ -129,7 +129,7 @@ int main()
     print(test);
     return 0; */
 
-    cout << ",QuickSort,IterativeMergeSort,MergeSort,ShellSort,InsertionSort,BubbleSort";
+    cout << "# Elements,QuickSort,IterativeMergeSort,MergeSort,ShellSort,InsertionSort,BubbleSort";
     for (int i = 100; i <= 1000; i += 100)
     {
         cout << endl;

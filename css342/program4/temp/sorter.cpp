@@ -85,6 +85,10 @@ int main(int argc, char *argv[])
     {
         ShellSort(items, 0, size - 1);
     }
+    else{
+        cout << "Invalid Sort Name" << endl;
+        return 0;
+    }
     gettimeofday(&end_time, 0);
     if (print_out)
     {
