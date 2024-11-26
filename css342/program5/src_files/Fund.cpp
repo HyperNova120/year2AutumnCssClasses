@@ -25,9 +25,9 @@ void Fund::Withdraw(int uid, long amount)
     fund_accounts_[uid] -= amount;
 }
 
-long Fund::GetAccountFunds(int uid)
+long Fund::GetAccountFunds(int uid) const
 {
-    return fund_accounts_[uid];
+    return fund_accounts_.at(uid);//[uid];
 }
 
 int Fund::fund_id() const

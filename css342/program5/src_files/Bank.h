@@ -36,6 +36,8 @@ private:
     void PrintAccountTransactionHistory(Transaction &transaction);
     void PrintFundTransactionHistoryForAccount(Transaction &transaction);
 
+    void AddToTransactionHistory(Transaction &transaction);
+
     queue<Transaction> transactions_ = queue<Transaction>();
     BST<Account> accounts_ = BST<Account>();
     map<int, list<Transaction>> account_transaction_history_ = map<int, list<Transaction>>(); // key: account id

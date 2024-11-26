@@ -18,7 +18,7 @@ public:
 
     void Deposit(int uid, long amount);
     void Withdraw(int uid, long amount);
-    long GetAccountFunds(int uid);
+    long GetAccountFunds(int uid) const;
 
 
     int fund_id() const;

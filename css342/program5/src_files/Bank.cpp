@@ -39,42 +39,35 @@ void Bank::ExecuteTranactions()
     {
         Transaction current_transaction = transactions_.front();
         transactions_.pop();
-
-        if (current_transaction.transaction_type() == O)
+        switch (current_transaction.transaction_type())
         {
+        case O:
             CreateAccount(current_transaction);
-        }
-        else if (current_transaction.transaction_type() == D)
-        {
+            break;
+        case D:
             DepositFunds(current_transaction);
-            account_transaction_history_[current_transaction.uid()].push_back(current_transaction);
-            fund_transaction_history_[current_transaction.fund_id()].push_back(current_transaction);
-        }
-        else if (current_transaction.transaction_type() == W)
-        {
+            AddToTransactionHistory(current_transaction);
+            break;
+        case W:
             WithdrawFunds(current_transaction);
-            account_transaction_history_[current_transaction.uid()].push_back(current_transaction);
-            fund_transaction_history_[current_transaction.fund_id()].push_back(current_transaction);
-        }
-        else if (current_transaction.transaction_type() == T)
-        {
+            AddToTransactionHistory(current_transaction);
+            break;
+        case T:
             TransferFunds(current_transaction);
-            account_transaction_history_[current_transaction.uid()].push_back(current_transaction);
-            account_transaction_history_[current_transaction.uid_to()].push_back(current_transaction);
-            fund_transaction_history_[current_transaction.fund_id()].push_back(current_transaction);
-            fund_transaction_history_[current_transaction.fund_id_to()].push_back(current_transaction);
-        }
-        else if (current_transaction.transaction_type() == A)
-        {
+            AddToTransactionHistory(current_transaction);
+            break;
+        case A:
             PrintAccountTransactionHistory(current_transaction);
-        }
-        else if (current_transaction.transaction_type() == F)
-        {
+            break;
+        case F:
             PrintFundTransactionHistoryForAccount(current_transaction);
+            break;
         }
     }
     cout << "FINAL BALANCES:" << endl;
     cout << accounts_ << endl;
+    /* Transaction tmp = Transaction(A, 1001);
+    PrintAccountTransactionHistory(tmp); */
 }
 
 vector<string> Bank::split(string s, char delim)
@@ -96,6 +89,7 @@ bool Bank::CreateAccount(Transaction &transaction)
 {
     if (DoesAccountExist(transaction.uid()))
     {
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Already Exists" << endl;
         transaction.MarkAsFailed();
         return false;
     }
@@ -113,19 +107,19 @@ bool Bank::DepositFunds(Transaction &transaction)
 {
     if (!DoesAccountExist(transaction.uid()))
     {
-        cerr << "Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (!DoesFundExist(transaction.fund_id()))
     {
-        cerr << "Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (transaction.amount() < 0)
     {
-        cerr << "Cannot Be Negative Amount" << endl;
+        cerr << "ERROR: Cannot Be Negative Amount" << endl;
         transaction.MarkAsFailed();
         return false;
     }
@@ -138,19 +132,19 @@ bool Bank::WithdrawFunds(Transaction &transaction)
 {
     if (!DoesAccountExist(transaction.uid()))
     {
-        cerr << "Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (!DoesFundExist(transaction.fund_id()))
     {
-        cerr << "Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (transaction.amount() < 0)
     {
-        cerr << "Cannot Be Negative Amount" << endl;
+        cerr << "ERROR: Cannot Be Negative Amount" << endl;
         transaction.MarkAsFailed();
         return false;
     }
@@ -160,7 +154,7 @@ bool Bank::WithdrawFunds(Transaction &transaction)
         // insufficient funds
         if (!TransferFundsBetweenElligibleFundsToCover(transaction))
         {
-            cerr << "Account With ID: " << to_string(transaction.uid()) << " Has Insufficient Funds Within Fund With ID: " << to_string(transaction.fund_id()) << endl;
+            cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Has Insufficient Funds Within Fund With ID: " << to_string(transaction.fund_id()) << endl;
             transaction.MarkAsFailed();
             return false;
         }
@@ -173,25 +167,25 @@ bool Bank::TransferFunds(Transaction &transaction)
 {
     if (!DoesAccountExist(transaction.uid()))
     {
-        cerr << "Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (!DoesFundExist(transaction.fund_id()))
     {
-        cerr << "Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (!DoesAccountExist(transaction.uid_to()))
     {
-        cerr << "Account With ID: " << to_string(transaction.uid_to()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid_to()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (!DoesFundExist(transaction.fund_id_to()))
     {
-        cerr << "Fund With ID: " << to_string(transaction.fund_id_to()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id_to()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return false;
     }
@@ -200,13 +194,13 @@ bool Bank::TransferFunds(Transaction &transaction)
               (IsMoneyMarketFund(transaction.fund_id()) && IsMoneyMarketFund(transaction.fund_id_to()))) &&
              global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid()) < transaction.amount())
     {
-        cerr << "Account With ID: " << to_string(transaction.uid()) << " Has Insufficient Funds Within Fund With ID: " << to_string(transaction.fund_id()) << endl;
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Has Insufficient Funds Within Fund With ID: " << to_string(transaction.fund_id()) << endl;
         transaction.MarkAsFailed();
         return false;
     }
     else if (transaction.amount() < 0)
     {
-        cerr << "Cannot Be Negative Amount" << endl;
+        cerr << "ERROR: Cannot Be Negative Amount" << endl;
         transaction.MarkAsFailed();
         return false;
     }
@@ -243,27 +237,36 @@ bool Bank::TransferFundsBetweenElligibleFundsToCover(Transaction &transaction)
     int total_amount = 0;
     for (int i = 0; i < fundIds.size(); i++)
     {
-        if (i == transaction.fund_id())
+        if (fundIds[i] == transaction.fund_id())
         {
             continue;
         }
-        total_amount += global_funds::funds_[i].GetAccountFunds(transaction.uid());
+        total_amount += global_funds::funds_[fundIds[i]].GetAccountFunds(transaction.uid());
     }
 
     if (total_amount < overdraw_amount)
     {
+        transaction.MarkAsFailed();
         return false;
     }
 
+    int old_amount = global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid());
+    transaction.SetAmount(old_amount);
+
     for (int i = 0; i < fundIds.size() && overdraw_amount > 0; i++)
     {
-        if (i == transaction.fund_id())
+        if (fundIds[i] == transaction.fund_id())
         {
             continue;
         }
         int amount = (global_funds::funds_[fundIds[i]].GetAccountFunds(transaction.uid()) < overdraw_amount) ? global_funds::funds_[fundIds[i]].GetAccountFunds(transaction.uid()) : overdraw_amount;
         global_funds::funds_[fundIds[i]].Withdraw(transaction.uid(), amount);
-        global_funds::funds_[transaction.fund_id()].Deposit(transaction.uid(), amount);
+        Transaction tmp = Transaction(W, transaction.uid(), fundIds[i], amount);
+        AddToTransactionHistory(tmp);
+        if (transaction.transaction_type() == T)
+        {
+            global_funds::funds_[transaction.fund_id_to()].Deposit(transaction.uid_to(), amount);
+        }
     }
     return true;
 }
@@ -272,7 +275,7 @@ void Bank::PrintAccountTransactionHistory(Transaction &transaction)
 {
     if (!DoesAccountExist(transaction.uid()))
     {
-        cerr << "Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return;
     }
@@ -304,13 +307,13 @@ void Bank::PrintFundTransactionHistoryForAccount(Transaction &transaction)
 {
     if (!DoesAccountExist(transaction.uid()))
     {
-        cerr << "Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return;
     }
     else if (!DoesFundExist(transaction.fund_id()))
     {
-        cerr << "Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
+        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
         transaction.MarkAsFailed();
         return;
     }
@@ -326,4 +329,25 @@ void Bank::PrintFundTransactionHistoryForAccount(Transaction &transaction)
         }
     }
     cout << endl;
+}
+
+void Bank::AddToTransactionHistory(Transaction &transaction)
+{
+    switch (transaction.transaction_type())
+    {
+    case D:
+        account_transaction_history_[transaction.uid()].push_back(transaction);
+        fund_transaction_history_[transaction.fund_id()].push_back(transaction);
+        break;
+    case W:
+        account_transaction_history_[transaction.uid()].push_back(transaction);
+        fund_transaction_history_[transaction.fund_id()].push_back(transaction);
+        break;
+    case T:
+        account_transaction_history_[transaction.uid()].push_back(transaction);
+        account_transaction_history_[transaction.uid_to()].push_back(transaction);
+        fund_transaction_history_[transaction.fund_id()].push_back(transaction);
+        fund_transaction_history_[transaction.fund_id_to()].push_back(transaction);
+        break;
+    }
 }

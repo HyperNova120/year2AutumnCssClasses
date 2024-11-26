@@ -25,20 +25,23 @@ public:
     Transaction(TransactionType type, int uid);
     Transaction(TransactionType type, int uid, int fund_id);
     Transaction(TransactionType type, int uid, string first_name, string last_name);
+    Transaction(const Transaction &other);
 
     void MarkAsFailed();
 
     friend ostream &operator<<(ostream &os, const Transaction &obj);
 
-    TransactionType transaction_type();
-    int uid();
-    int uid_to();
-    int fund_id();
-    int fund_id_to();
-    int amount();
-    string first_name();
-    string last_name();
-    bool failed();
+    void SetAmount(int amount);
+
+    TransactionType transaction_type() const;
+    int uid() const;
+    int uid_to() const;
+    int fund_id() const;
+    int fund_id_to() const;
+    int amount() const;
+    string first_name() const;
+    string last_name() const;
+    bool failed() const;
 
 private:
     TransactionType transaction_type_;

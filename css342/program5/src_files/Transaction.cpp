@@ -86,47 +86,65 @@ Transaction::Transaction(TransactionType type, int uid, string first_name, strin
     last_name_ = last_name;
 }
 
+Transaction::Transaction(const Transaction &other)
+{
+    transaction_type_ = other.transaction_type_;
+    uid_ = other.uid_;
+    fund_id_ = other.fund_id_;
+    first_name_ = other.first_name_;
+    last_name_ = other.last_name_;
+    fund_id_to_ = other.fund_id_to_;
+    uid_to_ = other.uid_to_;
+    amount_ = other.amount_;
+    failed_ = other.failed_;
+}
+
 void Transaction::MarkAsFailed()
 {
     failed_ = true;
 }
 
-TransactionType Transaction::transaction_type()
+void Transaction::SetAmount(int amount)
+{
+    amount_ = amount;
+}
+
+TransactionType Transaction::transaction_type() const
 {
     return transaction_type_;
 }
 
-int Transaction::uid()
+int Transaction::uid() const
 {
     return uid_;
 }
 
-int Transaction::uid_to()
+int Transaction::uid_to() const
 {
     return uid_to_;
 }
 
-int Transaction::fund_id()
+int Transaction::fund_id() const
 {
     return fund_id_;
 }
 
-int Transaction::fund_id_to()
+int Transaction::fund_id_to() const
 {
     return fund_id_to_;
 }
 
-int Transaction::amount()
+int Transaction::amount() const
 {
     return amount_;
 }
 
-string Transaction::first_name()
+string Transaction::first_name() const
 {
     return first_name_;
 }
 
-string Transaction::last_name()
+string Transaction::last_name() const
 {
     return last_name_;
 }
