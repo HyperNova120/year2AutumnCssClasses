@@ -1,3 +1,0 @@
-the only issue i encountered was me mistyping the file names. 
-it does not matter what os because ifstream abstracts that away
-when i transfer the files to my windows machine and back to my docker image diff reports they are the same still
