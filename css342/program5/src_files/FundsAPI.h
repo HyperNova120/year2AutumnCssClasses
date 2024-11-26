@@ -4,10 +4,22 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "Fund.h"
 
 using namespace std;
 
-vector<int> GetAllFundIDs()
+class global_funds //allows anybody to look at the funds but only Bank to edit them
+{
+public:
+    friend class Bank;
+
+    static map<int, Fund> funds();
+
+private:
+    static map<int, Fund> funds_;
+};
+
+inline vector<int> GetAllFundIDs()
 {
     vector<int> tmp = vector<int>();
     for (int i = 0; i <= 7; i++)
@@ -17,7 +29,7 @@ vector<int> GetAllFundIDs()
     return tmp;
 };
 
-string GetFundName(int fund_id)
+inline string GetFundName(int fund_id)
 {
     map<int, string> funds = map<int, string>();
     funds[0] = "Money Market";
@@ -31,12 +43,12 @@ string GetFundName(int fund_id)
     return funds[fund_id];
 };
 
-bool DoesFundExist(int fund_id)
+inline bool DoesFundExist(int fund_id)
 {
     return fund_id >= 0 && fund_id <= 7;
 };
 
-vector<int> GetMoneyMarketFundIDs()
+inline vector<int> GetMoneyMarketFundIDs()
 {
     vector<int> tmp = vector<int>();
     tmp.push_back(0);
@@ -44,18 +56,20 @@ vector<int> GetMoneyMarketFundIDs()
     return tmp;
 };
 
-vector<int> GetBondFundIDs()
+inline vector<int> GetBondFundIDs()
 {
     vector<int> tmp = vector<int>();
     tmp.push_back(2);
     tmp.push_back(3);
     return tmp;
 };
-bool IsMoneyMarketFund(int fund_id)
+
+inline bool IsMoneyMarketFund(int fund_id)
 {
     return fund_id == 0 || fund_id == 1;
 };
-bool IsBondFund(int fund_id)
+
+inline bool IsBondFund(int fund_id)
 {
     return fund_id == 2 || fund_id == 3;
 };

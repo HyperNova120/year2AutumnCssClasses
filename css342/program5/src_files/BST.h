@@ -22,6 +22,7 @@ public:
     BST(const BST<T> &other);
     ~BST();
 
+    void copy (BST<T>::Node *currentNode);
     bool Remove(const T &obj);
     bool Insert(const T &obj);
     bool Contains(const T &obj) const;
@@ -45,11 +46,15 @@ private:
 template <typename T>
 inline BST<T>::BST()
 {
+    head_ = nullptr;
 }
 
 template <typename T>
 inline BST<T>::BST(const BST<T> &other)
 {
+    DeleteBST(head_);
+    head_ = nullptr;
+    copy(other.head_);
 }
 
 template <typename T>
@@ -57,6 +62,18 @@ inline BST<T>::~BST()
 {
     DeleteBST(head_);
     head_ = nullptr;
+}
+
+template <typename T>
+inline void BST<T>::copy(BST<T>::Node *currentNode)
+{
+    if (currentNode == nullptr)
+    {
+        return;
+    }
+    Insert(T(*currentNode->item_));
+    copy(currentNode->left_);
+    copy(currentNode->right_);
 }
 
 template <typename T>
