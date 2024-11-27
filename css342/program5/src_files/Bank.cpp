@@ -38,7 +38,7 @@ void Bank::ExecuteTranactions()
     while (!transactions_.empty())
     {
         Transaction current_transaction = transactions_.front();
-        transactions_.pop();
+        transactions_.pop(); 
         switch (current_transaction.transaction_type())
         {
         case O:
@@ -227,12 +227,12 @@ Account &Bank::GetAccount(int uid) const
 
 bool Bank::TransferFundsBetweenElligibleFundsToCover(Transaction &transaction)
 {
-    if (!(IsBondFund(transaction.fund_id()) || IsMoneyMarketFund(transaction.fund_id())))
+    if (!IsLinkedFund(transaction.fund_id()))
     {
         return false;
     }
     int overdraw_amount = transaction.amount() - global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid());
-    vector<int> fundIds = (IsBondFund(transaction.fund_id())) ? GetBondFundIDs() : GetMoneyMarketFundIDs();
+    vector<int> fundIds = GetLinkedFundIDs(transaction.fund_id());//(IsBondFund(transaction.fund_id())) ? GetBondFundIDs() : GetMoneyMarketFundIDs();
 
     int total_amount = 0;
     for (int i = 0; i < fundIds.size(); i++)

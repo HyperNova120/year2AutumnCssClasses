@@ -74,4 +74,21 @@ inline bool IsBondFund(int fund_id)
     return fund_id == 2 || fund_id == 3;
 };
 
+inline bool IsLinkedFund(int fund_id)
+{   
+    return IsMoneyMarketFund(fund_id) || IsBondFund(fund_id);
+};
+
+inline vector<int> GetLinkedFundIDs(int fund_id)
+{
+    if (IsMoneyMarketFund(fund_id))
+    {
+        return GetMoneyMarketFundIDs(); 
+    }
+    else if (IsBondFund(fund_id))
+    {
+        return GetBondFundIDs();
+    }
+}
+
 #endif //_SRC_FUNDSAPI_H_;
