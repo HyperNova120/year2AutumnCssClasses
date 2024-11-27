@@ -38,7 +38,7 @@ void Bank::ExecuteTranactions()
     while (!transactions_.empty())
     {
         Transaction current_transaction = transactions_.front();
-        transactions_.pop(); 
+        transactions_.pop();
         switch (current_transaction.transaction_type())
         {
         case O:
@@ -189,7 +189,7 @@ bool Bank::TransferFunds(Transaction &transaction)
         transaction.MarkAsFailed();
         return false;
     }
-    else if ((transaction.uid() == transaction.uid_to()) &&
+    /* else if ((transaction.uid() == transaction.uid_to()) &&
              ((IsBondFund(transaction.fund_id()) && IsBondFund(transaction.fund_id_to())) ||
               (IsMoneyMarketFund(transaction.fund_id()) && IsMoneyMarketFund(transaction.fund_id_to()))) &&
              global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid()) < transaction.amount())
@@ -197,7 +197,7 @@ bool Bank::TransferFunds(Transaction &transaction)
         cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Has Insufficient Funds Within Fund With ID: " << to_string(transaction.fund_id()) << endl;
         transaction.MarkAsFailed();
         return false;
-    }
+    } */
     else if (transaction.amount() < 0)
     {
         cerr << "ERROR: Cannot Be Negative Amount" << endl;
@@ -207,6 +207,7 @@ bool Bank::TransferFunds(Transaction &transaction)
 
     if (!WithdrawFunds(transaction))
     {
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Has Insufficient Funds Within Fund With ID: " << to_string(transaction.fund_id()) << endl;
         transaction.MarkAsFailed();
         return false;
     }
@@ -232,12 +233,12 @@ bool Bank::TransferFundsBetweenElligibleFundsToCover(Transaction &transaction)
         return false;
     }
     int overdraw_amount = transaction.amount() - global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid());
-    vector<int> fundIds = GetLinkedFundIDs(transaction.fund_id());//(IsBondFund(transaction.fund_id())) ? GetBondFundIDs() : GetMoneyMarketFundIDs();
+    vector<int> fundIds = GetLinkedFundIDs(transaction.fund_id()); //(IsBondFund(transaction.fund_id())) ? GetBondFundIDs() : GetMoneyMarketFundIDs();
 
     int total_amount = 0;
     for (int i = 0; i < fundIds.size(); i++)
     {
-        if (fundIds[i] == transaction.fund_id())
+        if (fundIds[i] == transaction.fund_id() || fundIds[i] == transaction.fund_id_to())
         {
             continue;
         }
@@ -255,7 +256,7 @@ bool Bank::TransferFundsBetweenElligibleFundsToCover(Transaction &transaction)
 
     for (int i = 0; i < fundIds.size() && overdraw_amount > 0; i++)
     {
-        if (fundIds[i] == transaction.fund_id())
+        if (fundIds[i] == transaction.fund_id() || fundIds[i] == transaction.fund_id_to())
         {
             continue;
         }
