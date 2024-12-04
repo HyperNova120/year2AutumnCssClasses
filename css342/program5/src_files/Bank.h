@@ -38,6 +38,8 @@ private:
 
     void AddToTransactionHistory(Transaction &transaction);
 
+    bool isValidDeposit_Withdraw_Transaction(Transaction &transaction);
+
     queue<Transaction> transactions_ = queue<Transaction>();
     BST<Account> accounts_ = BST<Account>();
     map<int, list<Transaction>> account_transaction_history_ = map<int, list<Transaction>>(); // key: account id

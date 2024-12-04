@@ -40,28 +40,28 @@ public:
 private:
     BST<T>::Node *GetReplacementNode(const BST<T>::Node *current);
     string printMe(const BST<T>::Node *current) const;
-    Node *head_ = nullptr;
+    Node *root_ = nullptr;
 };
 
 template <typename T>
 inline BST<T>::BST()
 {
-    head_ = nullptr;
+    root_ = nullptr;
 }
 
 template <typename T>
 inline BST<T>::BST(const BST<T> &other)
 {
-    DeleteBST(head_);
-    head_ = nullptr;
-    copy(other.head_);
+    DeleteBST(root_);
+    root_ = nullptr;
+    copy(other.root_);
 }
 
 template <typename T>
 inline BST<T>::~BST()
 {
-    DeleteBST(head_);
-    head_ = nullptr;
+    DeleteBST(root_);
+    root_ = nullptr;
 }
 
 template <typename T>
@@ -79,11 +79,11 @@ inline void BST<T>::copy(BST<T>::Node *currentNode)
 template <typename T>
 bool BST<T>::Remove(const T &obj)
 {
-    if (head_ == nullptr)
+    if (root_ == nullptr)
     {
         return false;
     }
-    Node *currentNode = head_;
+    Node *currentNode = root_;
     Node *lastNode = nullptr;
     bool wasLastMoveLeft = false;
     while (currentNode != nullptr && *currentNode->item_ != obj)
@@ -110,9 +110,9 @@ bool BST<T>::Remove(const T &obj)
     if (lastNode == nullptr)
     {
         // head
-        delete head_->item_;
-        delete head_;
-        head_ = nullptr;
+        delete root_->item_;
+        delete root_;
+        root_ = nullptr;
         return true;
     }
     replacementNode->left_ = currentNode->left_;
@@ -137,12 +137,12 @@ bool BST<T>::Insert(const T &obj)
 {
     BST<T>::Node *tmp = new BST<T>::Node();
     tmp->item_ = new T(obj);
-    if (head_ == nullptr)
+    if (root_ == nullptr)
     {
-        head_ = tmp;
+        root_ = tmp;
         return true;
     }
-    Node *currentNode = head_;
+    Node *currentNode = root_;
     Node *lastNode = nullptr;
     bool wasLastMoveLeft = false;
     while (currentNode != nullptr)
@@ -177,7 +177,7 @@ bool BST<T>::Insert(const T &obj)
 template <typename T>
 inline bool BST<T>::Contains(const T &obj) const
 {
-    Node *currentNode = head_;
+    Node *currentNode = root_;
     while (currentNode != nullptr)
     {
         if (*currentNode->item_ == obj)
@@ -200,7 +200,7 @@ template <typename T>
 inline T &BST<T>::Get(const T &obj) const
 {
     // assumes contains was true
-    Node *currentNode = head_;
+    Node *currentNode = root_;
     while (currentNode != nullptr)
     {
         if (*currentNode->item_ == obj)
@@ -293,7 +293,7 @@ string BST<T>::printMe(const BST<T>::Node *current) const
 template <typename U>
 ostream &operator<<(ostream &os, const BST<U> &obj)
 {
-    os << obj.printMe(obj.head_);
+    os << obj.printMe(obj.root_);
     return os;
 }
 

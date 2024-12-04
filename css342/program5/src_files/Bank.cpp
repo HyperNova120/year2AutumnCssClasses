@@ -93,6 +93,12 @@ bool Bank::CreateAccount(Transaction &transaction)
         transaction.MarkAsFailed();
         return false;
     }
+    else if (transaction.uid() < 0)
+    {
+        cerr << "ERROR: Account ID Cannot Be Negative" << endl;
+        transaction.MarkAsFailed();
+        return false;
+    }
 
     Account account_to_add = Account(transaction.first_name(), transaction.last_name(), transaction.uid());
     for (int fund_id : GetAllFundIDs())
@@ -105,22 +111,8 @@ bool Bank::CreateAccount(Transaction &transaction)
 
 bool Bank::DepositFunds(Transaction &transaction)
 {
-    if (!DoesAccountExist(transaction.uid()))
+    if (!isValidDeposit_Withdraw_Transaction(transaction))
     {
-        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    else if (!DoesFundExist(transaction.fund_id()))
-    {
-        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    else if (transaction.amount() < 0)
-    {
-        cerr << "ERROR: Cannot Be Negative Amount" << endl;
-        transaction.MarkAsFailed();
         return false;
     }
 
@@ -130,22 +122,8 @@ bool Bank::DepositFunds(Transaction &transaction)
 
 bool Bank::WithdrawFunds(Transaction &transaction)
 {
-    if (!DoesAccountExist(transaction.uid()))
+    if (!isValidDeposit_Withdraw_Transaction(transaction))
     {
-        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    else if (!DoesFundExist(transaction.fund_id()))
-    {
-        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    else if (transaction.amount() < 0)
-    {
-        cerr << "ERROR: Cannot Be Negative Amount" << endl;
-        transaction.MarkAsFailed();
         return false;
     }
 
@@ -165,43 +143,8 @@ bool Bank::WithdrawFunds(Transaction &transaction)
 
 bool Bank::TransferFunds(Transaction &transaction)
 {
-    if (!DoesAccountExist(transaction.uid()))
+    if (!isValidDeposit_Withdraw_Transaction(transaction))
     {
-        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    else if (!DoesFundExist(transaction.fund_id()))
-    {
-        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    else if (!DoesAccountExist(transaction.uid_to()))
-    {
-        cerr << "ERROR: Account With ID: " << to_string(transaction.uid_to()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    else if (!DoesFundExist(transaction.fund_id_to()))
-    {
-        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id_to()) << " Does Not Exist" << endl;
-        transaction.MarkAsFailed();
-        return false;
-    }
-    /* else if ((transaction.uid() == transaction.uid_to()) &&
-             ((IsBondFund(transaction.fund_id()) && IsBondFund(transaction.fund_id_to())) ||
-              (IsMoneyMarketFund(transaction.fund_id()) && IsMoneyMarketFund(transaction.fund_id_to()))) &&
-             global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid()) < transaction.amount())
-    {
-        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Has Insufficient Funds Within Fund With ID: " << to_string(transaction.fund_id()) << endl;
-        transaction.MarkAsFailed();
-        return false;
-    } */
-    else if (transaction.amount() < 0)
-    {
-        cerr << "ERROR: Cannot Be Negative Amount" << endl;
-        transaction.MarkAsFailed();
         return false;
     }
 
@@ -337,18 +280,57 @@ void Bank::AddToTransactionHistory(Transaction &transaction)
     switch (transaction.transaction_type())
     {
     case D:
-        account_transaction_history_[transaction.uid()].push_back(transaction);
-        fund_transaction_history_[transaction.fund_id()].push_back(transaction);
+        if (DoesAccountExist(transaction.uid())) {account_transaction_history_[transaction.uid()].push_back(transaction);}
+        if (DoesFundExist(transaction.fund_id())) {fund_transaction_history_[transaction.fund_id()].push_back(transaction);}
         break;
     case W:
-        account_transaction_history_[transaction.uid()].push_back(transaction);
-        fund_transaction_history_[transaction.fund_id()].push_back(transaction);
+        if (DoesAccountExist(transaction.uid())) {account_transaction_history_[transaction.uid()].push_back(transaction);}
+        if (DoesFundExist(transaction.fund_id())) {fund_transaction_history_[transaction.fund_id()].push_back(transaction);}
         break;
     case T:
-        account_transaction_history_[transaction.uid()].push_back(transaction);
-        account_transaction_history_[transaction.uid_to()].push_back(transaction);
-        fund_transaction_history_[transaction.fund_id()].push_back(transaction);
-        fund_transaction_history_[transaction.fund_id_to()].push_back(transaction);
+        if (DoesAccountExist(transaction.uid())) {account_transaction_history_[transaction.uid()].push_back(transaction);}
+        if (DoesFundExist(transaction.fund_id())) {fund_transaction_history_[transaction.fund_id()].push_back(transaction);}
+        
+        if (DoesAccountExist(transaction.uid_to())) {account_transaction_history_[transaction.uid_to()].push_back(transaction);}
+        if (DoesFundExist(transaction.fund_id_to())) {fund_transaction_history_[transaction.fund_id_to()].push_back(transaction);}
         break;
     }
+}
+
+bool Bank::isValidDeposit_Withdraw_Transaction(Transaction &transaction)
+{
+    if (!DoesAccountExist(transaction.uid()))
+    {
+        cerr << "ERROR: Account With ID: " << to_string(transaction.uid()) << " Does Not Exist" << endl;
+        transaction.MarkAsFailed();
+        return false;
+    }
+    else if (!DoesFundExist(transaction.fund_id()))
+    {
+        cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id()) << " Does Not Exist" << endl;
+        transaction.MarkAsFailed();
+        return false;
+    }
+    else if (transaction.amount() < 0)
+    {
+        cerr << "ERROR: Cannot Be Negative Amount" << endl;
+        transaction.MarkAsFailed();
+        return false;
+    }
+    if (transaction.transaction_type() == T)
+    {
+        if (!DoesAccountExist(transaction.uid_to()))
+        {
+            cerr << "ERROR: Account With ID: " << to_string(transaction.uid_to()) << " Does Not Exist" << endl;
+            transaction.MarkAsFailed();
+            return false;
+        }
+        else if (!DoesFundExist(transaction.fund_id_to()))
+        {
+            cerr << "ERROR: Fund With ID: " << to_string(transaction.fund_id_to()) << " Does Not Exist" << endl;
+            transaction.MarkAsFailed();
+            return false;
+        }
+    }
+    return true;
 }
