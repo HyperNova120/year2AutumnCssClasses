@@ -58,7 +58,7 @@ Account &Account::operator=(const Account &other)
 ostream &operator<<(ostream &os, const Account &obj)
 {
     map<int, Fund> tmp = global_funds::funds();
-    os << obj.first_name_ << " " << obj.last_name_ << " Account ID: " << to_string(obj.uid_) << endl;
+    os << obj.last_name_ << " " << obj.first_name_ << " Account ID: " << to_string(obj.uid_) << endl;
     for (int fund_id : GetAllFundIDs())
     {
         os << "    " << GetFundName(fund_id) << ": $" << tmp[fund_id].GetAccountFunds(obj.uid_) << endl;

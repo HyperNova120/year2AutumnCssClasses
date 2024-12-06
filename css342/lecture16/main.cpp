@@ -4,7 +4,7 @@ using namespace std;
 
 bool List::MoveToEnd(Item item)
 {
-    Node buffer = *head;
+    Node buffer;
     buffer.next = head;
     Node *current = &buffer;
     while (current->next != nullptr && *current->next->pItem != item)
