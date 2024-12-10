@@ -241,7 +241,7 @@ void Bank::PrintAccountTransactionHistory(Transaction &transaction)
         int transactions = 0;
         for (Transaction t : fund_transaction_history_[fund_id])
         {
-            if (t.uid() == account->uid() || (t.transaction_type() == T && t.uid_to() == account->uid()))
+            if (t.uid() == account->uid() && t.fund_id() == fund_id || (t.transaction_type() == T && t.uid_to() == account->uid() && t.fund_id_to() == fund_id))
             {
                 total_transactions++;
                 transactions++;
@@ -276,7 +276,7 @@ void Bank::PrintFundTransactionHistoryForAccount(Transaction &transaction)
     int total_transactions = 0;
     for (Transaction t : fund_transaction_history_[transaction.fund_id()])
     {
-        if (t.uid() == account->uid() || (t.transaction_type() == T && t.uid_to() == account->uid()))
+        if (t.uid() == account->uid() && t.fund_id() == transaction.fund_id() || (t.transaction_type() == T && t.uid_to() == account->uid() && t.fund_id_to() == transaction.fund_id()))
         {
             total_transactions++;
             cout << "   " << t << endl;
@@ -324,11 +324,11 @@ void Bank::AddToTransactionHistory(Transaction &transaction)
             fund_transaction_history_[transaction.fund_id()].push_back(transaction);
         }
 
-        if (DoesAccountExist(transaction.uid_to()))
+        if (DoesAccountExist(transaction.uid_to()) && transaction.uid_to() != transaction.uid())
         {
             account_transaction_history_[transaction.uid_to()].push_back(transaction);
         }
-        if (DoesFundExist(transaction.fund_id_to()))
+        if (DoesFundExist(transaction.fund_id_to()) && transaction.fund_id_to() != transaction.fund_id())
         {
             fund_transaction_history_[transaction.fund_id_to()].push_back(transaction);
         }

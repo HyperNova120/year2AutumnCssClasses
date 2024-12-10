@@ -102,16 +102,12 @@ Growth Index Fund: $500
 Transaction History For George Negate By Fund.
 Money Market: $0
    T 0 4 0 0 600 (FAILED)
-   T 0 4 1001 0 600 (FAILED)
 Prime Money Market: $0
    T 0 5 0 1 600 (FAILED)
-   T 0 5 1001 1 600 (FAILED)
 Long-Term Bond: $0
    T 0 6 0 2 600 (FAILED)
-   T 0 6 1001 2 600 (FAILED)
 Short-Term Bond: $0
    T 0 7 0 3 600 (FAILED)
-   T 0 7 1001 3 600 (FAILED)
 500 Index Fund: $0
    T 0 4 0 0 600 (FAILED)
    T 0 4 1001 0 600 (FAILED)
@@ -136,14 +132,6 @@ Prime Money Market: $0
 Long-Term Bond: $0
    T 0 6 1001 2 600 (FAILED)
 Short-Term Bond: $0
-   T 0 7 1001 3 600 (FAILED)
-500 Index Fund: $0
-   T 0 4 1001 0 600 (FAILED)
-Capital Value Fund: $0
-   T 0 5 1001 1 600 (FAILED)
-Growth Equity Fund: $0
-   T 0 6 1001 2 600 (FAILED)
-Growth Index Fund: $0
    T 0 7 1001 3 600 (FAILED)
 
 Transaction History For George Jones Capital Value Fund: $0
@@ -174,25 +162,21 @@ Short-Term Bond: $0
    T 1001 3 1001 -4 500 (FAILED)
    T 1001 -2 1001 3 500 (FAILED)
 500 Index Fund: $0
-   T 0 4 1001 0 600 (FAILED)
    T 1001 3 1001 4 500
    T 1001 4 1001 5 500
    T 1001 4 1001 -5 500 (FAILED)
    T 1001 -3 1001 4 500 (FAILED)
 Capital Value Fund: $0
-   T 0 5 1001 1 600 (FAILED)
    T 1001 4 1001 5 500
    T 1001 5 1001 6 500
    T 1001 5 1001 -6 500 (FAILED)
    T 1001 -4 1001 5 500 (FAILED)
 Growth Equity Fund: $0
-   T 0 6 1001 2 600 (FAILED)
    T 1001 5 1001 6 500
    T 1001 6 1001 7 500
    T 1001 6 1001 -7 500 (FAILED)
    T 1001 -5 1001 6 500 (FAILED)
 Growth Index Fund: $500
-   T 0 7 1001 3 600 (FAILED)
    T 1001 6 1001 7 500
    T 1001 -6 1001 7 500 (FAILED)
 
@@ -272,6 +256,50 @@ Long-Term Bond: $7000
 
 Transaction History For George Jones Short-Term Bond: $0
    No Transaction History
+Transaction History For Johnny Cash By Fund.
+Money Market: $0
+   T 0 4 1001 0 600 (FAILED)
+   D 1001 0 500
+   T 1001 0 1001 1 500
+   T 1001 0 1001 -1 500 (FAILED)
+   T 1001 0 1001 1 500 (FAILED)
+Prime Money Market: $0
+   T 0 5 1001 1 600 (FAILED)
+   T 1001 0 1001 1 500
+   T 1001 1 1001 2 500
+   T 1001 1 1001 -2 500 (FAILED)
+   T 1001 0 1001 1 500 (FAILED)
+Long-Term Bond: $0
+   T 0 6 1001 2 600 (FAILED)
+   T 1001 1 1001 2 500
+   T 1001 2 1001 3 500
+   T 1001 2 1001 -3 500 (FAILED)
+   T 1001 -1 1001 2 500 (FAILED)
+Short-Term Bond: $0
+   T 0 7 1001 3 600 (FAILED)
+   T 1001 2 1001 3 500
+   T 1001 3 1001 4 500
+   T 1001 3 1001 -4 500 (FAILED)
+   T 1001 -2 1001 3 500 (FAILED)
+500 Index Fund: $0
+   T 1001 3 1001 4 500
+   T 1001 4 1001 5 500
+   T 1001 4 1001 -5 500 (FAILED)
+   T 1001 -3 1001 4 500 (FAILED)
+Capital Value Fund: $0
+   T 1001 4 1001 5 500
+   T 1001 5 1001 6 500
+   T 1001 5 1001 -6 500 (FAILED)
+   T 1001 -4 1001 5 500 (FAILED)
+Growth Equity Fund: $0
+   T 1001 5 1001 6 500
+   T 1001 6 1001 7 500
+   T 1001 6 1001 -7 500 (FAILED)
+   T 1001 -5 1001 6 500 (FAILED)
+Growth Index Fund: $500
+   T 1001 6 1001 7 500
+   T 1001 -6 1001 7 500 (FAILED)
+
 FINAL BALANCES:
 George Negate Account ID: 0
     Money Market: $0

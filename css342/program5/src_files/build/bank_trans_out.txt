@@ -30,7 +30,6 @@ Transaction History For Hank Williams 500 Index Fund: $10000
 Transaction History For Hank Williams By Fund.
 Money Market: $10000
    D 1253 0 10000
-   T 1253 3 0 0 5000
 Prime Money Market: $10000
    D 1253 1 10000
 Long-Term Bond: $0
