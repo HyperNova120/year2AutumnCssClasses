@@ -1,3 +1,0 @@
-ERROR: Cash Johnny Has Insufficient Funds Within Growth Index Fund
-ERROR: Account With ID: 4356 Does Not Exist. Transaction Refused
-ERROR: Account With ID: 9876 Already Exists. Transaction Refused
