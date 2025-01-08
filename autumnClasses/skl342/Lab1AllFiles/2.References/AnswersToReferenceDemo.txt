@@ -1,0 +1,6 @@
+2. line 55, the variable xr is a reference variable but is not initialized. reference vars cannot be null
+3. onePlus takes an int var and adds 1 to it, the method is void so doesn't return and the method var, a, is pass-by-value so it is a copy and doesn't affect the variable in main
+4. the variable refincrement takes is a refernce int so it takes a reference to the variable in main and can directly modify the variable  
+5. pair is a struct that contains a string and int value, when you initialize a pair you give it both a string and int which sets that pair struct's internal vars 
+6. value() recives a reference to a string that is marked as const. the const means that that within the value() method the variable won't/can't be changed or modified in any way 
+7. value() returns the number of times that string has been passed to it as a int reference, the ++ op means that when value() returns the int ref that value is changed by +1, it is legal because value() returns a int ref

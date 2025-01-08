@@ -1,0 +1,66 @@
+#ifndef UINT256_H_
+#define UINT256_H_
+#include <iostream>
+#include <bitset>
+using namespace std;
+
+const static bool KDEBUG = false;
+
+string addStringDec(string base, string add);
+
+class UInt256
+{
+public:
+    using Kbase_type_ = __uint128_t;
+    static const int Kbase_size_ = 128;
+    static const int Khalf_base_size = Kbase_size_ / 2;
+
+    UInt256();
+    UInt256(const UInt256 &other);
+    UInt256(Kbase_type_ value);
+    UInt256(Kbase_type_ high, Kbase_type_ low);
+
+    bool operator<(const UInt256 &other) const;
+    bool operator<(const Kbase_type_ value) const;
+    bool operator()(const UInt256 &other, const UInt256 &other2) const;
+
+    UInt256 &operator+=(const UInt256 &other);
+    UInt256 operator+(const UInt256 &other) const;
+    UInt256 operator+(const Kbase_type_ &other) const;
+    UInt256 &operator++(int value);
+
+    UInt256 operator-(const UInt256 &other) const;
+
+    UInt256 &operator=(const UInt256 &other);
+    UInt256 &operator=(const __uint128_t &value);
+
+    bool operator==(const UInt256 &other) const;
+    bool operator==(const Kbase_type_ value) const;
+    bool operator!=(const UInt256 &other) const;
+    bool operator!=(const Kbase_type_ value) const;
+
+    UInt256 operator*(const UInt256 &other) const;
+
+    friend ostream &operator<<(ostream &os, const UInt256 &obj);
+
+    UInt256 operator<<(int shift) const;
+    UInt256 operator>>(int shift) const;
+    UInt256 &operator<<=(int shift);
+    UInt256 &operator>>=(int shift);
+    UInt256 operator&(const UInt256 &other) const;
+    UInt256 &operator|=(const UInt256 &other);
+
+    bitset<Kbase_size_ * 2> GetBitSet() const;
+
+    static UInt256 GetBitwiseAndValue();
+
+    Kbase_type_ high() const;
+    Kbase_type_ low() const;
+
+private:
+    Kbase_type_ low_;
+    Kbase_type_ high_;
+    Kbase_type_ bitwise_and_mask_;
+};
+
+#endif // UINT256_H_
