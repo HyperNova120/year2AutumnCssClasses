@@ -1,0 +1,57 @@
+ERROR: Account ID Cannot Be Negative. Transaction Refused
+ERROR: Account ID Cannot Be Negative. Transaction Refused
+ERROR: Jones George Has Insufficient Funds Within Money Market
+ERROR: Cannot Be Negative Amount. Transaction Refused
+ERROR: Cannot Be Negative Amount. Transaction Refused
+ERROR: Cannot Be Negative Amount. Transaction Refused
+ERROR: Negate George Has Insufficient Funds Within 500 Index Fund
+ERROR: Negate George Has Insufficient Funds Within Capital Value Fund
+ERROR: Negate George Has Insufficient Funds Within Growth Equity Fund
+ERROR: Negate George Has Insufficient Funds Within Growth Index Fund
+ERROR: Negate George Has Insufficient Funds Within 500 Index Fund
+ERROR: Negate George Has Insufficient Funds Within Capital Value Fund
+ERROR: Negate George Has Insufficient Funds Within Growth Equity Fund
+ERROR: Negate George Has Insufficient Funds Within Growth Index Fund
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund With ID: 8 Does Not Exist. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund With ID: 8 Does Not Exist. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund With ID: 8 Does Not Exist. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund With ID: 8 Does Not Exist. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Cash Johnny Has Insufficient Funds Within Money Market
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Account ID Cannot Be Negative. Transaction Refused
+ERROR: Account With ID: 5000 Does Not Exist. Transaction Refused
+ERROR: Account ID Cannot Be Negative. Transaction Refused
+ERROR: Account With ID: 5000 Does Not Exist. Transaction Refused
+ERROR: Account ID Cannot Be Negative. Transaction Refused
+ERROR: Fund ID Cannot Be Negative. Transaction Refused
+ERROR: Account With ID: 5000 Does Not Exist. Transaction Refused

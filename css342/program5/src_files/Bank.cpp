@@ -127,6 +127,7 @@ bool Bank::WithdrawFunds(Transaction &transaction)
         return false;
     }
 
+    //attempts to withdraw from fund, if not enough funds tries to cover from linked funds
     if (global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid()) < transaction.amount())
     {
         // insufficient funds
@@ -150,11 +151,12 @@ bool Bank::TransferFunds(Transaction &transaction)
         return false;
     }
 
+    //attemps to withdraw amount from fund, if successful, depost into new fund
     if (!WithdrawFunds(transaction))
     {
         Account *P_tmp = &accounts_.Get(transaction.uid());
         string account_name = P_tmp->first_name() + " " + P_tmp->last_name();
-        cerr << "ERROR: " << account_name << " Has Insufficient Funds Within " << GetFundName(transaction.fund_id()) << endl;
+        // cerr << "ERROR: " << account_name << " Has Insufficient Funds Within " << GetFundName(transaction.fund_id()) << endl;
         transaction.MarkAsFailed();
         return false;
     }
@@ -173,15 +175,18 @@ Account &Bank::GetAccount(int uid) const
     return accounts_.Get(Account(uid));
 }
 
+
 bool Bank::TransferFundsBetweenElligibleFundsToCover(Transaction &transaction)
 {
     if (!IsLinkedFund(transaction.fund_id()))
     {
         return false;
     }
+    //gets overdraw amount
     int overdraw_amount = transaction.amount() - global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid());
     vector<int> fundIds = GetLinkedFundIDs(transaction.fund_id()); //(IsBondFund(transaction.fund_id())) ? GetBondFundIDs() : GetMoneyMarketFundIDs();
 
+    //calculates available amount to cover
     int total_amount = 0;
     for (int i = 0; i < fundIds.size(); i++)
     {
@@ -198,6 +203,7 @@ bool Bank::TransferFundsBetweenElligibleFundsToCover(Transaction &transaction)
         return false;
     }
 
+    //pulls from funds not being transfered from or too to cover
     int old_amount = global_funds::funds_[transaction.fund_id()].GetAccountFunds(transaction.uid());
     transaction.SetAmount(old_amount);
 
@@ -209,7 +215,7 @@ bool Bank::TransferFundsBetweenElligibleFundsToCover(Transaction &transaction)
         }
         int amount = (global_funds::funds_[fundIds[i]].GetAccountFunds(transaction.uid()) < overdraw_amount) ? global_funds::funds_[fundIds[i]].GetAccountFunds(transaction.uid()) : overdraw_amount;
         global_funds::funds_[fundIds[i]].Withdraw(transaction.uid(), amount);
-        Transaction tmp = Transaction(W, transaction.uid(), fundIds[i], amount);
+        Transaction tmp = Transaction(T, transaction.uid(), fundIds[i], transaction.uid_to(), transaction.fund_id_to(), amount);
         AddToTransactionHistory(tmp);
         if (transaction.transaction_type() == T)
         {
@@ -228,14 +234,16 @@ void Bank::PrintAccountTransactionHistory(Transaction &transaction)
     }
     Account *account = &GetAccount(transaction.uid());
     cout << "Transaction History For " << account->last_name() << " " << account->first_name() << " By Fund." << endl;
+    int total_transactions = 0;
     for (int fund_id : GetAllFundIDs())
     {
         string tmp = GetFundName(fund_id) + ": $" + to_string(global_funds::funds_[fund_id].GetAccountFunds(account->uid())) + "\n";
         int transactions = 0;
         for (Transaction t : fund_transaction_history_[fund_id])
         {
-            if (t.uid() == account->uid() || (t.transaction_type() == T && t.fund_id_to() == account->uid()))
+            if (t.uid() == account->uid() && t.fund_id() == fund_id || (t.transaction_type() == T && t.uid_to() == account->uid() && t.fund_id_to() == fund_id))
             {
+                total_transactions++;
                 transactions++;
                 stringstream ss;
                 ss << t;
@@ -246,6 +254,10 @@ void Bank::PrintAccountTransactionHistory(Transaction &transaction)
         {
             cout << tmp;
         }
+    }
+    if (total_transactions == 0)
+    {
+        cout << "   No Transaction History";
     }
     cout << endl;
 }
@@ -261,16 +273,23 @@ void Bank::PrintFundTransactionHistoryForAccount(Transaction &transaction)
     Account *account = &GetAccount(transaction.uid());
 
     cout << "Transaction History For " << account->last_name() << " " << account->first_name() << " " << GetFundName(transaction.fund_id()) << ": $" << global_funds::funds_[transaction.fund_id()].GetAccountFunds(account->uid()) << endl;
+    int total_transactions = 0;
     for (Transaction t : fund_transaction_history_[transaction.fund_id()])
     {
-        if (t.uid() == account->uid() || (t.transaction_type() == T && t.fund_id_to() == account->uid()))
+        if (t.uid() == account->uid() && t.fund_id() == transaction.fund_id() || (t.transaction_type() == T && t.uid_to() == account->uid() && t.fund_id_to() == transaction.fund_id()))
         {
+            total_transactions++;
             cout << "   " << t << endl;
         }
+    }
+    if (total_transactions == 0)
+    {
+        cout << "   No Transaction History";
     }
     cout << endl;
 }
 
+//adds transaction to history if account/fund exists
 void Bank::AddToTransactionHistory(Transaction &transaction)
 {
     switch (transaction.transaction_type())
@@ -305,11 +324,11 @@ void Bank::AddToTransactionHistory(Transaction &transaction)
             fund_transaction_history_[transaction.fund_id()].push_back(transaction);
         }
 
-        if (DoesAccountExist(transaction.uid_to()))
+        if (DoesAccountExist(transaction.uid_to()) && transaction.uid_to() != transaction.uid())
         {
             account_transaction_history_[transaction.uid_to()].push_back(transaction);
         }
-        if (DoesFundExist(transaction.fund_id_to()))
+        if (DoesFundExist(transaction.fund_id_to()) && transaction.fund_id_to() != transaction.fund_id())
         {
             fund_transaction_history_[transaction.fund_id_to()].push_back(transaction);
         }
@@ -317,6 +336,7 @@ void Bank::AddToTransactionHistory(Transaction &transaction)
     }
 }
 
+//checks needed vars to ensure transaction is valid
 bool Bank::isValidTransaction(Transaction &transaction)
 {
     if (transaction.uid() < 0)
