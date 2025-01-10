@@ -2,8 +2,7 @@
 
 Poly::Poly()
 {
-    coeffPtr = nullptr;
-    arraySize = 0;
+    setCoeff(0, 0);
 }
 
 Poly::Poly(int coeff)
@@ -16,6 +15,7 @@ Poly::Poly(int coeff, int exp)
     if (exp < 0)
     {
         exp = 0;
+        coeff = 0;
     }
     setCoeff(coeff, exp);
 }
@@ -28,12 +28,13 @@ Poly::Poly(const Poly &other)
 Poly::~Poly()
 {
     delete[] coeffPtr;
+    coeffPtr = nullptr;
     arraySize = 0;
 }
 
 int Poly::getCoeff(int exp)
 {
-    if (arraySize < exp)
+    if (arraySize <= exp || exp < 0)
     {
         return 0;
     }
@@ -47,9 +48,9 @@ void Poly::setCoeff(int coeff, int exp)
         return;
     }
 
-    if (arraySize < exp)
+    if (arraySize <= exp)
     {
-        ChangeSize(exp);
+        ChangeSize(exp+1);
     }
     *(coeffPtr + exp) = coeff;
 }
@@ -65,14 +66,14 @@ Poly Poly::operator=(const Poly &other)
     return *this;
 }
 
-void Poly::ChangeSize(int expToSizeTo)
+void Poly::ChangeSize(int newArraySize)
 {
-    if (arraySize == expToSizeTo)
+    if (arraySize == newArraySize)
     {
         return;
     }
-    int *tmpPtr = new int[expToSizeTo];
-    for (int i = 0; i < expToSizeTo; i++)
+    int *tmpPtr = new int[newArraySize];
+    for (int i = 0; i < newArraySize; i++)
     {
         *(tmpPtr + i) = 0;
     }
@@ -81,7 +82,7 @@ void Poly::ChangeSize(int expToSizeTo)
         *(tmpPtr + i) = *(coeffPtr + i);
     }
 
-    arraySize = expToSizeTo;
+    arraySize = newArraySize;
     delete[] coeffPtr;
     coeffPtr = tmpPtr;
 }
@@ -179,12 +180,17 @@ ostream &operator<<(ostream &os, const Poly &obj)
         {
             continue;
         }
+
         string adder = " +";
+
         if (*(obj.coeffPtr) < 0)
         {
             adder = " -";
         }
+
         adder += to_string(*(obj.coeffPtr));
+
+        // handle how x and exp are printed
         if (i == 1)
         {
             adder += "x";
@@ -193,7 +199,14 @@ ostream &operator<<(ostream &os, const Poly &obj)
         {
             adder += "x^" + to_string(i);
         }
+
         output += adder;
+    }
+
+    // if all coeff were 0
+    if (output.size() == 0)
+    {
+        output = " 0";
     }
     os << output;
     return os;
