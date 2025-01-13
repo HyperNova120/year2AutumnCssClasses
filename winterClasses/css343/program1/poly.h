@@ -23,10 +23,10 @@ public:
     bool operator==(const Poly &other) const;
     bool operator!=(const Poly &other) const;
 
-    Poly operator+=(const Poly &other);
-    Poly operator-=(const Poly &other);
-    Poly operator*=(const Poly &other);
-    Poly operator=(const Poly &other);
+    Poly &operator+=(const Poly &other);
+    Poly &operator-=(const Poly &other);
+    Poly &operator*=(const Poly &other);
+    Poly &operator=(const Poly &other);
 
     friend ostream &operator<<(ostream &os, const Poly &obj);
     friend istream &operator>>(istream &is, Poly &obj);

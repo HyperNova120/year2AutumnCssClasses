@@ -55,8 +55,12 @@ void Poly::setCoeff(int coeff, int exp)
     *(coeffPtr + exp) = coeff;
 }
 
-Poly Poly::operator=(const Poly &other)
+Poly &Poly::operator=(const Poly &other)
 {
+    if (this == &other)
+    {
+        return *this;
+    }
     this->~Poly();
     ChangeSize(other.arraySize);
     for (int i = 0; i < other.arraySize; i++)
@@ -114,7 +118,7 @@ bool Poly::operator!=(const Poly &other) const
     return !(*this == other);
 }
 
-Poly Poly::operator+=(const Poly &other)
+Poly &Poly::operator+=(const Poly &other)
 {
     int maxSize = (arraySize > other.arraySize) ? arraySize : other.arraySize;
     ChangeSize(maxSize);
@@ -125,7 +129,7 @@ Poly Poly::operator+=(const Poly &other)
     return *this;
 }
 
-Poly Poly::operator-=(const Poly &other)
+Poly &Poly::operator-=(const Poly &other)
 {
     int maxSize = (arraySize > other.arraySize) ? arraySize : other.arraySize;
     ChangeSize(maxSize);
@@ -151,8 +155,9 @@ Poly Poly::operator*(const Poly &other) const
     return Poly(*this) *= other;
 }
 
-Poly Poly::operator*=(const Poly &other)
+Poly &Poly::operator*=(const Poly &other)
 {
+    Poly tmp(other); //ensures functionality if &other == &this; 
     int *tmpPtr = coeffPtr;
     coeffPtr = nullptr;
     int tmpArraySize = arraySize;
@@ -160,9 +165,9 @@ Poly Poly::operator*=(const Poly &other)
 
     for (int i = 0; i < tmpArraySize; i++)
     {
-        for (int j = 0; j < other.arraySize; j++)
+        for (int j = 0; j < tmp.arraySize; j++)
         {
-            int coeff = *(tmpPtr + i) * *(other.coeffPtr + j);
+            int coeff = *(tmpPtr + i) * *(tmp.coeffPtr + j);
             int exp = i + j;
             Poly tmp(coeff, exp);
             *this += tmp;
@@ -175,7 +180,7 @@ Poly Poly::operator*=(const Poly &other)
 ostream &operator<<(ostream &os, const Poly &obj)
 {
     string output = "";
-    for (int i = obj.arraySize; i > 0; i--)
+    for (int i = obj.arraySize; i >= 0; i--)
     {
         if (*(obj.coeffPtr + i) == 0)
         {
