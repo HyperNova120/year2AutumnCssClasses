@@ -5,12 +5,12 @@ Poly::Poly()
     setCoeff(0, 0);
 }
 
-Poly::Poly(int coeff)
+Poly::Poly(const long coeff)
 {
     setCoeff(coeff, 0);
 }
 
-Poly::Poly(int coeff, int exp)
+Poly::Poly(long coeff, long exp)
 {
     if (exp < 0)
     {
@@ -32,7 +32,7 @@ Poly::~Poly()
     arraySize = 0;
 }
 
-int Poly::getCoeff(int exp)
+long Poly::getCoeff(const long exp) const
 {
     if (arraySize <= exp || exp < 0)
     {
@@ -41,7 +41,7 @@ int Poly::getCoeff(int exp)
     return *(coeffPtr + exp);
 }
 
-void Poly::setCoeff(int coeff, int exp)
+void Poly::setCoeff(const long coeff, const long exp)
 {
     if (exp < 0)
     {
@@ -63,25 +63,26 @@ Poly &Poly::operator=(const Poly &other)
     }
     this->~Poly();
     ChangeSize(other.arraySize);
-    for (int i = 0; i < other.arraySize; i++)
+    for (long i = 0; i < other.arraySize; i++)
     {
         *(coeffPtr + i) = *(other.coeffPtr + i);
     }
     return *this;
 }
 
-void Poly::ChangeSize(int newArraySize)
+void Poly::ChangeSize(const long newArraySize)
 {
     if (arraySize == newArraySize)
     {
         return;
     }
-    int *tmpPtr = new int[newArraySize];
-    for (int i = 0; i < newArraySize; i++)
+    long *tmpPtr = new long[newArraySize];
+    for (long i = 0; i < newArraySize; i++)
     {
         *(tmpPtr + i) = 0;
     }
-    for (int i = 0; i < arraySize; i++)
+    int sizeToCopy = (arraySize < newArraySize) ? arraySize : newArraySize;
+    for (long i = 0; i < sizeToCopy; i++)
     {
         *(tmpPtr + i) = *(coeffPtr + i);
     }
@@ -102,7 +103,7 @@ bool Poly::operator==(const Poly &other) const
         return false;
     }
 
-    for (int i = 0; i < arraySize; i++)
+    for (long i = 0; i < arraySize; i++)
     {
         if (*(coeffPtr + i) != *(other.coeffPtr + i))
         {
@@ -120,9 +121,9 @@ bool Poly::operator!=(const Poly &other) const
 
 Poly &Poly::operator+=(const Poly &other)
 {
-    int maxSize = (arraySize > other.arraySize) ? arraySize : other.arraySize;
+    long maxSize = (arraySize > other.arraySize) ? arraySize : other.arraySize;
     ChangeSize(maxSize);
-    for (int i = 0; i < other.arraySize; i++)
+    for (long i = 0; i < other.arraySize; i++)
     {
         *(coeffPtr + i) = *(coeffPtr + i) + *(other.coeffPtr + i);
     }
@@ -131,9 +132,9 @@ Poly &Poly::operator+=(const Poly &other)
 
 Poly &Poly::operator-=(const Poly &other)
 {
-    int maxSize = (arraySize > other.arraySize) ? arraySize : other.arraySize;
+    long maxSize = (arraySize > other.arraySize) ? arraySize : other.arraySize;
     ChangeSize(maxSize);
-    for (int i = 0; i < other.arraySize; i++)
+    for (long i = 0; i < other.arraySize; i++)
     {
         *(coeffPtr + i) = *(coeffPtr + i) - *(other.coeffPtr + i);
     }
@@ -157,20 +158,20 @@ Poly Poly::operator*(const Poly &other) const
 
 Poly &Poly::operator*=(const Poly &other)
 {
-    Poly tmp(other); //ensures functionality if &other == &this; 
-    int *tmpPtr = coeffPtr;
+    Poly tmp(other); // ensures functionality if &other == &this;
+    long *tmpPtr = coeffPtr;
     coeffPtr = nullptr;
-    int tmpArraySize = arraySize;
+    long tmpArraySize = arraySize;
     this->~Poly();
 
-    for (int i = 0; i < tmpArraySize; i++)
+    for (long i = 0; i < tmpArraySize; i++)
     {
-        for (int j = 0; j < tmp.arraySize; j++)
+        for (long j = 0; j < tmp.arraySize; j++)
         {
-            int coeff = *(tmpPtr + i) * *(tmp.coeffPtr + j);
-            int exp = i + j;
-            Poly tmp(coeff, exp);
-            *this += tmp;
+            long coeff = *(tmpPtr + i) * *(tmp.coeffPtr + j);
+            long exp = i + j;
+            Poly tmp2(coeff, exp);
+            *this += tmp2;
         }
     }
     delete[] tmpPtr;
@@ -180,7 +181,7 @@ Poly &Poly::operator*=(const Poly &other)
 ostream &operator<<(ostream &os, const Poly &obj)
 {
     string output = "";
-    for (int i = obj.arraySize; i >= 0; i--)
+    for (long i = obj.arraySize-1; i >= 0; i--)
     {
         if (*(obj.coeffPtr + i) == 0)
         {
@@ -194,6 +195,7 @@ ostream &operator<<(ostream &os, const Poly &obj)
             adder += "+";
         }
 
+        // add coeff value
         adder += to_string(*(obj.coeffPtr + i));
 
         // handle how x and exp are printed
@@ -203,6 +205,7 @@ ostream &operator<<(ostream &os, const Poly &obj)
         }
         else if (i != 0)
         {
+            // add exp value
             adder += "x^" + to_string(i);
         }
 
@@ -221,8 +224,8 @@ ostream &operator<<(ostream &os, const Poly &obj)
 istream &operator>>(istream &is, Poly &obj)
 {
     obj.~Poly();
-    int coeff = 0;
-    int exp = 0;
+    long coeff = 0;
+    long exp = 0;
     while (!(coeff == -1 && exp == -1))
     {
         try

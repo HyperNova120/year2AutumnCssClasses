@@ -12,7 +12,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int main2() {
 	Poly A(5, 7);
 	Poly B(3, 4);
 	Poly C(2);
