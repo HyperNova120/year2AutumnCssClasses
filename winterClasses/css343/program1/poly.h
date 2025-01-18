@@ -21,34 +21,34 @@ class Poly
 {
 
 private:
-    void ChangeSize(const long expToSizeTo);
+    void ChangeSize(const long newArraySize); //increases size of heap array if newArraySize > arraySize
 
-    long *coeffPtr = nullptr;
-    long arraySize = 0;
+    long *coeffPtr = nullptr; //ptr to array
+    long arraySize = 0; //array size
 
 public:
-    Poly();
-    Poly(const long coeff);
-    Poly(long coeff, long exp);
-    Poly(const Poly &other);
-    ~Poly();
+    Poly(); //default constructor
+    Poly(const long coeff); //sets constant coeff
+    Poly(long coeff, long exp); //sets coeff of exp
+    Poly(const Poly &other); //deep copy 
+    ~Poly(); //deconstructor
 
-    long getCoeff(const long exp) const;
-    void setCoeff(const long coeff, const long exp);
+    long getCoeff(const long exp) const; //returns coeff of exp, 0 if invalid exp
+    void setCoeff(const long coeff, const long exp); //sets coeff of exp, does nothing if exp < 0
 
-    Poly operator+(const Poly &other) const;
-    Poly operator-(const Poly &other) const;
-    Poly operator*(const Poly &other) const;
-    bool operator==(const Poly &other) const;
-    bool operator!=(const Poly &other) const;
+    Poly operator+(const Poly &other) const; //adds other 
+    Poly operator-(const Poly &other) const; //subtracts other
+    Poly operator*(const Poly &other) const; //multiplies other
+    bool operator==(const Poly &other) const; //returns equality of other
+    bool operator!=(const Poly &other) const; //returns not equality of other
+ 
+    Poly &operator+=(const Poly &other); //adds other to this
+    Poly &operator-=(const Poly &other); //subracts other from this
+    Poly &operator*=(const Poly &other); //multiplies other to this
+    Poly &operator=(const Poly &other); //sets this to deep copy of other
 
-    Poly &operator+=(const Poly &other);
-    Poly &operator-=(const Poly &other);
-    Poly &operator*=(const Poly &other);
-    Poly &operator=(const Poly &other);
-
-    friend ostream &operator<<(ostream &os, const Poly &obj);
-    friend istream &operator>>(istream &is, Poly &obj);
+    friend ostream &operator<<(ostream &os, const Poly &obj); //returns string expressing poly
+    friend istream &operator>>(istream &is, Poly &obj); //sets this based on input
 };
 
 #endif //_POLY_H_
