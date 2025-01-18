@@ -72,7 +72,7 @@ Poly &Poly::operator=(const Poly &other)
 
 void Poly::ChangeSize(const long newArraySize)
 {
-    if (arraySize == newArraySize)
+    if (arraySize >= newArraySize)
     {
         return;
     }
