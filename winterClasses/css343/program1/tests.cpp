@@ -444,5 +444,13 @@ int main()
     AdditionAssignmentTest();
     SubtractionAssignmentTest();
     MultiplicationAssignmentTest();
+
+
+    Poly A, B;
+    cin >> A;
+    cout << "A:" << A << endl;
+    cin >> B;
+    cout << "B:" << B << endl;
+    cout << (A * B) << endl;
     return 0;
 }

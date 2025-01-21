@@ -1,25 +1,25 @@
-//file poly.cpp
+// file poly.cpp
 #include "poly.h"
 
 //---------------------------------------------------------
-//constructor
-//default constructor 
+// constructor
+// default constructor
 Poly::Poly()
 {
     setCoeff(0, 0);
 }
 
 //---------------------------------------------------------
-//constructor
-//sets poly constant 
+// constructor
+// sets poly constant
 Poly::Poly(const long coeff)
 {
     setCoeff(coeff, 0);
 }
 
 //---------------------------------------------------------
-//constructor
-//sets coeff for exp
+// constructor
+// sets coeff for exp
 Poly::Poly(long coeff, long exp)
 {
     if (exp < 0)
@@ -31,16 +31,16 @@ Poly::Poly(long coeff, long exp)
 }
 
 //---------------------------------------------------------
-//constructor
-//copy constructor
+// constructor
+// copy constructor
 Poly::Poly(const Poly &other)
 {
     *this = other;
 }
 
 //---------------------------------------------------------
-//deconstructor constructor
-//deconstructs poly
+// deconstructor constructor
+// deconstructs poly
 Poly::~Poly()
 {
     delete[] coeffPtr;
@@ -49,8 +49,8 @@ Poly::~Poly()
 }
 
 //---------------------------------------------------------
-//method
-//returns ceoff of exp, 0 if exp invalid
+// method
+// returns ceoff of exp, 0 if exp invalid
 long Poly::getCoeff(const long exp) const
 {
     if (arraySize <= exp || exp < 0)
@@ -61,7 +61,7 @@ long Poly::getCoeff(const long exp) const
 }
 
 //---------------------------------------------------------
-//method
+// method
 // sets coeff of exp, does nothing if exp invalid
 void Poly::setCoeff(const long coeff, const long exp)
 {
@@ -78,8 +78,8 @@ void Poly::setCoeff(const long coeff, const long exp)
 }
 
 //---------------------------------------------------------
-//assignment overload
-//makes deep copy of other
+// assignment overload
+// makes deep copy of other
 Poly &Poly::operator=(const Poly &other)
 {
     if (this == &other)
@@ -96,8 +96,8 @@ Poly &Poly::operator=(const Poly &other)
 }
 
 //---------------------------------------------------------
-//method
-//increases internal array size to newArraySize if arraySize is <
+// method
+// increases internal array size to newArraySize if arraySize is <
 void Poly::ChangeSize(const long newArraySize)
 {
     if (arraySize >= newArraySize)
@@ -105,12 +105,12 @@ void Poly::ChangeSize(const long newArraySize)
         return;
     }
     long *tmpPtr = new long[newArraySize];
-    //set array to default as 0
+    // set array to default as 0
     for (long i = 0; i < newArraySize; i++)
     {
         *(tmpPtr + i) = 0;
     }
-    //copy old arrya over
+    // copy old array over
     int sizeToCopy = (arraySize < newArraySize) ? arraySize : newArraySize;
     for (long i = 0; i < sizeToCopy; i++)
     {
@@ -123,7 +123,7 @@ void Poly::ChangeSize(const long newArraySize)
 }
 
 //---------------------------------------------------------
-//equivalence overload
+// equivalence overload
 // returns true if other is equal to this
 bool Poly::operator==(const Poly &other) const
 {
@@ -148,7 +148,7 @@ bool Poly::operator==(const Poly &other) const
 }
 
 //---------------------------------------------------------
-//not equivalence overload
+// not equivalence overload
 // returns true if other not equal to this
 bool Poly::operator!=(const Poly &other) const
 {
@@ -156,8 +156,8 @@ bool Poly::operator!=(const Poly &other) const
 }
 
 //---------------------------------------------------------
-//addition assignment overload
-//adds other to this
+// addition assignment overload
+// adds other to this
 Poly &Poly::operator+=(const Poly &other)
 {
     long maxSize = (arraySize > other.arraySize) ? arraySize : other.arraySize;
@@ -170,7 +170,7 @@ Poly &Poly::operator+=(const Poly &other)
 }
 
 //---------------------------------------------------------
-//subtraction assignment overload
+// subtraction assignment overload
 // subtracts other from this
 Poly &Poly::operator-=(const Poly &other)
 {
@@ -184,7 +184,7 @@ Poly &Poly::operator-=(const Poly &other)
 }
 
 //---------------------------------------------------------
-//addition overload
+// addition overload
 // reutrns new poly with other added to this
 Poly Poly::operator+(const Poly &other) const
 {
@@ -192,7 +192,7 @@ Poly Poly::operator+(const Poly &other) const
 }
 
 //---------------------------------------------------------
-//subtraction overload
+// subtraction overload
 // returns new poly with other subracted from this
 Poly Poly::operator-(const Poly &other) const
 {
@@ -200,7 +200,7 @@ Poly Poly::operator-(const Poly &other) const
 }
 
 //---------------------------------------------------------
-//multiplication overload
+// multiplication overload
 // returns new poly with other multiplied by this
 Poly Poly::operator*(const Poly &other) const
 {
@@ -208,7 +208,7 @@ Poly Poly::operator*(const Poly &other) const
 }
 
 //---------------------------------------------------------
-//multiplication assignment overload
+// multiplication assignment overload
 // sets this to the product of other and this
 Poly &Poly::operator*=(const Poly &other)
 {
@@ -233,12 +233,12 @@ Poly &Poly::operator*=(const Poly &other)
 }
 
 //---------------------------------------------------------
-//ostream overload
+// ostream overload
 // prints obj in form of +ax^2 +bx +c
 ostream &operator<<(ostream &os, const Poly &obj)
 {
     string output = "";
-    for (long i = obj.arraySize-1; i >= 0; i--)
+    for (long i = obj.arraySize - 1; i >= 0; i--)
     {
         if (*(obj.coeffPtr + i) == 0)
         {
@@ -279,7 +279,7 @@ ostream &operator<<(ostream &os, const Poly &obj)
 }
 
 //---------------------------------------------------------
-//istream overload
+// istream overload
 // sets obj to given coeff exp sets until -1 -1
 istream &operator>>(istream &is, Poly &obj)
 {
