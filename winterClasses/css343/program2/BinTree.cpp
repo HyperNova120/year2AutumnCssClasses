@@ -9,7 +9,8 @@ BinTree::BinTree(const BinTree &other)
 
 BinTree::~BinTree()
 {
-    recursiveDelete(root);
+    deleteHelper(root);
+    root = nullptr;
 }
 
 bool BinTree::isEmpty() const
@@ -24,12 +25,18 @@ void BinTree::makeEmpty()
 
 BinTree &BinTree::operator=(const BinTree &other)
 {
-    // TODO: insert return statement here
+    if (this == &other)
+    {
+        return *this;
+    }
+    this->~BinTree();
+    assignmentHelper(other.root);
+    return *this;
 }
 
 bool BinTree::operator==(const BinTree &other) const
 {
-    return recursiveEqualsCheck(root, other.root);
+    return equivalencyHelper(root, other.root);
 }
 
 bool BinTree::operator!=(const BinTree &other) const
@@ -83,22 +90,25 @@ bool BinTree::retrieve(const NodeData &target, NodeData *&nodeData) const
     return false;
 }
 
-void BinTree::recursiveDelete(Node *curNode)
+void BinTree::deleteHelper(Node *curNode)
 {
     if (curNode == nullptr)
     {
         return;
     }
-    recursiveDelete(curNode->left);
+    deleteHelper(curNode->left);
     curNode->left = nullptr;
-    recursiveDelete(curNode->right);
+    deleteHelper(curNode->right);
     curNode->right = nullptr;
-    delete curNode->data;
-    curNode->data = nullptr;
+    if (curNode->data != nullptr)
+    {
+        delete curNode->data;
+        curNode->data = nullptr;
+    }
     delete curNode;
 }
 
-bool BinTree::recursiveEqualsCheck(const Node *curNode, const Node *otherCurNode) const
+bool BinTree::equivalencyHelper(const Node *curNode, const Node *otherCurNode) const
 {
     if ((curNode == nullptr) ^ (otherCurNode == nullptr))
     {
@@ -112,8 +122,8 @@ bool BinTree::recursiveEqualsCheck(const Node *curNode, const Node *otherCurNode
     {
         return false;
     }
-    return recursiveEqualsCheck(curNode->left, otherCurNode->left) &&
-           recursiveEqualsCheck(curNode->right, otherCurNode->right);
+    return equivalencyHelper(curNode->left, otherCurNode->left) &&
+           equivalencyHelper(curNode->right, otherCurNode->right);
 }
 
 int BinTree::getHeight(const Node *curNode) const
@@ -130,7 +140,8 @@ int BinTree::getHeight(const Node *curNode) const
     int leftHeight = getHeight(curNode->left);
     int rightHeight = getHeight(curNode->right);
 
-    return 1 + (leftHeight < rightHeight) ? leftHeight : rightHeight;
+    int height = ((leftHeight > rightHeight) ? leftHeight : rightHeight);
+    return 1 + height;
 }
 
 BinTree::Node *BinTree::getNode(const NodeData &target) const
@@ -191,4 +202,113 @@ void BinTree::sideways(Node *current, int level) const
         cout << *current->data << endl; // display information of object
         sideways(current->left, level);
     }
+}
+
+void BinTree::bstreeToArray(NodeData *arr[])
+{
+    for (int i = 0; i < K_ARRAY_MAX_SIZE; i++)
+    {
+        if (arr[i] != nullptr)
+        {
+            delete arr[i];
+            arr[i] = nullptr;
+        }
+    }
+    int index = 0;
+    bstreeToArrayHelper(root, arr, index);
+    this->~BinTree();
+}
+
+void BinTree::bstreeToArrayHelper(Node *curNode, NodeData *arr[], int &index)
+{
+    if (curNode == nullptr)
+    {
+        return;
+    }
+    bstreeToArrayHelper(curNode->left, arr, index);
+    arr[index] = curNode->data;
+    curNode->data = nullptr;
+    index++;
+    bstreeToArrayHelper(curNode->right, arr, index);
+}
+
+void BinTree::arrayToBSTree(NodeData *arr[])
+{
+    this->~BinTree();
+    int arraySize = 0;
+    for (int i = 0; i < K_ARRAY_MAX_SIZE; i++)
+    {
+        if (arr[i] != nullptr)
+        {
+            arraySize++;
+        }
+    }
+    arrayToBSTreeHelper(arr, 0, arraySize - 1);
+    for (int i = 0; i < arraySize; i++)
+    {
+        if (arr[i] != nullptr)
+        {
+            delete arr[i];
+            arr[i] = nullptr;
+        }
+    }
+}
+
+void BinTree::arrayToBSTreeHelper(NodeData *arr[], int low, int high)
+{
+    if (high < low || low > high)
+    {
+        return;
+    }
+    int mid = (low + high) / 2;
+    if (arr[mid] != nullptr)
+    {
+        NodeData *tmp = arr[mid];
+        insert(tmp);
+        arr[mid] = nullptr;
+    }
+
+    if (low == high)
+    {
+        return;
+    }
+    arrayToBSTreeHelper(arr, low, mid-1);
+    arrayToBSTreeHelper(arr, mid + 1, high);
+}
+
+ostream &operator<<(ostream &os, BinTree obj)
+{
+    obj.inorderHelper(obj.root, os);
+    os << endl; // this is cursed
+    return os;
+}
+
+void BinTree::inorderHelper(Node *curNode, ostream &os) const
+{
+    if (curNode == nullptr)
+    {
+        return;
+    }
+    if (curNode->left != nullptr)
+    {
+        inorderHelper(curNode->left, os);
+        os << " ";
+    }
+    os << *curNode->data;
+    if (curNode->right != nullptr)
+    {
+        os << " ";
+        inorderHelper(curNode->right, os);
+    }
+}
+
+void BinTree::assignmentHelper(Node *curNode)
+{
+    if (curNode == nullptr)
+    {
+        return;
+    }
+    insert(new NodeData(*curNode->data));
+    assignmentHelper(curNode->left);
+    assignmentHelper(curNode->right);
 }

@@ -20,7 +20,7 @@ const int ARRAYSIZE = 100;
 void buildTree(BinTree&, ifstream&);      // 
 void initArray(NodeData*[]);             // initialize array to NULL
 
-int main2() {
+int main() {
 	// create file object infile and open it
 	// for testing, call your data file something appropriate, e.g., data2.txt
 	ifstream infile("data2.txt");

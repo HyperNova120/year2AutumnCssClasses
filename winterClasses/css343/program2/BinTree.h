@@ -31,6 +31,8 @@ public:
     void displaySideways() const; // provided below, displays the tree sideways
 
 private:
+    int K_ARRAY_MAX_SIZE = 100;
+
     struct Node
     {
         NodeData *data = nullptr; // pointer to data object
@@ -40,13 +42,16 @@ private:
     Node *root = nullptr; // root of the tree
 
     // utility functions
-    void inorderHelper(...) const;
-    void sideways(Node *, int) const; // provided below, helper for displaySideways()
+    void inorderHelper(Node *curNode, ostream &output) const;
+    void sideways(Node *current, int level) const; // provided below, helper for displaySideways()
 
-    void recursiveDelete(Node *curNode);                                            // recursivly delete starting from curNode
-    bool recursiveEqualsCheck(const Node *curNode, const Node *otherCurNode) const; // recursivly check equivalency starting from curNode
-    int getHeight(const Node *curNode) const;                                       // get height of node
-    Node *getNode(const NodeData &target) const;                                    // returns Node with target data
+    void deleteHelper(Node *curNode);                                            // recursivly delete starting from curNode
+    bool equivalencyHelper(const Node *curNode, const Node *otherCurNode) const; // recursivly check equivalency starting from curNode
+    int getHeight(const Node *curNode) const;                                    // get height of node
+    Node *getNode(const NodeData &target) const;                                 // returns Node with target data
+    void arrayToBSTreeHelper(NodeData *arr[], int low, int high);
+    void bstreeToArrayHelper(Node *curNode, NodeData *arr[], int &index);
+    void assignmentHelper(Node *curNode);
 };
 
 #endif //_BIN_TREE_H_
