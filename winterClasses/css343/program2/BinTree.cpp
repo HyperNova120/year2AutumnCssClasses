@@ -1,4 +1,4 @@
-#include "BinTree.h"
+#include "bintree.h"
 
 BinTree::BinTree() {}
 
@@ -130,7 +130,7 @@ int BinTree::getHeight(const Node *curNode) const
     int leftHeight = getHeight(curNode->left);
     int rightHeight = getHeight(curNode->right);
 
-    return (leftHeight < rightHeight) ? leftHeight : rightHeight;
+    return 1 + (leftHeight < rightHeight) ? leftHeight : rightHeight;
 }
 
 BinTree::Node *BinTree::getNode(const NodeData &target) const
