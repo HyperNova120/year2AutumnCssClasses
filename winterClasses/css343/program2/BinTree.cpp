@@ -256,7 +256,7 @@ void BinTree::arrayToBSTree(NodeData *arr[])
 
 void BinTree::arrayToBSTreeHelper(NodeData *arr[], int low, int high)
 {
-    if (high < low || low > high)
+    if (high < low)
     {
         return;
     }
@@ -272,7 +272,7 @@ void BinTree::arrayToBSTreeHelper(NodeData *arr[], int low, int high)
     {
         return;
     }
-    arrayToBSTreeHelper(arr, low, mid-1);
+    arrayToBSTreeHelper(arr, low, mid - 1);
     arrayToBSTreeHelper(arr, mid + 1, high);
 }
 

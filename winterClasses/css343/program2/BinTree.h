@@ -18,7 +18,6 @@ public:
     bool operator!=(const BinTree &other) const; // not equality
 
     bool insert(NodeData *data);                                      // insert data into BSTree
-    NodeData *remove(NodeData *target);                               // removes and returns nodeData if found
     bool retrieve(const NodeData &target, NodeData *&nodeData) const; // return target Nodedata if exists
 
     void bstreeToArray(NodeData *arr[]); // make BSTree into array
