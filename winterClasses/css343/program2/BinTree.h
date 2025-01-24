@@ -46,7 +46,7 @@ private:
 
     void deleteHelper(Node *curNode);                                            // recursivly delete starting from curNode
     bool equivalencyHelper(const Node *curNode, const Node *otherCurNode) const; // recursivly check equivalency starting from curNode
-    int getHeight(const Node *curNode) const;                                    // get height of node
+    int getHeightHelper(const Node *curNode) const;                                    // get height of node
     Node *getNode(const NodeData &target) const;                                 // returns Node with target data
     void arrayToBSTreeHelper(NodeData *arr[], int low, int high);
     void bstreeToArrayHelper(Node *curNode, NodeData *arr[], int &index);

@@ -126,7 +126,7 @@ bool BinTree::equivalencyHelper(const Node *curNode, const Node *otherCurNode) c
            equivalencyHelper(curNode->right, otherCurNode->right);
 }
 
-int BinTree::getHeight(const Node *curNode) const
+int BinTree::getHeightHelper(const Node *curNode) const
 {
     if (curNode == nullptr)
     {
@@ -137,8 +137,8 @@ int BinTree::getHeight(const Node *curNode) const
         // leaf
         return 1;
     }
-    int leftHeight = getHeight(curNode->left);
-    int rightHeight = getHeight(curNode->right);
+    int leftHeight = getHeightHelper(curNode->left);
+    int rightHeight = getHeightHelper(curNode->right);
 
     int height = ((leftHeight > rightHeight) ? leftHeight : rightHeight);
     return 1 + height;
@@ -167,7 +167,7 @@ int BinTree::getHeight(const NodeData &target) const
     if (targetNode != nullptr)
     {
         // node found
-        return getHeight(targetNode);
+        return getHeightHelper(targetNode);
     }
     return 0;
 }
