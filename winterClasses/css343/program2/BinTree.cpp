@@ -118,7 +118,7 @@ bool BinTree::equivalencyHelper(const Node *curNode, const Node *otherCurNode) c
     {
         return true;
     }
-    if (*curNode->data != *otherCurNode->data)
+    else if (*curNode->data != *otherCurNode->data)
     {
         return false;
     }
