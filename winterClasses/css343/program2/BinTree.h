@@ -3,6 +3,8 @@
 
 #include "nodedata.h"
 #include <iostream>
+#include <stack>
+#include <queue>
 using namespace std;
 class BinTree
 { // you add class/method comments and assumptions

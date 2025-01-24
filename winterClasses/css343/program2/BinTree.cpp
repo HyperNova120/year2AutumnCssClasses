@@ -9,7 +9,25 @@ BinTree::BinTree(const BinTree &other)
 
 BinTree::~BinTree()
 {
-    deleteHelper(root);
+
+    stack<Node *> toDelete;
+    toDelete.push(root);
+    while (toDelete.size() != 0)
+    {
+        Node *curNode = toDelete.top();
+        if (curNode != nullptr)
+        {
+            if (curNode->left == nullptr && curNode->right == nullptr)
+            {
+                //leaf
+
+            }
+            else{
+                
+            }
+        }
+    }
+
     root = nullptr;
 }
 
@@ -30,13 +48,54 @@ BinTree &BinTree::operator=(const BinTree &other)
         return *this;
     }
     this->~BinTree();
-    assignmentHelper(other.root);
+    queue<Node *> curNodeToAdd;
+    curNodeToAdd.push(other.root);
+    while (curNodeToAdd.size() != 0)
+    {
+        Node *curNode = curNodeToAdd.front();
+        if (curNode != nullptr)
+        {
+            insert(new NodeData(*curNode->data));
+            curNodeToAdd.push(curNode->left);
+            curNodeToAdd.push(curNode->right);
+        }
+        curNodeToAdd.pop();
+    }
     return *this;
 }
 
 bool BinTree::operator==(const BinTree &other) const
 {
-    return equivalencyHelper(root, other.root);
+    queue<Node *> nodesToCheck;
+    queue<Node *> otherNodesToCheck;
+    nodesToCheck.push(root);
+    otherNodesToCheck.push(other.root);
+    while ((nodesToCheck.size() != 0) && (otherNodesToCheck.size() != 0))
+    {
+        Node *curNode = nodesToCheck.front();
+        Node *othercurNode = otherNodesToCheck.front();
+        if ((curNode == nullptr) ^ (othercurNode == nullptr))
+        {
+            return false;
+        }
+        else if ((curNode == nullptr) && (othercurNode == nullptr))
+        {
+            nodesToCheck.pop();
+            otherNodesToCheck.pop();
+            continue;
+        }
+        else if (*curNode->data != *othercurNode->data)
+        {
+            return false;
+        }
+        nodesToCheck.push(curNode->left);
+        nodesToCheck.push(curNode->right);
+        otherNodesToCheck.push(othercurNode->left);
+        otherNodesToCheck.push(othercurNode->right);
+        nodesToCheck.pop();
+        otherNodesToCheck.pop();
+    }
+    return true;
 }
 
 bool BinTree::operator!=(const BinTree &other) const
@@ -96,16 +155,6 @@ void BinTree::deleteHelper(Node *curNode)
     {
         return;
     }
-    deleteHelper(curNode->left);
-    curNode->left = nullptr;
-    deleteHelper(curNode->right);
-    curNode->right = nullptr;
-    if (curNode->data != nullptr)
-    {
-        delete curNode->data;
-        curNode->data = nullptr;
-    }
-    delete curNode;
 }
 
 bool BinTree::equivalencyHelper(const Node *curNode, const Node *otherCurNode) const
