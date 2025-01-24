@@ -46,6 +46,7 @@ bool BinTree::operator!=(const BinTree &other) const
 
 bool BinTree::insert(NodeData *data)
 {
+    data = new NodeData(*data);
     Node *tmp = new Node();
     tmp->data = data;
     if (root == nullptr)
@@ -82,7 +83,7 @@ bool BinTree::retrieve(const NodeData &target, NodeData *&nodeData) const
 
     if (targetNode != nullptr && *targetNode->data == target)
     {
-        nodeData = targetNode->data;
+        nodeData = new NodeData(*targetNode->data);
         return true;
     }
     nodeData = nullptr;
@@ -225,8 +226,7 @@ void BinTree::bstreeToArrayHelper(Node *curNode, NodeData *arr[], int &index)
         return;
     }
     bstreeToArrayHelper(curNode->left, arr, index);
-    arr[index] = curNode->data;
-    curNode->data = nullptr;
+    arr[index] = new NodeData(*curNode->data);
     index++;
     bstreeToArrayHelper(curNode->right, arr, index);
 }
@@ -262,8 +262,9 @@ void BinTree::arrayToBSTreeHelper(NodeData *arr[], int low, int high)
     int mid = (low + high) / 2;
     if (arr[mid] != nullptr)
     {
-        NodeData *tmp = arr[mid];
+        NodeData *tmp = new NodeData(*arr[mid]);
         insert(tmp);
+        delete arr[mid];
         arr[mid] = nullptr;
     }
 
