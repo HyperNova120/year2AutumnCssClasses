@@ -9,25 +9,7 @@ BinTree::BinTree(const BinTree &other)
 
 BinTree::~BinTree()
 {
-
-    stack<Node *> toDelete;
-    toDelete.push(root);
-    while (toDelete.size() != 0)
-    {
-        Node *curNode = toDelete.top();
-        if (curNode != nullptr)
-        {
-            if (curNode->left == nullptr && curNode->right == nullptr)
-            {
-                //leaf
-
-            }
-            else{
-                
-            }
-        }
-    }
-
+    deleteHelper(root);
     root = nullptr;
 }
 
@@ -66,36 +48,7 @@ BinTree &BinTree::operator=(const BinTree &other)
 
 bool BinTree::operator==(const BinTree &other) const
 {
-    queue<Node *> nodesToCheck;
-    queue<Node *> otherNodesToCheck;
-    nodesToCheck.push(root);
-    otherNodesToCheck.push(other.root);
-    while ((nodesToCheck.size() != 0) && (otherNodesToCheck.size() != 0))
-    {
-        Node *curNode = nodesToCheck.front();
-        Node *othercurNode = otherNodesToCheck.front();
-        if ((curNode == nullptr) ^ (othercurNode == nullptr))
-        {
-            return false;
-        }
-        else if ((curNode == nullptr) && (othercurNode == nullptr))
-        {
-            nodesToCheck.pop();
-            otherNodesToCheck.pop();
-            continue;
-        }
-        else if (*curNode->data != *othercurNode->data)
-        {
-            return false;
-        }
-        nodesToCheck.push(curNode->left);
-        nodesToCheck.push(curNode->right);
-        otherNodesToCheck.push(othercurNode->left);
-        otherNodesToCheck.push(othercurNode->right);
-        nodesToCheck.pop();
-        otherNodesToCheck.pop();
-    }
-    return true;
+    return equivalencyHelper(root, other.root);
 }
 
 bool BinTree::operator!=(const BinTree &other) const
@@ -125,14 +78,7 @@ bool BinTree::insert(NodeData *data)
         }
         next = (*data < *parent->data) ? parent->left : parent->right;
     }
-    if (*data < *parent->data)
-    {
-        parent->left = tmp;
-    }
-    else
-    {
-        parent->right = tmp;
-    }
+    ((*data < *parent->data) ? parent->left : parent->right) = tmp;
     return true;
 }
 
@@ -155,6 +101,11 @@ void BinTree::deleteHelper(Node *curNode)
     {
         return;
     }
+    deleteHelper(curNode->left);
+    deleteHelper(curNode->right);
+    curNode->left = nullptr;
+    curNode->right = nullptr;
+    delete curNode->data;
 }
 
 bool BinTree::equivalencyHelper(const Node *curNode, const Node *otherCurNode) const
@@ -349,15 +300,4 @@ void BinTree::inorderHelper(Node *curNode, ostream &os) const
         os << " ";
         inorderHelper(curNode->right, os);
     }
-}
-
-void BinTree::assignmentHelper(Node *curNode)
-{
-    if (curNode == nullptr)
-    {
-        return;
-    }
-    insert(new NodeData(*curNode->data));
-    assignmentHelper(curNode->left);
-    assignmentHelper(curNode->right);
 }

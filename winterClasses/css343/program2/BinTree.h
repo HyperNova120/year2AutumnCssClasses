@@ -88,9 +88,6 @@ private:
 
     // recursivly set arr[index] to nodeData via in-order traversal
     void bstreeToArrayHelper(Node *curNode, NodeData *arr[], int &index);
-
-    // recursivly check each BST has equivalent nodes
-    void assignmentHelper(Node *curNode);
 };
 
 #endif //_BIN_TREE_H_
