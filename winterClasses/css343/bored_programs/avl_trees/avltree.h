@@ -2,6 +2,7 @@
 #define AVLTREE_H_
 
 #include <stack>
+#include <queue>
 #include <iostream>
 #include <cmath>
 using namespace std;
@@ -31,13 +32,17 @@ public:
     AVLTree(const AVLTree<T> &other);
     ~AVLTree();
 
+    AVLTree<T> &operator=(const AVLTree<T> &other);
+    bool operator==(const AVLTree<T> &other) const;
+    bool operator!=(const AVLTree<T> &other) const;
+
     bool insert(const T &obj);
     T *remove(const T &data);
     bool contains(const T &data) const;
     void print();
+    bool isEmpty() const;
 
 private:
-    void deleteHelper();
     void sideways(Node *current, int level) const;
     void calculateBalanceFactors(Node *curNode);
     int getHeight(Node *curNode);
@@ -49,19 +54,112 @@ private:
     Node *root_ = nullptr;
 };
 
-
 template <typename T>
 inline AVLTree<T>::AVLTree() {}
 
 template <typename T>
 inline AVLTree<T>::AVLTree(const AVLTree<T> &other)
 {
+    *this = other;
 }
 
 template <typename T>
 inline AVLTree<T>::~AVLTree()
 {
-    deleteHelper();
+    if (root_ == nullptr)
+    {
+        return;
+    }
+    stack<Node *> nodeStack;
+    nodeStack.push(root_);
+    while (!nodeStack.empty())
+    {
+        Node *curNode = nodeStack.top();
+        nodeStack.pop();
+        if (curNode == nullptr)
+        {
+            continue;
+        }
+        nodeStack.push(curNode->left_);
+        nodeStack.push(curNode->right_);
+        delete curNode;
+    }
+    root_ = nullptr;
+}
+
+template <typename T>
+inline AVLTree<T> &AVLTree<T>::operator=(const AVLTree<T> &other)
+{
+    // TODO: insert return statement here
+    if (&other == this)
+    {
+        return *this;
+    }
+    this->~AVLTree();
+    if (other.root_ == nullptr)
+    {
+        return *this;
+    }
+    queue<Node *> nodeQueue = queue<Node *>();
+    nodeQueue.push(other.root_);
+    while (!nodeQueue.empty())
+    {
+        insert(*(nodeQueue.front()->data_));
+        if (nodeQueue.front()->left_ != nullptr)
+        {
+            nodeQueue.push(nodeQueue.front()->left_);
+        }
+        if (nodeQueue.front()->right_ != nullptr)
+        {
+            nodeQueue.push(nodeQueue.front()->right_);
+        }
+        nodeQueue.pop();
+    }
+    return *this;
+}
+
+template <typename T>
+inline bool AVLTree<T>::operator==(const AVLTree<T> &other) const
+{
+    if (&other == this)
+    {
+        return true;
+    }
+    queue<Node *> nodeQueue = queue<Node *>();
+    nodeQueue.push(root_);
+    queue<Node *> otherNodeQueue = queue<Node *>();
+    otherNodeQueue.push(other.root_);
+    while (!nodeQueue.empty() && !otherNodeQueue.empty())
+    {
+        if (nodeQueue.front() == nullptr && otherNodeQueue.front() == nullptr)
+        {
+            nodeQueue.pop();
+            otherNodeQueue.pop();
+            continue;
+        }
+        if (nodeQueue.front() == nullptr ^ otherNodeQueue.front() == nullptr)
+        {
+            return false;
+        }
+        else if (*(nodeQueue.front()->data_) != *(otherNodeQueue.front()->data_))
+        {
+            return false;
+        }
+        nodeQueue.push(nodeQueue.front()->left_);
+        nodeQueue.push(nodeQueue.front()->right_);
+
+        otherNodeQueue.push(otherNodeQueue.front()->left_);
+        otherNodeQueue.push(otherNodeQueue.front()->right_);
+        nodeQueue.pop();
+        otherNodeQueue.pop();
+    }
+    return true;
+}
+
+template <typename T>
+inline bool AVLTree<T>::operator!=(const AVLTree<T> &other) const
+{
+    return !(*this == other);
 }
 
 template <typename T>
@@ -203,6 +301,12 @@ inline void AVLTree<T>::print()
 }
 
 template <typename T>
+inline bool AVLTree<T>::isEmpty() const
+{
+    return root_ == nullptr;
+}
+
+template <typename T>
 inline void AVLTree<T>::calculateBalanceFactors(Node *curNode)
 {
     if (curNode == nullptr)
@@ -237,54 +341,34 @@ inline void AVLTree<T>::balanceTree(Node *changedNode)
     {
         return;
     }
-    struct stackData
-    {
-        stackData(Node *nNode, bool l, bool r)
-        {
-            node = nNode;
-            checkedLeft = l;
-            checkedRight = r;
-        }
-        Node *node;
-        bool checkedLeft = false;
-        bool checkedRight = false;
-    };
 
     // find path to change
-    stack<stackData> nodeStack = stack<stackData>();
-    nodeStack.push(stackData(root_, false, false));
-    while (!nodeStack.empty() && *nodeStack.top().node->data_ != *changedNode->data_)
+    stack<Node *> nodeStack = stack<Node *>();
+    nodeStack.push(root_);
+    while (!nodeStack.empty() && *nodeStack.top()->data_ != *changedNode->data_)
     {
-        if (nodeStack.top().checkedLeft && nodeStack.top().checkedRight)
+        if (*changedNode->data_ < *(nodeStack.top()->data_))
         {
-            // checked both
-            nodeStack.pop();
-        }
-        else if (nodeStack.top().checkedLeft && !nodeStack.top().checkedRight)
-        {
-            // need to check right
-            nodeStack.top().checkedRight = true;
-            if (nodeStack.top().node->right_ != nullptr)
+            // left
+            if (nodeStack.top()->left_ != nullptr)
             {
-                nodeStack.push(stackData(nodeStack.top().node->right_, false, false));
+                nodeStack.push(nodeStack.top()->left_);
             }
         }
         else
         {
-            // need to check left
-            nodeStack.top().checkedLeft = true;
-            if (nodeStack.top().node->left_ != nullptr)
+            // right
+            if (nodeStack.top()->right_ != nullptr)
             {
-                nodeStack.push(stackData(nodeStack.top().node->left_, false, false));
+                nodeStack.push(nodeStack.top()->right_);
             }
         }
     }
 
     // rotate
-    Node *root = nodeStack.top().node;
-    Node *gParent = root;
+    Node *gParent = nodeStack.top();
     nodeStack.pop();
-    root = nodeStack.top().node;
+    Node *root = nodeStack.top();
     Node *parent = nullptr;
     Node *child = nullptr;
     nodeStack.pop();
@@ -294,16 +378,17 @@ inline void AVLTree<T>::balanceTree(Node *changedNode)
         child = parent;
         parent = gParent;
         gParent = root;
-        root = nodeStack.top().node;
+        root = nodeStack.top();
         // gParent = nodeStack.top().node;
         leftToUpdate = (root->left_ == gParent) ? true : false;
         nodeStack.pop();
     }
 
+    // check if we need to set root_
     bool isSmallTree = false;
     if (nodeStack.empty() && abs((*gParent).balanceFactor_) < 2 && abs((*root).balanceFactor_) > 1)
     {
-        cout << "isSmallTree" << endl;
+        // cout << "isSmallTree" << endl;
         child = parent;
         parent = gParent;
         gParent = root;
@@ -313,26 +398,18 @@ inline void AVLTree<T>::balanceTree(Node *changedNode)
     if ((nodeStack.empty() && abs((*gParent).balanceFactor_) < 2))
     {
         // balanced
-        cout << "balanced" << endl;
+        // cout << "balanced" << endl;
         return;
     }
-    int rotationType = getRotationType(gParent, parent, child);
-    cout << "not balanced" << endl;
-    cout << "GParent:" << *(gParent->data_) << " Parent:" << *(parent->data_) << " Child:" << *(child->data_) << " RoationType:" << rotationType << endl;
-    switch (rotationType)
+    // cout << "not balanced" << endl;
+    // cout << "GParent:" << *(gParent->data_) << " Parent:" << *(parent->data_) << " Child:" << *(child->data_) << " RoationType:" << rotationType << endl;
+    switch (getRotationType(gParent, parent, child))
     {
     case 1:
         // LL
         gParent->left_ = parent->right_;
         parent->right_ = gParent;
-        if (isSmallTree)
-        {
-            root_ = parent;
-        }
-        else
-        {
-            ((leftToUpdate) ? root->left_ : root->right_) = parent;
-        }
+        ((isSmallTree) ? root_ : ((leftToUpdate) ? root->left_ : root->right_)) = parent;
         break;
     case 2:
         // LR
@@ -343,14 +420,7 @@ inline void AVLTree<T>::balanceTree(Node *changedNode)
         // rot2 parent=child, child=parent
         gParent->left_ = child->right_;
         child->right_ = gParent;
-        if (isSmallTree)
-        {
-            root_ = child;
-        }
-        else
-        {
-            ((leftToUpdate) ? root->left_ : root->right_) = child;
-        }
+        ((isSmallTree) ? root_ : ((leftToUpdate) ? root->left_ : root->right_)) = child;
         break;
     case 3:
         // RL
@@ -361,27 +431,13 @@ inline void AVLTree<T>::balanceTree(Node *changedNode)
         // rot 2
         gParent->right_ = child->left_;
         child->left_ = gParent;
-        if (isSmallTree)
-        {
-            root_ = child;
-        }
-        else
-        {
-            ((leftToUpdate) ? root->left_ : root->right_) = child;
-        }
+        ((isSmallTree) ? root_ : ((leftToUpdate) ? root->left_ : root->right_)) = child;
         break;
     case 4:
         // RR
         gParent->right_ = parent->left_;
         parent->left_ = gParent;
-        if (isSmallTree)
-        {
-            root_ = parent;
-        }
-        else
-        {
-            ((leftToUpdate) ? root->left_ : root->right_) = parent;
-        }
+        ((isSmallTree) ? root_ : ((leftToUpdate) ? root->left_ : root->right_)) = parent;
         break;
     default:
         cout << "HOW TF ARE WE HERE" << endl;
@@ -437,30 +493,6 @@ inline void AVLTree<T>::removeNode(const T &data)
     }
 }
 
-template <typename T>
-inline void AVLTree<T>::deleteHelper()
-{
-    if (root_ == nullptr)
-    {
-        return;
-    }
-    stack<Node *> nodeStack;
-    nodeStack.push(root_);
-    while (!nodeStack.empty())
-    {
-        Node *curNode = nodeStack.top();
-        nodeStack.pop();
-        if (curNode == nullptr)
-        {
-            continue;
-        }
-        nodeStack.push(curNode->left_);
-        nodeStack.push(curNode->right_);
-        delete curNode;
-    }
-    root_ = nullptr;
-}
-
 //---------------------------- Sideways -------------------------------------
 // Helper method for displaySideways
 // Preconditions: NONE
@@ -484,6 +516,5 @@ inline void AVLTree<T>::sideways(Node *current, int level) const
         sideways(current->left_, level);
     }
 }
-
 
 #endif // AVLTREE_H_
