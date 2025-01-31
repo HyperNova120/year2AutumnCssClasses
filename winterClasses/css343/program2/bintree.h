@@ -21,7 +21,7 @@ public:
     // true if tree is empty, otherwise false
     bool isEmpty() const;
 
-    // make the tree empty so isEmpty returns true
+    // make the tree empty so isEmpty returns true, calls delete helper
     void makeEmpty();
 
     // assignment overload

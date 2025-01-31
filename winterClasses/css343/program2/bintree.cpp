@@ -67,18 +67,22 @@ bool BinTree::insert(NodeData *data)
         return true;
     }
 
-    Node *parent = nullptr;
-    Node *next = root;
-    while (next != nullptr)
+    Node *reader = root;
+    while (((*data < *reader->data) ? reader->left : reader->right) != nullptr)
     {
-        parent = next;
-        if (*parent->data == *data)
+        if (*data == *reader->data)
         {
+            delete tmp;
             return false;
         }
-        next = (*data < *parent->data) ? parent->left : parent->right;
+        reader = (*data < *reader->data) ? reader->left : reader->right;
     }
-    ((*data < *parent->data) ? parent->left : parent->right) = tmp;
+    if (*data == *reader->data)
+    {
+        delete tmp;
+        return false;
+    }
+    ((*data < *reader->data) ? reader->left : reader->right) = tmp;
     return true;
 }
 
