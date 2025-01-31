@@ -46,7 +46,8 @@ private:
     void sideways(Node *current, int level) const;
     void calculateBalanceFactors(Node *curNode);
     int getHeight(Node *curNode);
-    void balanceTree(Node *changedNode);
+    void balanceTreeInsertion(Node *changedNode);
+    void balanceTreeRemove(Node *changedNode);
     void removeNode(const T &data);
     T *remove(const T &data, bool original);
     int getRotationType(Node *GParent, Node *Parent, Node *child);
@@ -183,8 +184,7 @@ inline bool AVLTree<T>::insert(const T &obj)
         return false;
     }
     ((obj < *reader->data_) ? reader->left_ : reader->right_) = new Node(obj);
-    calculateBalanceFactors(root_);
-    balanceTree(((obj < *reader->data_) ? reader->left_ : reader->right_));
+    balanceTreeInsertion(((obj < *reader->data_) ? reader->left_ : reader->right_));
     return true;
 }
 
@@ -248,13 +248,12 @@ inline T *AVLTree<T>::remove(const T &data, bool original)
     }
     if (original)
     {
-        calculateBalanceFactors(root_);
-        balanceTree(W);
+        throw new exception(); // Not Implemented Yet
+        // balanceTreeRemove(W);
     }
 
     return returner;
 }
-
 // returns roation type for balancing, 1=LL, 2=LR, 3=RL, 4=RR, 0=WTF
 template <typename T>
 inline int AVLTree<T>::getRotationType(Node *GParent, Node *Parent, Node *child)
@@ -335,19 +334,22 @@ inline int AVLTree<T>::getHeight(Node *curNode)
 }
 
 template <typename T>
-inline void AVLTree<T>::balanceTree(Node *changedNode)
+inline void AVLTree<T>::balanceTreeInsertion(Node *changedNode)
 {
     if (root_ == nullptr)
     {
         return;
     }
+    calculateBalanceFactors(root_);
 
     // find path to change
     stack<Node *> nodeStack = stack<Node *>();
     nodeStack.push(root_);
     while (!nodeStack.empty() && *nodeStack.top()->data_ != *changedNode->data_)
     {
-        if (*changedNode->data_ < *(nodeStack.top()->data_))
+        
+        nodeStack.push((*changedNode->data_ < *(nodeStack.top()->data_)) ? nodeStack.top()->left_ : nodeStack.top()->right_);
+       /*  if (*changedNode->data_ < *(nodeStack.top()->data_))
         {
             // left
             if (nodeStack.top()->left_ != nullptr)
@@ -362,7 +364,7 @@ inline void AVLTree<T>::balanceTree(Node *changedNode)
             {
                 nodeStack.push(nodeStack.top()->right_);
             }
-        }
+        } */
     }
 
     // rotate
@@ -442,6 +444,24 @@ inline void AVLTree<T>::balanceTree(Node *changedNode)
     default:
         cout << "HOW TF ARE WE HERE" << endl;
         break;
+    }
+}
+
+template <typename T>
+inline void AVLTree<T>::balanceTreeRemove(Node *changedNode)
+{
+    if (root_ == nullptr)
+    {
+        return;
+    }
+    calculateBalanceFactors(root_);
+
+    // find path to change
+    stack<Node *> nodeStack = stack<Node *>();
+    nodeStack.push(root_);
+    while (!nodeStack.empty() && *nodeStack.top()->data_ != *changedNode->data_)
+    {
+        nodeStack.push((*changedNode->data_ < *(nodeStack.top()->data_)) ? nodeStack.top()->left_ : nodeStack.top()->right_);
     }
 }
 

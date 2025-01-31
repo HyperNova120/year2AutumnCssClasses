@@ -8,7 +8,24 @@ int main()
 {
     // cout << "Hello World!" << endl;
     AVLTree<int> test = AVLTree<int>();
+    test.insert(5);
     test.insert(4);
+    test.insert(8);
+    test.insert(7);
+    test.insert(9);
+    test.insert(6);
+    test.print();
+    delete test.remove(6);
+    cout << "=========================" << endl;
+    test.print();
+    delete test.remove(8);
+    cout << "=========================" << endl;
+    test.print();
+    delete test.remove(9);
+    cout << "=========================" << endl;
+    test.print();
+    test.~AVLTree();
+   /*  test.insert(4);
     test.insert(2);
     test.insert(6);
     test.insert(1);
@@ -24,13 +41,13 @@ int main()
     test.insert(11);
     test.insert(10);
     test.insert(8);
-    test.insert(9);
+    test.insert(9); */
 
-    test.print();
+    /* test.print();
     cout << "=================================" << endl;
     AVLTree<int> test2 = AVLTree<int>(test);
     test2.print();
     cout << "Test:" << (test == test2) << endl;
     cout << "Test2:" << (test != test2) << endl;
-    cout << "Test:" << (test == test) << endl;
+    cout << "Test:" << (test == test) << endl; */
 }
