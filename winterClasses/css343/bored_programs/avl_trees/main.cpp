@@ -80,9 +80,18 @@ int main()
     delete test.remove(testing(15, 12));
     delete test.remove(testing(9, 67));
     test.print();
+    cout << "=================================" << endl;
     /*AVLTree<int> test2 = AVLTree<int>(test);
     test2.print();
     cout << "Test:" << (test == test2) << endl;
     cout << "Test2:" << (test != test2) << endl;
     cout << "Test:" << (test == test) << endl; */
+
+    AVLTree<int> test2 = AVLTree<int>();
+    for (int i = 0; i < 10000; i++)
+    {
+        test2.insert(rand() % 100000);
+    }
+    test2.print();
+    //test2.print();
 }

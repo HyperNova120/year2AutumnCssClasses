@@ -521,7 +521,6 @@ inline void AVLTree<T, TComparison>::balanceTreeInsertion(Node *changedNode)
     {
         return;
     }
-    calculateBalanceFactors(root_);
 
     // find path to change
     stack<Node *> nodeStack = stack<Node *>();
@@ -539,6 +538,7 @@ inline void AVLTree<T, TComparison>::balanceTreeInsertion(Node *changedNode)
     Node *parent = nullptr;
     Node *child = nullptr;
     nodeStack.pop();
+    calculateBalanceFactors(root);
     bool leftToUpdate = (root->left_ == gParent);
     while (!nodeStack.empty() && abs((*gParent).balanceFactor_) < 2)
     {
@@ -547,6 +547,7 @@ inline void AVLTree<T, TComparison>::balanceTreeInsertion(Node *changedNode)
         gParent = root;
         root = nodeStack.top();
         leftToUpdate = (root->left_ == gParent);
+        calculateBalanceFactors(root);
         nodeStack.pop();
     }
 
@@ -577,7 +578,6 @@ inline void AVLTree<T, TComparison>::balanceTreeRemove(Node *changedNode)
     {
         return;
     }
-    calculateBalanceFactors(root_);
 
     // find path to change
     stack<Node *> nodeStack = stack<Node *>();
@@ -592,6 +592,7 @@ inline void AVLTree<T, TComparison>::balanceTreeRemove(Node *changedNode)
     root = nodeStack.top();
     nodeStack.pop();
     bool firstRun = true;
+    calculateBalanceFactors(root);
     while (!nodeStack.empty() || firstRun)
     {
         firstRun = false;
@@ -601,7 +602,7 @@ inline void AVLTree<T, TComparison>::balanceTreeRemove(Node *changedNode)
             root = nodeStack.top();
             nodeStack.pop();
         }
-        calculateBalanceFactors(root_);
+        calculateBalanceFactors(root);
         bool leftToUpdate = (root->left_ == gParent);
         bool isSmallTree = false;
         if (nodeStack.empty() && abs((*root).balanceFactor_) > 1)
