@@ -48,6 +48,10 @@ BinTree &BinTree::operator=(const BinTree &other)
 
 bool BinTree::operator==(const BinTree &other) const
 {
+    if (this == &other)
+    {
+        return true;
+    }
     return equivalencyHelper(root, other.root);
 }
 
