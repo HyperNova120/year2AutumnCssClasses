@@ -47,7 +47,11 @@ BinTree &BinTree::operator=(const BinTree &other)
         Node *curNode = curNodeToAdd.front();
         if (curNode != nullptr)
         {
-            insert(new NodeData(*curNode->data));
+            NodeData *tmp = new NodeData(*curNode->data);
+            if (!insert(tmp))
+            {
+                delete tmp;
+            }
             curNodeToAdd.push(curNode->left);
             curNodeToAdd.push(curNode->right);
         }
@@ -81,11 +85,15 @@ bool BinTree::operator!=(const BinTree &other) const
 /// @return true if insertion was successful, false if a duplicate exist
 bool BinTree::insert(NodeData *data)
 {
-    data = new NodeData(*data);
-    Node *tmp = new Node();
-    tmp->data = data;
+    if (data == nullptr)
+    {
+        return false;
+    }
     if (root == nullptr)
     {
+        Node *tmp = new Node();
+        tmp->data = data;
+        // delete data;
         root = tmp;
         return true;
     }
@@ -95,17 +103,20 @@ bool BinTree::insert(NodeData *data)
     {
         if (*data == *reader->data)
         {
-            delete tmp;
+            // duplicate
             return false;
         }
         reader = (*data < *reader->data) ? reader->left : reader->right;
     }
     if (*data == *reader->data)
     {
-        delete tmp;
+        // duplicate
         return false;
     }
+    Node *tmp = new Node();
+    tmp->data = data;
     ((*data < *reader->data) ? reader->left : reader->right) = tmp;
+    // delete data;
     return true;
 }
 
@@ -115,6 +126,10 @@ bool BinTree::insert(NodeData *data)
 /// @return true if target was found, false if not
 bool BinTree::retrieve(const NodeData &target, NodeData *&nodeData) const
 {
+    if (nodeData == nullptr)
+    {
+        return false;
+    }
     Node *targetNode = getNode(target);
 
     if (targetNode != nullptr && *targetNode->data == target)
@@ -139,6 +154,7 @@ void BinTree::deleteHelper(Node *curNode)
     curNode->left = nullptr;
     curNode->right = nullptr;
     delete curNode->data;
+    delete curNode;
 }
 
 /// @brief recursive helper to test equality
@@ -278,7 +294,8 @@ void BinTree::bstreeToArrayHelper(Node *curNode, NodeData *arr[], int &index)
         return;
     }
     bstreeToArrayHelper(curNode->left, arr, index);
-    arr[index] = new NodeData(*curNode->data);
+    arr[index] = curNode->data;
+    curNode->data = nullptr;
     index++;
     bstreeToArrayHelper(curNode->right, arr, index);
 }
@@ -320,9 +337,9 @@ void BinTree::arrayToBSTreeHelper(NodeData *arr[], int low, int high)
     int mid = (low + high) / 2;
     if (arr[mid] != nullptr)
     {
-        NodeData *tmp = new NodeData(*arr[mid]);
-        insert(tmp);
-        delete arr[mid];
+        // NodeData *tmp = new NodeData(*arr[mid]);
+        insert(arr[mid]);
+        //delete arr[mid];
         arr[mid] = nullptr;
     }
 

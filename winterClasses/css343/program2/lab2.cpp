@@ -43,6 +43,14 @@ int main()
 	NodeData tND("t");
 
 	BinTree T, T2, dup;
+
+	/* T.insert(&notND);
+	T.insert(&andND);
+	T.insert(&sssND);
+	T.insert(&ttttND);
+
+
+	return 1; */
 	NodeData *ndArray[ARRAYSIZE];
 	initArray(ndArray);
 	cout << "Initial data:" << endl

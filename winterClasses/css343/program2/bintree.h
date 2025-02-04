@@ -34,7 +34,7 @@ public:
     bool operator!=(const BinTree &other) const;
 
     // insert data into BSTree
-    bool insert(NodeData *data);
+    bool insert(NodeData *inData);
 
     // return target Nodedata if exists
     bool retrieve(const NodeData &target, NodeData *&nodeData) const;
