@@ -86,10 +86,12 @@ public:
             bool firstVisit = true;
         };
         stack<IteratorNodeData> nodeStack;
+        TComparison m_compare;
 
     public:
-        Iterator(Node *ptr)
+        Iterator(Node *ptr, TComparison compare)
         {
+            m_compare = compare;
             if (ptr == nullptr)
             {
                 return;
@@ -166,8 +168,9 @@ public:
             {
                 return false;
             }
-            bool equalPlace = equalPlace && (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
-            equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
+            bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
+            //equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
+            equalPlace = equalPlace && (!a.m_compare(*a.nodeStack.top().node->data_, *b.nodeStack.top().node->data_) && !a.m_compare(*b.nodeStack.top().node->data_, *a.nodeStack.top().node->data_));
 
             return equalPlace;
         }
@@ -177,8 +180,8 @@ public:
         }
     };
 
-    Iterator begin() { return Iterator(root_); }
-    Iterator end() { return Iterator(nullptr); }
+    Iterator begin() { return Iterator(root_, m_comp); }
+    Iterator end() { return Iterator(nullptr, m_comp); }
 };
 
 /// @brief default constructor

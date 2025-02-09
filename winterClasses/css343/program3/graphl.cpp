@@ -2,7 +2,7 @@
 
 GraphL::GraphL()
 {
-    size = 1;
+    size = 0;
     for (int i = 0; i < maxNodes; i++) // start
     {
         NodeList[i] = {nullptr, nullptr, false};
