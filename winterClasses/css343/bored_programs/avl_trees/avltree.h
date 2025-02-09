@@ -69,6 +69,7 @@ private:
     Node *root_ = nullptr;
 
 public:
+    /// @brief Custom Iterator for AVLTree, allows for in-order stepping
     struct Iterator
     {
         using iterator_category = forward_iterator_tag;
