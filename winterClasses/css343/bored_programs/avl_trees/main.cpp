@@ -71,14 +71,22 @@ int main()
 
     test.print();
     cout << "=================================" << endl;
-    delete test.remove(testing(11, 24));
-    delete test.remove(testing(12, 64));
-    delete test.remove(testing(8, 89));
-    delete test.remove(testing(14, 17));
-    delete test.remove(testing(16, 41));
-    delete test.remove(testing(10, 13));
-    delete test.remove(testing(15, 12));
-    delete test.remove(testing(9, 67));
+    cout << "Size:" << test.size() << endl;
+    for (auto i : test)
+    {
+        cout << i << endl;
+    }
+
+
+
+    test.remove(testing(11, 24));
+    test.remove(testing(12, 64));
+    test.remove(testing(8, 89));
+    test.remove(testing(14, 17));
+    test.remove(testing(16, 41));
+    test.remove(testing(10, 13));
+    test.remove(testing(15, 12));
+    test.remove(testing(9, 67));
     test.print();
     cout << "=================================" << endl;
     /*AVLTree<int> test2 = AVLTree<int>(test);
@@ -94,6 +102,7 @@ int main()
     }
     test2.print(); */
     //test2.print();
+    cout << "Size:" << test.size() << endl;
     for (auto i : test)
     {
         cout << i << endl;

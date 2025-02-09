@@ -15,7 +15,6 @@ using namespace std;
 template <typename T, typename TComparison = less<T>>
 class AVLTree
 {
-private:
 public:
     class Node
     {
@@ -44,11 +43,12 @@ public:
     bool operator!=(const AVLTree<T, TComparison> &other) const;
 
     bool insert(const T &obj);          // inserts a copy of obj into tree
-    T *remove(const T &data);           // removes node from tree and returns it, calls remove
+    T remove(const T &data);            // removes node from tree and returns it, calls remove
     T *retrieve(const T &data);         // returns node if tree contains, else nullptr
     bool contains(const T &data) const; // returns if tree contains data
     void print();                       // calls sideways
     bool isEmpty() const;               // returns if tree is empty
+    int size() const;                   // returns size of AVLTree
 
 private:
     TComparison m_comp;                                                                    // user defined comparison method
@@ -67,6 +67,7 @@ private:
     void RotateRL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child); // performs RL rotation
 
     Node *root_ = nullptr;
+    int size_ = 0;
 
 public:
     /// @brief Custom Iterator for AVLTree, allows for in-order stepping
@@ -170,7 +171,7 @@ public:
             }
             bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
             equalPlace &= a.nodeStack.top().firstVisit == b.nodeStack.top().firstVisit;
-            //equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
+            // equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
             equalPlace &= (!a.m_compare(*a.nodeStack.top().node->data_, *b.nodeStack.top().node->data_) && !a.m_compare(*b.nodeStack.top().node->data_, *a.nodeStack.top().node->data_));
 
             return equalPlace;
@@ -227,6 +228,7 @@ inline AVLTree<T, TComparison>::~AVLTree()
         delete curNode;
     }
     root_ = nullptr;
+    size_ = 0;
 }
 
 /// @brief assignment operator for AVLTree, performs a deep copy of other
@@ -322,6 +324,7 @@ inline bool AVLTree<T, TComparison>::insert(const T &obj)
     if (root_ == nullptr)
     {
         root_ = new Node(obj);
+        size_ = 1;
     }
     Node *reader = root_;
     while (((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_) != nullptr)
@@ -338,6 +341,7 @@ inline bool AVLTree<T, TComparison>::insert(const T &obj)
     }
     ((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_) = new Node(obj);
     balanceTreeInsertion(((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_));
+    size_++;
     return true;
 }
 
@@ -345,9 +349,13 @@ inline bool AVLTree<T, TComparison>::insert(const T &obj)
 /// @param data T to search for and remove
 /// @return deep copy of the T that was stored in the AVLTree
 template <typename T, typename TComparison>
-inline T *AVLTree<T, TComparison>::remove(const T &data)
+inline T AVLTree<T, TComparison>::remove(const T &data)
 {
-    return remove(data, true);
+    T *tmp = remove(data, true);
+    T returner = T(*tmp);
+    delete tmp;
+    size_--;
+    return returner;
 }
 
 /// @brief returns a pointer to the T object stored in the AVLTree
@@ -595,6 +603,14 @@ template <typename T, typename TComparison>
 inline bool AVLTree<T, TComparison>::isEmpty() const
 {
     return root_ == nullptr;
+}
+
+/// @brief returns size of AVLTree
+/// @return number of nodes in AVLTree
+template <typename T, typename TComparison>
+inline int AVLTree<T, TComparison>::size() const
+{
+    return size_;
 }
 
 /// @brief recursively calculates the balance factor (rightHeight - leftHeight) for curNode
