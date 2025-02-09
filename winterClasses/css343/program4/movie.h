@@ -16,12 +16,12 @@ public:
     Movie(MovieType type, int stock, string directorFirstName, string directorLastName, string title, int releaseYear);
     Movie(Movie &other);
 
-    bool operator<(const Movie &other) const;
-    bool operator<=(const Movie &other) const;
-    bool operator>(const Movie &other) const;
-    bool operator>=(const Movie &other) const;
-    bool operator==(const Movie &other) const;
-    bool operator!=(const Movie &other) const;
+    virtual bool operator<(const Movie &other) const;
+    virtual bool operator<=(const Movie &other) const;
+    virtual bool operator>(const Movie &other) const;
+    virtual bool operator>=(const Movie &other) const;
+    virtual bool operator==(const Movie &other) const;
+    virtual bool operator!=(const Movie &other) const;
 
     int Stock() const;
     string Director() const;

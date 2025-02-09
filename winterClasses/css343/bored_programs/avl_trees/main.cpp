@@ -19,7 +19,7 @@ public:
     bool operator!=(const testing &other) const { return key2 != other.key2; }
     friend ostream &operator<<(ostream &os, testing &obj)
     {
-        os << to_string(obj.key2);
+        os << to_string(obj.key1);
         return os;
     }
     int key1 = 0;
@@ -27,7 +27,7 @@ public:
 };
 struct Compare
 {
-    int operator()(testing a, testing b) const { return a.key2 < b.key2; }
+    int operator()(testing a, testing b) const { return a.key1 < b.key1; }
 };
 
 int main()
