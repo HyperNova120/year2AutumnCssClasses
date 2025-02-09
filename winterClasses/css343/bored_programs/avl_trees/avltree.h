@@ -5,6 +5,8 @@
 #include <queue>
 #include <iostream>
 #include <cmath>
+#include <iterator>
+#include <cstddef>
 using namespace std;
 
 /// @brief
@@ -65,6 +67,117 @@ private:
     void RotateRL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child); // performs RL rotation
 
     Node *root_ = nullptr;
+
+public:
+    struct Iterator
+    {
+        using iterator_category = forward_iterator_tag;
+        using difference_type = ptrdiff_t;
+        using value_type = T;
+        using pointer = value_type *;
+        using reference = value_type &;
+
+    private:
+        struct IteratorNodeData
+        {
+            Node *node = nullptr;
+            bool vistedRightBranch = false;
+            bool firstVisit = true;
+        };
+        stack<IteratorNodeData> nodeStack;
+
+    public:
+        Iterator(Node *ptr)
+        {
+            if (ptr == nullptr)
+            {
+                return;
+            }
+            Node *reader = ptr;
+            do
+            {
+                nodeStack.push({reader, false});
+                reader = reader->left_;
+            } while (reader != nullptr);
+            nodeStack.top().firstVisit = false;
+            nodeStack.top().vistedRightBranch = true;
+        };
+
+        reference operator*() const { return *nodeStack.top().node->data_; };
+        pointer operator->() { return nodeStack.top().node->data_; };
+
+        // prefix
+        Iterator &operator++()
+        {
+            if (nodeStack.size() == 0)
+            {
+                return *this;
+            }
+            if (nodeStack.top().vistedRightBranch)
+            {
+                // fully explored children
+                while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
+                {
+                    nodeStack.pop();
+                }
+            }
+            else
+            {
+                // need to visit right
+                if (nodeStack.top().node->right_ == nullptr && nodeStack.top().firstVisit)
+                {
+                    // no right node on first visit
+                    nodeStack.top().firstVisit = false;
+                    nodeStack.top().vistedRightBranch = true;
+                    while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
+                    {
+                        nodeStack.pop();
+                    }
+                    return *this;
+                }
+                nodeStack.top().vistedRightBranch = true;
+                // has right node
+                nodeStack.push({nodeStack.top().node->right_, false});
+                while (nodeStack.top().node->left_ != nullptr)
+                {
+                    nodeStack.push({nodeStack.top().node->left_, false});
+                }
+            }
+
+            return *this;
+        }
+
+        // postfix
+        Iterator &operator++(int)
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool operator==(const Iterator &a, const Iterator &b)
+        {
+            if (a.nodeStack.size() == 0 && b.nodeStack.size() == 0)
+            {
+                return true;
+            }
+            if (a.nodeStack.size() != b.nodeStack.size())
+            {
+                return false;
+            }
+            bool equalPlace = equalPlace && (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
+            equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
+
+            return equalPlace;
+        }
+        friend bool operator!=(const Iterator &a, const Iterator &b)
+        {
+            return !(a == b);
+        }
+    };
+
+    Iterator begin() { return Iterator(root_); }
+    Iterator end() { return Iterator(nullptr); }
 };
 
 /// @brief default constructor

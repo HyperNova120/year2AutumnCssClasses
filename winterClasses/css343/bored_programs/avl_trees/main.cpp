@@ -87,11 +87,15 @@ int main()
     cout << "Test2:" << (test != test2) << endl;
     cout << "Test:" << (test == test) << endl; */
 
-    AVLTree<int> test2 = AVLTree<int>();
+    /* AVLTree<int> test2 = AVLTree<int>();
     for (int i = 0; i < 10000; i++)
     {
         test2.insert(rand() % 100000);
     }
-    test2.print();
+    test2.print(); */
     //test2.print();
+    for (auto i : test)
+    {
+        cout << i << endl;
+    }
 }
