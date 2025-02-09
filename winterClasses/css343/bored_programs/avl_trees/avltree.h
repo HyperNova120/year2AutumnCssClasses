@@ -138,7 +138,7 @@ public:
                 }
                 nodeStack.top().vistedRightBranch = true;
                 // has right node
-                nodeStack.push({nodeStack.top().node->right_, false});
+                nodeStack.push({nodeStack.top().node->right_, (nodeStack.top().node->right_->right_ == nullptr)});
                 while (nodeStack.top().node->left_ != nullptr)
                 {
                     nodeStack.push({nodeStack.top().node->left_, false});
