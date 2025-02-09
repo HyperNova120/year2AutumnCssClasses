@@ -169,8 +169,9 @@ public:
                 return false;
             }
             bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
+            equalPlace &= a.nodeStack.top().firstVisit == b.nodeStack.top().firstVisit;
             //equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
-            equalPlace = equalPlace && (!a.m_compare(*a.nodeStack.top().node->data_, *b.nodeStack.top().node->data_) && !a.m_compare(*b.nodeStack.top().node->data_, *a.nodeStack.top().node->data_));
+            equalPlace &= (!a.m_compare(*a.nodeStack.top().node->data_, *b.nodeStack.top().node->data_) && !a.m_compare(*b.nodeStack.top().node->data_, *a.nodeStack.top().node->data_));
 
             return equalPlace;
         }
