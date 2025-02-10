@@ -1,6 +1,7 @@
 #include "avltree.h"
 
 #include <iostream>
+#include <set>
 
 using namespace std;
 
@@ -108,21 +109,35 @@ int main()
     }
 
     cout << "=================================" << endl;
-    int randCount = 20000;
+    int randCount = 10000;
     AVLTree<int> largeTest;
     for (int i = 0; i < randCount; i++)
     {
         largeTest.insert(rand() % randCount);
     }
-    //largeTest.print();
+    // largeTest.print();
     cout << "=================================" << endl;
-    for (int i = 0; i < randCount; i++)
+    /* for (int i = 0; i < randCount; i++)
     {
         delete largeTest.remove(rand() % randCount);
     }
     cout << "=================================" << endl;
-    //largeTest.print();
+    cout << "SET TEST" << endl;
+    set<int> setTest;
 
+    for (int i = 0; i < randCount; i++)
+    {
+        setTest.insert(rand() % randCount);
+    }
+    // largeTest.print();
+    cout << "=================================" << endl;
+    for (int i = 0; i < randCount; i++)
+    {
+        setTest.erase(rand() % randCount);
+    }
+    cout << "=================================" << endl; */
+
+    // largeTest.print();
 
     /* cout << "=================================" << endl;
     delete largeTest.remove(62);
@@ -133,7 +148,7 @@ int main()
         delete largeTest.remove(rand() % randCount);
     }
     delete largeTest.remove(57); */
-    //largeTest.print();
+    // largeTest.print();
 
     /* cout << "=================================" << endl;
     AVLTree<int> largeTest2;

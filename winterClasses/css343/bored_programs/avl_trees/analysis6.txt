@@ -3,14 +3,14 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ns/call  ns/call  name    
- 54.66      0.47     0.47                             AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*)
- 41.29      0.83     0.36  5449470    65.16    65.16  AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*)
-  4.07      0.86     0.04                             void std::deque<AVLTree<int, std::less<int> >::Node*, std::allocator<AVLTree<int, std::less<int> >::Node*> >::_M_push_back_aux<AVLTree<int, std::less<int> >::Node* const&>(AVLTree<int, std::less<int> >::Node* const&)
-  0.00      0.86     0.00       64     0.00     0.00  AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*)
-  0.00      0.86     0.00       25     0.00     0.00  std::_Deque_base<AVLTree<testing, Compare>::Node*, std::allocator<AVLTree<testing, Compare>::Node*> >::_M_initialize_map(unsigned long)
-  0.00      0.86     0.00       24     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...)
-  0.00      0.86     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
-  0.00      0.86     0.00        1     0.00     0.00  std::_Deque_base<AVLTree<int, std::less<int> >::Node*, std::allocator<AVLTree<int, std::less<int> >::Node*> >::_M_initialize_map(unsigned long)
+ 61.82      0.45     0.45                             AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*)
+ 36.12      0.71     0.26  5190742    50.10    50.10  AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*)
+  2.08      0.72     0.02                             void std::deque<AVLTree<int, std::less<int> >::Node*, std::allocator<AVLTree<int, std::less<int> >::Node*> >::_M_push_back_aux<AVLTree<int, std::less<int> >::Node* const&>(AVLTree<int, std::less<int> >::Node* const&)
+  0.00      0.72     0.00       65     0.00     0.00  AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*)
+  0.00      0.72     0.00       25     0.00     0.00  std::_Deque_base<AVLTree<testing, Compare>::Node*, std::allocator<AVLTree<testing, Compare>::Node*> >::_M_initialize_map(unsigned long)
+  0.00      0.72     0.00       24     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...)
+  0.00      0.72     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
+  0.00      0.72     0.00        1     0.00     0.00  std::_Deque_base<AVLTree<int, std::less<int> >::Node*, std::allocator<AVLTree<int, std::less<int> >::Node*> >::_M_initialize_map(unsigned long)
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -48,27 +48,27 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 1.16% of 0.86 seconds
+granularity: each sample hit covers 2 byte(s) for 1.39% of 0.72 seconds
 
 index % time    self  children    called     name
-                             113324994             AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
-[1]     95.9    0.47    0.36       0+113324994 AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
-                0.36    0.00 5449470/5449470     AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
-                             113324994             AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
+                             113298973             AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
+[1]     97.9    0.45    0.26       0+113298973 AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
+                0.26    0.00 5190742/5190742     AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
+                             113298973             AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
 -----------------------------------------------
-                             117837036             AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
-                0.36    0.00 5449470/5449470     AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
-[2]     41.3    0.36    0.00 5449470+117837036 AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
-                             117837036             AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
+                             118348946             AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
+                0.26    0.00 5190742/5190742     AVLTree<int, std::less<int> >::calculateBalanceFactors(AVLTree<int, std::less<int> >::Node*) [1]
+[2]     36.1    0.26    0.00 5190742+118348946 AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
+                             118348946             AVLTree<int, std::less<int> >::getHeight(AVLTree<int, std::less<int> >::Node*) [2]
 -----------------------------------------------
                                                  <spontaneous>
-[3]      4.1    0.04    0.00                 void std::deque<AVLTree<int, std::less<int> >::Node*, std::allocator<AVLTree<int, std::less<int> >::Node*> >::_M_push_back_aux<AVLTree<int, std::less<int> >::Node* const&>(AVLTree<int, std::less<int> >::Node* const&) [3]
+[3]      2.1    0.02    0.00                 void std::deque<AVLTree<int, std::less<int> >::Node*, std::allocator<AVLTree<int, std::less<int> >::Node*> >::_M_push_back_aux<AVLTree<int, std::less<int> >::Node* const&>(AVLTree<int, std::less<int> >::Node* const&) [3]
 -----------------------------------------------
-                                 198             AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*) [11]
-                0.00    0.00      23/64          AVLTree<testing, Compare>::remove(testing const&) [17]
-                0.00    0.00      41/64          AVLTree<testing, Compare>::insert(testing const&) [16]
-[11]     0.0    0.00    0.00      64+198     AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*) [11]
-                                 198             AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*) [11]
+                                 181             AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*) [11]
+                0.00    0.00      15/65          AVLTree<testing, Compare>::remove(testing const&) [17]
+                0.00    0.00      50/65          AVLTree<testing, Compare>::insert(testing const&) [16]
+[11]     0.0    0.00    0.00      65+181     AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*) [11]
+                                 181             AVLTree<testing, Compare>::calculateBalanceFactors(AVLTree<testing, Compare>::Node*) [11]
 -----------------------------------------------
                 0.00    0.00       1/25          AVLTree<testing, Compare>::~AVLTree() [20]
                 0.00    0.00       8/25          AVLTree<testing, Compare>::remove(testing const&) [17]
