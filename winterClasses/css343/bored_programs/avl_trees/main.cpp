@@ -77,16 +77,15 @@ int main()
         cout << i << endl;
     }
 
-
-
-    test.remove(testing(11, 24));
-    test.remove(testing(12, 64));
-    test.remove(testing(8, 89));
-    test.remove(testing(14, 17));
-    test.remove(testing(16, 41));
-    test.remove(testing(10, 13));
-    test.remove(testing(15, 12));
-    test.remove(testing(9, 67));
+    delete test.remove(testing(11, 24));
+    delete test.remove(testing(12, 64));
+    delete test.remove(testing(8, 89));
+    delete test.remove(testing(14, 17));
+    delete test.remove(testing(16, 41));
+    delete test.remove(testing(10, 13));
+    delete test.remove(testing(15, 12));
+    delete test.remove(testing(9, 67));
+    // delete test.remove(testing(6, 9));
     test.print();
     cout << "=================================" << endl;
     /*AVLTree<int> test2 = AVLTree<int>(test);
@@ -99,12 +98,51 @@ int main()
     for (int i = 0; i < 10000; i++)
     {
         test2.insert(rand() % 100000);
-    }
-    test2.print(); */
-    //test2.print();
+    } */
+    // test2.print();
+    //  test2.print();
     cout << "Size:" << test.size() << endl;
     for (auto i : test)
     {
         cout << i << endl;
     }
+
+    cout << "=================================" << endl;
+    int randCount = 10000;
+    AVLTree<int> largeTest;
+    for (int i = 0; i < randCount; i++)
+    {
+        largeTest.insert(rand() % randCount);
+    }
+    //largeTest.print();
+    //cout << "=================================" << endl;
+    for (int i = 0; i < randCount; i++)
+    {
+        delete largeTest.remove(rand() % randCount);
+    }
+    cout << "=================================" << endl;
+    //largeTest.print();
+
+
+    /* cout << "=================================" << endl;
+    delete largeTest.remove(62);
+    delete largeTest.remove(98);
+    delete largeTest.remove(73);
+    for (int i = 0; i < randCount*2; i++)
+    {
+        delete largeTest.remove(rand() % randCount);
+    }
+    delete largeTest.remove(57); */
+    //largeTest.print();
+
+    /* cout << "=================================" << endl;
+    AVLTree<int> largeTest2;
+
+    for (int i = 0; i <= 27; i++)
+    {
+        largeTest2.insert(i);
+    }
+    largeTest2.print();
+
+    cout << "=================================" << endl; */
 }

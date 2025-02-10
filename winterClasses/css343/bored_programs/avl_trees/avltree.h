@@ -30,6 +30,9 @@ public:
         Node *left_ = nullptr;
         Node *right_ = nullptr;
         int balanceFactor_ = 0;
+        int height_ = 0;
+        short heightOnChange_ = 0;
+        short BalanceFactorOnChange_ = 0;
         T *data_ = nullptr;
     };
 
@@ -43,7 +46,7 @@ public:
     bool operator!=(const AVLTree<T, TComparison> &other) const;
 
     bool insert(const T &obj);          // inserts a copy of obj into tree
-    T remove(const T &data);            // removes node from tree and returns it, calls remove
+    T *remove(const T &data);           // removes node from tree and returns it, calls remove
     T *retrieve(const T &data);         // returns node if tree contains, else nullptr
     bool contains(const T &data) const; // returns if tree contains data
     void print();                       // calls sideways
@@ -68,6 +71,7 @@ private:
 
     Node *root_ = nullptr;
     int size_ = 0;
+    short currentChange_ = 0;
 
 public:
     /// @brief Custom Iterator for AVLTree, allows for in-order stepping
@@ -340,6 +344,7 @@ inline bool AVLTree<T, TComparison>::insert(const T &obj)
         return false;
     }
     ((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_) = new Node(obj);
+    currentChange_ = (currentChange_ + 1) % 32000;
     balanceTreeInsertion(((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_));
     size_++;
     return true;
@@ -349,13 +354,9 @@ inline bool AVLTree<T, TComparison>::insert(const T &obj)
 /// @param data T to search for and remove
 /// @return deep copy of the T that was stored in the AVLTree
 template <typename T, typename TComparison>
-inline T AVLTree<T, TComparison>::remove(const T &data)
+inline T *AVLTree<T, TComparison>::remove(const T &data)
 {
-    T *tmp = remove(data, true);
-    T returner = T(*tmp);
-    delete tmp;
-    size_--;
-    return returner;
+    return remove(data, true);
 }
 
 /// @brief returns a pointer to the T object stored in the AVLTree
@@ -407,17 +408,37 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original)
     if (reader->left_ == nullptr && reader->right_ == nullptr)
     {
         // leaf
+        /* if (root_ == reader)
+        {
+            // delete leaf root node
+            delete root_;
+            root_ = nullptr;
+            // cerr << "NO BRANCH ROOT" << endl;
+        currentChange_ = (currentChange_ + 1) % 32000;
+        }
+        else
+        { */
         delete reader;
         ((lastSearchMoveLeft) ? parent->left_ : parent->right_) = nullptr;
         W = parent;
+        // cerr << "NO BRANCH NOT ROOT" << endl;
+        //}
     }
     else if (reader->left_ == nullptr ^ reader->right_ == nullptr)
     {
         // single branch
         Node *replacement = ((reader->left_ != nullptr) ? reader->left_ : reader->right_);
-        delete reader;
+        /* if (reader == root_)
+        {
+            root_ = replacement;
+        }
+        else
+        { */
         ((lastSearchMoveLeft) ? parent->left_ : parent->right_) = replacement;
+        //}
+        delete reader;
         W = replacement;
+        // cerr << "Single BRANCH" << endl;
     }
     else
     {
@@ -431,9 +452,11 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original)
         delete reader->data_;
         reader->data_ = replacementData;
         W = reader;
+        // cerr << "DUAL BRANCH" << endl;
     }
     if (original)
     {
+        currentChange_ = (currentChange_ + 1) % 32000;
         balanceTreeRemove(W);
     }
 
@@ -481,7 +504,8 @@ inline int AVLTree<T, TComparison>::getRotationType(Node *gParent, Node *parent,
 template <typename T, typename TComparison>
 inline void AVLTree<T, TComparison>::Rotate(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child)
 {
-    bool leftToUpdate = (root->left_ == gParent);
+
+    currentChange_ = (currentChange_ + 1) % 32000;
     switch (getRotationType(gParent, parent, child))
     {
     case 1:
@@ -594,7 +618,7 @@ inline bool AVLTree<T, TComparison>::contains(const T &data) const
 template <typename T, typename TComparison>
 inline void AVLTree<T, TComparison>::print()
 {
-    sideways(root_, 0);
+    sideways(root_, -1);
 }
 
 /// @brief returns if AVLTree is empty
@@ -622,7 +646,12 @@ inline void AVLTree<T, TComparison>::calculateBalanceFactors(Node *curNode)
     {
         return;
     }
+    if (curNode->BalanceFactorOnChange_ == currentChange_)
+    {
+        return;
+    }
     curNode->balanceFactor_ = getHeight(curNode->right_) - getHeight(curNode->left_);
+    curNode->BalanceFactorOnChange_ = currentChange_;
     calculateBalanceFactors(curNode->left_);
     calculateBalanceFactors(curNode->right_);
 }
@@ -641,9 +670,15 @@ inline int AVLTree<T, TComparison>::getHeight(Node *curNode)
     {
         return 1;
     }
+    else if (curNode->heightOnChange_ == currentChange_)
+    {
+        return curNode->height_;
+    }
     int left_height = getHeight(curNode->left_);
     int right_height = getHeight(curNode->right_);
-    return 1 + ((left_height > right_height) ? left_height : right_height);
+    curNode->height_ = 1 + ((left_height > right_height) ? left_height : right_height);
+    curNode->heightOnChange_ = currentChange_;
+    return curNode->height_;
 }
 
 /// @brief balances the AVLTree after insertion
@@ -659,9 +694,8 @@ inline void AVLTree<T, TComparison>::balanceTreeInsertion(Node *changedNode)
     // find path to change
     stack<Node *> nodeStack = stack<Node *>();
     nodeStack.push(root_);
-    while (!nodeStack.empty() && !TEqual(*nodeStack.top()->data_, *changedNode->data_))
+    while (!TEqual(*nodeStack.top()->data_, *changedNode->data_))
     {
-
         nodeStack.push(m_comp(*changedNode->data_, *(nodeStack.top()->data_)) ? nodeStack.top()->left_ : nodeStack.top()->right_);
     }
 
@@ -739,7 +773,7 @@ inline void AVLTree<T, TComparison>::balanceTreeRemove(Node *changedNode)
         calculateBalanceFactors(root);
         bool leftToUpdate = (root->left_ == gParent);
         bool isSmallTree = false;
-        if (nodeStack.empty() && abs((*root).balanceFactor_) > 1)
+        if (nodeStack.empty()) // && abs((*root).balanceFactor_) > 1)
         {
             isSmallTree = true;
             gParent = root;
@@ -809,7 +843,7 @@ inline void AVLTree<T, TComparison>::sideways(Node *current, int level) const
         sideways(current->right_, level);
 
         // indent for readability, 4 spaces per depth level
-        for (int i = level; i >= 0; i--)
+        for (int i = level; i > 0; i--)
         {
             cout << "    ";
         }
