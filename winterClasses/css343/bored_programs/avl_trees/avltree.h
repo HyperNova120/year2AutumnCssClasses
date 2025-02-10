@@ -27,18 +27,27 @@ public:
         {
             delete data_;
         }
-        Node *left_ = nullptr;
-        Node *right_ = nullptr;
-        int balanceFactor_ = 0;
-        int height_ = 0;
-        short heightOnChange_ = 0;
-        short BalanceFactorOnChange_ = 0;
-        T *data_ = nullptr;
+        Node *left_ = nullptr;            // left branch
+        Node *right_ = nullptr;           // right branch
+        int balanceFactor_ = 0;           // balance factor
+        int height_ = 0;                  // height
+        short heightOnChange_ = 0;        // change the height was last updated on
+        short BalanceFactorOnChange_ = 0; // change the balance factor was last updated on
+        T *data_ = nullptr;               // pointer to stored data
     };
 
+    /// @brief default constructor
     AVLTree();
+
+    /// @brief constructor
+    /// @param comp custom comparision method to compare T
     AVLTree(TComparison comp);
+
+    /// @brief copy constructor
+    /// @param other AVLTree to create a deep copy of
     AVLTree(const AVLTree<T, TComparison> &other);
+
+    /// @brief deconstructor
     ~AVLTree();
 
     AVLTree<T, TComparison> &operator=(const AVLTree<T, TComparison> &other);
@@ -69,12 +78,12 @@ private:
     void RotateRR(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child); // performs RR rotation
     void RotateRL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child); // performs RL rotation
 
-    Node *root_ = nullptr;
-    int size_ = 0;
-    short currentChange_ = 0;
+    Node *root_ = nullptr;    // root of AVL Tree
+    int size_ = 0;            // number of nodes in AVL Tree
+    short currentChange_ = 0; // wrapping counter of changes to AVLTree, used to track if height and balancefactor need to be updated
 
 public:
-    /// @brief Custom Iterator for AVLTree, allows for in-order stepping
+    /// @brief Custom Iterator for AVLTree, allows for in-order forward-only stepping
     struct Iterator
     {
         using iterator_category = forward_iterator_tag;
@@ -186,7 +195,12 @@ public:
         }
     };
 
+    /// @brief returns iterator placed at the start of AVLTree
+    /// @return Iterator at beginning of AVLTree
     Iterator begin() { return Iterator(root_, m_comp); }
+
+    /// @brief returns iterator placed at end of AVLTree
+    /// @return Iterator at end of AVLTree
     Iterator end() { return Iterator(nullptr, m_comp); }
 };
 
@@ -408,37 +422,17 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original)
     if (reader->left_ == nullptr && reader->right_ == nullptr)
     {
         // leaf
-        /* if (root_ == reader)
-        {
-            // delete leaf root node
-            delete root_;
-            root_ = nullptr;
-            // cerr << "NO BRANCH ROOT" << endl;
-        currentChange_ = (currentChange_ + 1) % 32000;
-        }
-        else
-        { */
         delete reader;
         ((lastSearchMoveLeft) ? parent->left_ : parent->right_) = nullptr;
         W = parent;
-        // cerr << "NO BRANCH NOT ROOT" << endl;
-        //}
     }
     else if (reader->left_ == nullptr ^ reader->right_ == nullptr)
     {
         // single branch
         Node *replacement = ((reader->left_ != nullptr) ? reader->left_ : reader->right_);
-        /* if (reader == root_)
-        {
-            root_ = replacement;
-        }
-        else
-        { */
         ((lastSearchMoveLeft) ? parent->left_ : parent->right_) = replacement;
-        //}
         delete reader;
         W = replacement;
-        // cerr << "Single BRANCH" << endl;
     }
     else
     {
@@ -452,7 +446,6 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original)
         delete reader->data_;
         reader->data_ = replacementData;
         W = reader;
-        // cerr << "DUAL BRANCH" << endl;
     }
     if (original)
     {
