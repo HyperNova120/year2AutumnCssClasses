@@ -109,7 +109,7 @@ int main()
     }
 
     cout << "=================================" << endl;
-    int randCount = 30000;
+    int randCount = 500000;
     AVLTree<int> largeTest;
     for (int i = 0; i < randCount; i++)
     {
@@ -122,7 +122,7 @@ int main()
         delete largeTest.remove(rand() % randCount);
     }
     cout << "=================================" << endl;
-    /* cout << "SET TEST" << endl;
+    cout << "SET TEST" << endl;
     set<int> setTest;
 
     for (int i = 0; i < randCount; i++)
@@ -135,7 +135,12 @@ int main()
     {
         setTest.erase(rand() % randCount);
     }
-    cout << "=================================" << endl; */
+    cout << "=================================" << endl;
+
+
+
+
+
 
     // largeTest.print();
 
