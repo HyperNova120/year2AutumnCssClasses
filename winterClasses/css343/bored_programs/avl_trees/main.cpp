@@ -157,9 +157,12 @@ int main()
 
     cout << "=================================" << endl;
 
-    AVLTree<int *> ptr_Test;
-    int *tmp = new int(5);
+    AVLTree<testing *> ptr_Test;
+    testing *tmp = new testing(1,1);
     ptr_Test.insert(tmp);
+    ptr_Test.print();
+    tmp->key1 = 5;
+    tmp->key2 = 5;
     ptr_Test.print();
     delete tmp;
 

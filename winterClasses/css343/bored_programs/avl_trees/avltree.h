@@ -337,6 +337,9 @@ inline bool AVLTree<T, TComparison>::operator!=(const AVLTree<T, TComparison> &o
     return !(*this == other);
 }
 
+/// @brief insert obj into AVLTree.
+/// @param obj object to insert
+/// @return true if insertion succeeded, false if obj is a duplicate
 template <typename T, typename TComparison>
 inline bool AVLTree<T, TComparison>::insert(const T &obj)
 {
@@ -349,7 +352,7 @@ inline bool AVLTree<T, TComparison>::insert(const T &obj)
     return true;
 }
 
-/// @brief insert deep copy of obj into AVLTree.
+/// @brief insert obj into AVLTree.
 /// @param obj object to insert
 /// @return true if insertion succeeded, false if obj is a duplicate
 template <typename T, typename TComparison>
