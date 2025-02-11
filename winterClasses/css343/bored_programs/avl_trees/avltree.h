@@ -19,21 +19,21 @@ private:
     class Node
     {
     public:
-        Node(const T &data)
+        Node(T *data)
         {
-            data_ = new T(data);
+            data_ = data;
         }
         ~Node()
         {
             delete data_;
         }
-        Node *left_ = nullptr;               // left branch
-        Node *right_ = nullptr;              // right branch
-        Node *parent_ = nullptr;             // right branch
         int balanceFactor_ = 0;              // balance factor
         int height_ = 0;                     // height
         bool heightOnChange_ = false;        // change the height was last updated on
         bool BalanceFactorOnChange_ = false; // change the balance factor was last updated on
+        Node *left_ = nullptr;               // left branch
+        Node *right_ = nullptr;              // right branch
+        Node *parent_ = nullptr;             // right branch
         T *data_ = nullptr;                  // pointer to stored data
     };
 
@@ -57,6 +57,7 @@ public:
     bool operator!=(const AVLTree<T, TComparison> &other) const;
 
     bool insert(const T &obj);          // inserts a copy of obj into tree
+    bool insert(T *obj);          // inserts a copy of obj into tree
     T *remove(const T &data);           // removes node from tree and returns it, calls remove
     T *retrieve(const T &data);         // returns node if tree contains, else nullptr
     bool contains(const T &data) const; // returns if tree contains data
@@ -65,9 +66,11 @@ public:
     int size() const;                   // returns size of AVLTree
 
 private:
-    TComparison m_comp;                                                                    // user defined comparison method
-    bool TEqual(const T &A, const T &B) const;                                             // equality checker for T using the user define comparison method
-    void sideways(Node *current, int level) const;                                         // prints tree sideways to cout
+    TComparison m_comp;                            // user defined comparison method
+    bool TEqual(const T &A, const T &B) const;     // equality checker for T using the user define comparison method
+    void sideways(Node *current, int level) const; // prints tree sideways to cout
+    void sidewaysHelper(Node *data, false_type) const;
+    void sidewaysHelper(Node *data, true_type) const;
     void calculateBalanceFactors(Node *curNode);                                           // calculates and sets balancefactors for curNode and all nodes under curNode
     int getHeight(Node *curNode);                                                          // returns height of curNode
     void balanceTreeInsertion(Node *curNode);                                              // balances tree after insertion
@@ -334,31 +337,44 @@ inline bool AVLTree<T, TComparison>::operator!=(const AVLTree<T, TComparison> &o
     return !(*this == other);
 }
 
+template <typename T, typename TComparison>
+inline bool AVLTree<T, TComparison>::insert(const T &obj)
+{
+    T *tmp = new T(obj);
+    if (!insert(tmp))
+    {
+        delete tmp;
+        return false;
+    }
+    return true;
+}
+
 /// @brief insert deep copy of obj into AVLTree.
 /// @param obj object to insert
 /// @return true if insertion succeeded, false if obj is a duplicate
 template <typename T, typename TComparison>
-inline bool AVLTree<T, TComparison>::insert(const T &obj)
+inline bool AVLTree<T, TComparison>::insert(T *obj)
 {
     if (root_ == nullptr)
     {
         root_ = new Node(obj);
         size_ = 1;
+        return true;
     }
     Node *reader = root_;
     // reader->BalanceFactorOnChange_ = false;
     // reader->heightOnChange_ = false;
-    while (((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_) != nullptr)
+    while (((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_) != nullptr)
     {
-        if (TEqual(*reader->data_, obj))
+        if (TEqual(*reader->data_, *obj))
         {
             return false;
         }
-        reader = ((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_);
+        reader = ((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_);
         // reader->BalanceFactorOnChange_ = false;
         // reader->heightOnChange_ = false;
     }
-    if (TEqual(*reader->data_, obj))
+    if (TEqual(*reader->data_, *obj))
     {
         return false;
     }
@@ -371,9 +387,9 @@ inline bool AVLTree<T, TComparison>::insert(const T &obj)
         tmp = tmp->parent_;
     }
 
-    ((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_) = new Node(obj);
-    ((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_)->parent_ = reader;
-    balanceTreeInsertion(((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_));
+    ((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_) = new Node(obj);
+    ((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_)->parent_ = reader;
+    balanceTreeInsertion(((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_));
     size_++;
     return true;
 }
@@ -458,12 +474,14 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original, Node *cu
     }
 
     // found node to delete, now to find replacement node
-    T *returner = new T(*reader->data_);
+    T *returner = reader->data_;
+    reader->data_ = nullptr;
     Node *W = nullptr;
 
     if (reader->left_ == nullptr && reader->right_ == nullptr)
     {
         // leaf
+        curNode = curNode->parent_;
         delete reader;
         ((lastSearchMoveLeft) ? parent->left_ : parent->right_) = nullptr;
         W = parent;
@@ -480,12 +498,13 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original, Node *cu
         Node *replacement = ((reader->left_ != nullptr) ? reader->left_ : reader->right_);
         ((lastSearchMoveLeft) ? parent->left_ : parent->right_) = replacement;
         replacement->parent_ = parent;
+        curNode = curNode->parent_;
         delete reader;
         W = replacement;
-        if (original)
+        /* if (original)
         {
             curNode = curNode->parent_;
-        }
+        } */
         curNode->BalanceFactorOnChange_ = false;
         curNode->heightOnChange_ = false;
         curNode = W;
@@ -494,7 +513,7 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original, Node *cu
     {
         // dual branch
         Node *replacement = reader->right_;
-        curNode = replacement;
+        curNode = reader;
         while (replacement->left_ != nullptr)
         {
             replacement = replacement->left_;
@@ -513,6 +532,7 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original, Node *cu
     if (original)
     {
         balanceTreeRemove(W);
+        size_--;
     }
 
     return returner;
@@ -976,10 +996,23 @@ inline void AVLTree<T, TComparison>::sideways(Node *current, int level) const
             cout << "    ";
         }
 
-        cout << *current->data_ << endl; // display information of object
+        // cout << *current->data_ << endl; // display information of object
+        sidewaysHelper(current, is_pointer<T>());
         // cout << (*current).balanceFactor_ << endl; // display information of object
         sideways(current->left_, level);
     }
+}
+
+template <typename T, typename TComparison>
+inline void AVLTree<T, TComparison>::sidewaysHelper(Node *data, false_type) const
+{
+    cout << *data->data_ << endl; // display information of object
+}
+
+template <typename T, typename TComparison>
+inline void AVLTree<T, TComparison>::sidewaysHelper(Node *data, true_type) const
+{
+    cout << **data->data_ << endl; // display information of object
 }
 
 #endif // AVLTREE_H_

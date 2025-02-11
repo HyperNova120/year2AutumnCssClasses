@@ -109,9 +109,6 @@ int main()
         cout << i << endl;
     }
 
-
-
-
     cout << "=================================" << endl;
     int randCount = 500000;
     AVLTree<int> largeTest;
@@ -152,12 +149,19 @@ int main()
     cout << "AVL DELETE TIME:" << chrono::duration_cast<chrono::milliseconds>(t4 - t3).count() << endl;
     cout << "SET INSERT TIME:" << chrono::duration_cast<chrono::milliseconds>(t6 - t5).count() << endl;
     cout << "SET DELETE TIME:" << chrono::duration_cast<chrono::milliseconds>(t8 - t7).count() << endl;
-    AVLTree<int *> ptr_test;
+    int insertTMP = chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() - chrono::duration_cast<chrono::milliseconds>(t6 - t5).count();
+    int deleteTMP = chrono::duration_cast<chrono::milliseconds>(t4 - t3).count() - chrono::duration_cast<chrono::milliseconds>(t8 - t7).count();
 
+    cout << "AVL INSERT Percent DIFF:" << ((double)insertTMP / chrono::duration_cast<chrono::milliseconds>(t6 - t5).count()) * 100 << endl;
+    cout << "AVL DELETE Percent DIFF:" << ((double)deleteTMP / chrono::duration_cast<chrono::milliseconds>(t8 - t7).count()) * 100 << endl;
 
+    cout << "=================================" << endl;
 
-
-
+    AVLTree<int *> ptr_Test;
+    int *tmp = new int(5);
+    ptr_Test.insert(tmp);
+    ptr_Test.print();
+    delete tmp;
 
     // largeTest.print();
 
