@@ -110,7 +110,7 @@ int main()
     }
 
     cout << "=================================" << endl;
-    int randCount = 500000;
+    int randCount = 10000000;
     AVLTree<int> largeTest;
     auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)

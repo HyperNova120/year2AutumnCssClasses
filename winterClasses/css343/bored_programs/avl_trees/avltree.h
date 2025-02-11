@@ -57,7 +57,7 @@ public:
     bool operator!=(const AVLTree<T, TComparison> &other) const;
 
     bool insert(const T &obj);          // inserts a copy of obj into tree
-    bool insert(T *obj);          // inserts a copy of obj into tree
+    bool insert(T *obj);                // inserts obj into tree
     T *remove(const T &data);           // removes node from tree and returns it, calls remove
     T *retrieve(const T &data);         // returns node if tree contains, else nullptr
     bool contains(const T &data) const; // returns if tree contains data
@@ -337,7 +337,7 @@ inline bool AVLTree<T, TComparison>::operator!=(const AVLTree<T, TComparison> &o
     return !(*this == other);
 }
 
-/// @brief insert obj into AVLTree.
+/// @brief insert a copy of obj into AVLTree.
 /// @param obj object to insert
 /// @return true if insertion succeeded, false if obj is a duplicate
 template <typename T, typename TComparison>

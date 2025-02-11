@@ -9,6 +9,20 @@ GraphL::GraphL()
     }
 }
 
+GraphL::~GraphL()
+{
+    for (int i = 0; i < size; i++)
+    {
+        delete NodeList[i].data;
+        while (NodeList[i].edgeHead != nullptr)
+        {
+            EdgeNode *tmp = NodeList[i].edgeHead->nextEdge;
+            delete NodeList[i].edgeHead;
+            NodeList[i].edgeHead = tmp;
+        }
+    }
+}
+
 void GraphL::buildGraph(ifstream &infile)
 {
     if (infile.eof())
@@ -56,11 +70,13 @@ void GraphL::displayGraph()
     cout << "Graph:" << endl;
     for (int i = 1; i < size; i++)
     {
-        cout << "Node" << i << "\t" << *NodeList[i].data << endl << endl;
+        cout << "Node" << i << "\t" << *NodeList[i].data << endl
+             << endl;
         EdgeNode *reader = NodeList[i].edgeHead;
         while (reader != nullptr)
         {
-            cout << " edge " << i << " " << reader->adjGraphNode << endl;;
+            cout << " edge " << i << " " << reader->adjGraphNode << endl;
+            ;
             reader = reader->nextEdge;
         }
     }
@@ -76,7 +92,8 @@ void GraphL::depthFirstSearch()
         cout << "  " << DFSOrder.front();
         DFSOrder.pop();
     }
-    cout << endl << endl;
+    cout << endl
+         << endl;
 }
 
 void GraphL::depthFirstSearchHelper(int originNode, queue<int> &DFSOrder)

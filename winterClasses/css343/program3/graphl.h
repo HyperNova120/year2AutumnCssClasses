@@ -10,6 +10,7 @@ class GraphL
 {
 public:
     GraphL();
+    ~GraphL();
 
     void buildGraph(ifstream &infile);
     void insertEdge(int from, int to);
