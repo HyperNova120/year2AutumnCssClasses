@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <set>
+#include <chrono>
 
 using namespace std;
 
@@ -108,34 +109,50 @@ int main()
         cout << i << endl;
     }
 
+
+
+
     cout << "=================================" << endl;
     int randCount = 500000;
     AVLTree<int> largeTest;
+    auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
     {
         largeTest.insert(rand() % randCount);
     }
+    auto t2 = chrono::high_resolution_clock::now();
     // largeTest.print();
     cout << "=================================" << endl;
+    auto t3 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
     {
         delete largeTest.remove(rand() % randCount);
     }
+    auto t4 = chrono::high_resolution_clock::now();
     cout << "=================================" << endl;
     cout << "SET TEST" << endl;
     set<int> setTest;
 
+    auto t5 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
     {
         setTest.insert(rand() % randCount);
     }
+    auto t6 = chrono::high_resolution_clock::now();
     // largeTest.print();
     cout << "=================================" << endl;
+    auto t7 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
     {
         setTest.erase(rand() % randCount);
     }
+    auto t8 = chrono::high_resolution_clock::now();
     cout << "=================================" << endl;
+    cout << "AVL INSERT TIME:" << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << endl;
+    cout << "AVL DELETE TIME:" << chrono::duration_cast<chrono::milliseconds>(t4 - t3).count() << endl;
+    cout << "SET INSERT TIME:" << chrono::duration_cast<chrono::milliseconds>(t6 - t5).count() << endl;
+    cout << "SET DELETE TIME:" << chrono::duration_cast<chrono::milliseconds>(t8 - t7).count() << endl;
+    AVLTree<int *> ptr_test;
 
 
 
