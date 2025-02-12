@@ -9,7 +9,7 @@
 #include <cstddef>
 using namespace std;
 
-//TODO rewrite to allow for pointers
+// TODO rewrite to allow for pointers
 
 /// @brief DOES NOT CURRENTLY WORK WITH POINTERS, DO NOT USE WITH POINTERS
 /// @tparam T type to be stored
