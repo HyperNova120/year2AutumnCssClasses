@@ -19,9 +19,10 @@ private:
     class Node
     {
     public:
-        Node(T *data)
+        Node(T *data, Node *parent)
         {
             data_ = data;
+            parent_ = parent;
         }
         ~Node()
         {
@@ -360,7 +361,7 @@ inline bool AVLTree<T, TComparison>::insert(T *obj)
 {
     if (root_ == nullptr)
     {
-        root_ = new Node(obj);
+        root_ = new Node(obj, nullptr);
         size_ = 1;
         return true;
     }
@@ -389,10 +390,10 @@ inline bool AVLTree<T, TComparison>::insert(T *obj)
         tmp->heightOnChange_ = false;
         tmp = tmp->parent_;
     }
-
-    ((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_) = new Node(obj);
-    ((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_)->parent_ = reader;
-    balanceTreeInsertion(((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_));
+    bool tmp_comp = (m_comp(*obj, *reader->data_));
+    ((tmp_comp) ? reader->left_ : reader->right_) = new Node(obj, reader);
+    //((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_)->parent_ = reader;
+    balanceTreeInsertion(((tmp_comp) ? reader->left_ : reader->right_));
     size_++;
     return true;
 }
