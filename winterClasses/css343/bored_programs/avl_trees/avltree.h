@@ -9,6 +9,8 @@
 #include <cstddef>
 using namespace std;
 
+//TODO rewrite to allow for pointers
+
 /// @brief DOES NOT CURRENTLY WORK WITH POINTERS, DO NOT USE WITH POINTERS
 /// @tparam T type to be stored
 /// @tparam TComparison comparision function takes (T A, T B) that returns true only if A < B
