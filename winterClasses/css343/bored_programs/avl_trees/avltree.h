@@ -485,16 +485,13 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original, Node *cu
     if (reader->left_ == nullptr && reader->right_ == nullptr)
     {
         // leaf
-        curNode = curNode->parent_;
+        // curNode = curNode->parent_;
         delete reader;
         ((lastSearchMoveLeft) ? parent->left_ : parent->right_) = nullptr;
         W = parent;
         W->BalanceFactorOnChange_ = false;
         W->heightOnChange_ = false;
-        while (curNode != nullptr && curNode != W)
-        {
-            curNode = curNode->parent_;
-        }
+        // curNode = W;
     }
     else if (reader->left_ == nullptr ^ reader->right_ == nullptr)
     {
@@ -511,27 +508,30 @@ inline T *AVLTree<T, TComparison>::remove(const T &data, bool original, Node *cu
         } */
         curNode->BalanceFactorOnChange_ = false;
         curNode->heightOnChange_ = false;
-        curNode = W;
     }
     else
     {
         // dual branch
         Node *replacement = reader->right_;
-        curNode = reader;
+        // curNode = reader;
+        replacement->BalanceFactorOnChange_ = false;
+        replacement->heightOnChange_ = false;
         while (replacement->left_ != nullptr)
         {
             replacement = replacement->left_;
+            replacement->BalanceFactorOnChange_ = false;
+            replacement->heightOnChange_ = false;
         }
         T *replacementData = remove(*replacement->data_, false, replacement);
         delete reader->data_;
         reader->data_ = replacementData;
         W = reader;
-        while (curNode != nullptr && curNode != W)
+        /* while (curNode != nullptr && curNode != W)
         {
             curNode->BalanceFactorOnChange_ = false;
             curNode->heightOnChange_ = false;
             curNode = curNode->parent_;
-        }
+        } */
     }
     if (original)
     {
