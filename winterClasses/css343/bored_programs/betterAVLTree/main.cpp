@@ -54,83 +54,38 @@ int main()
     test.print();
     test.~AVLTree(); */
     test.insert(testing(4, 5));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(2, 6));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(6, 9));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(1, 14));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(3, 52));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(5, 8));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(7, 4));
-    test.print();
-    cout << "=================================" << endl;
 
     test.insert(testing(16, 41));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(15, 12));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(14, 17));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(13, 18));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(12, 64));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(11, 24));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(10, 13));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(8, 89));
-    test.print();
-    cout << "=================================" << endl;
     test.insert(testing(9, 67));
 
     test.print();
     cout << "=================================" << endl;
     cout << "Size:" << test.size() << endl;
-    /* for (auto i : test)
+    for (auto i : test)
     {
         cout << i << endl;
-    } */
-    cout << "=============REMOVE===========" << endl;
+    }
 
     test.remove(testing(11, 24));
-    test.print();
-    cout << "=================================" << endl;
     test.remove(testing(12, 64));
-    test.print();
-    cout << "=================================" << endl;
     test.remove(testing(8, 89));
-    test.print();
-    cout << "=================================" << endl;
     test.remove(testing(14, 17));
-    test.print();
-    cout << "=================================" << endl;
     test.remove(testing(16, 41));
-    test.print();
-    cout << "=================================" << endl;
     test.remove(testing(10, 13));
-    test.print();
-    cout << "=================================" << endl;
     test.remove(testing(15, 12));
-    test.print();
-    cout << "=================================" << endl;
     test.remove(testing(9, 67));
     // delete test.remove(testing(6, 9));
     test.print();
@@ -149,10 +104,10 @@ int main()
     // test2.print();
     //  test2.print();
     cout << "Size:" << test.size() << endl;
-    /* for (auto i : test)
+    for (auto i : test)
     {
         cout << i << endl;
-    } */
+    }
 
     /* AVLTree<int> failTest;
     for (int i = 0; i < 25; i++)
