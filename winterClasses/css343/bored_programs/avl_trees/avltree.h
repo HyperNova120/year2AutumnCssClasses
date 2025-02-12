@@ -9,7 +9,7 @@
 #include <cstddef>
 using namespace std;
 
-/// @brief
+/// @brief DOES NOT CURRENTLY WORK WITH POINTERS, DO NOT USE WITH POINTERS
 /// @tparam T type to be stored
 /// @tparam TComparison comparision function takes (T A, T B) that returns true only if A < B
 template <typename T, typename TComparison = less<T>>
@@ -19,9 +19,9 @@ private:
     class Node
     {
     public:
-        Node(T *data, Node *parent)
+        Node(T data, Node *parent)
         {
-            data_ = data;
+            data_ = new T(data);
             parent_ = parent;
         }
         ~Node()
@@ -57,9 +57,8 @@ public:
     bool operator==(const AVLTree<T, TComparison> &other) const;
     bool operator!=(const AVLTree<T, TComparison> &other) const;
 
-    bool insert(const T &obj);          // inserts a copy of obj into tree
-    bool insert(T *obj);                // inserts obj into tree
-    T *remove(const T &data);           // removes node from tree and returns it, calls remove
+    bool insert(T obj);                 // inserts a copy of obj into tree
+    T remove(const T &data);            // removes node from tree and returns it, calls remove
     T *retrieve(const T &data);         // returns node if tree contains, else nullptr
     bool contains(const T &data) const; // returns if tree contains data
     void print();                       // calls sideways
@@ -67,11 +66,9 @@ public:
     int size() const;                   // returns size of AVLTree
 
 private:
-    TComparison m_comp;                            // user defined comparison method
-    bool TEqual(const T &A, const T &B) const;     // equality checker for T using the user define comparison method
-    void sideways(Node *current, int level) const; // prints tree sideways to cout
-    void sidewaysHelper(Node *data, false_type) const;
-    void sidewaysHelper(Node *data, true_type) const;
+    TComparison m_comp;                                                                    // user defined comparison method
+    bool TEqual(const T &A, const T &B) const;                                             // equality checker for T using the user define comparison method
+    void sideways(Node *current, int level) const;                                         // prints tree sideways to cout
     void calculateBalanceFactors(Node *curNode);                                           // calculates and sets balancefactors for curNode and all nodes under curNode
     int getHeight(Node *curNode);                                                          // returns height of curNode
     void balanceTreeInsertion(Node *curNode);                                              // balances tree after insertion
@@ -170,7 +167,7 @@ public:
         }
 
         // postfix
-        Iterator &operator++(int)
+        Iterator operator++(int)
         {
             Iterator tmp = *this;
             ++(*this);
@@ -338,26 +335,11 @@ inline bool AVLTree<T, TComparison>::operator!=(const AVLTree<T, TComparison> &o
     return !(*this == other);
 }
 
-/// @brief insert a copy of obj into AVLTree.
-/// @param obj object to insert
-/// @return true if insertion succeeded, false if obj is a duplicate
-template <typename T, typename TComparison>
-inline bool AVLTree<T, TComparison>::insert(const T &obj)
-{
-    T *tmp = new T(obj);
-    if (!insert(tmp))
-    {
-        delete tmp;
-        return false;
-    }
-    return true;
-}
-
 /// @brief insert obj into AVLTree.
 /// @param obj object to insert
 /// @return true if insertion succeeded, false if obj is a duplicate
 template <typename T, typename TComparison>
-inline bool AVLTree<T, TComparison>::insert(T *obj)
+inline bool AVLTree<T, TComparison>::insert(T obj)
 {
     if (root_ == nullptr)
     {
@@ -368,17 +350,17 @@ inline bool AVLTree<T, TComparison>::insert(T *obj)
     Node *reader = root_;
     // reader->BalanceFactorOnChange_ = false;
     // reader->heightOnChange_ = false;
-    while (((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_) != nullptr)
+    while (((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_) != nullptr)
     {
-        if (TEqual(*reader->data_, *obj))
+        if (TEqual(*reader->data_, obj))
         {
             return false;
         }
-        reader = ((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_);
+        reader = ((m_comp(obj, *reader->data_)) ? reader->left_ : reader->right_);
         // reader->BalanceFactorOnChange_ = false;
         // reader->heightOnChange_ = false;
     }
-    if (TEqual(*reader->data_, *obj))
+    if (TEqual(*reader->data_, obj))
     {
         return false;
     }
@@ -390,7 +372,7 @@ inline bool AVLTree<T, TComparison>::insert(T *obj)
         tmp->heightOnChange_ = false;
         tmp = tmp->parent_;
     }
-    bool tmp_comp = (m_comp(*obj, *reader->data_));
+    bool tmp_comp = (m_comp(obj, *reader->data_));
     ((tmp_comp) ? reader->left_ : reader->right_) = new Node(obj, reader);
     //((m_comp(*obj, *reader->data_)) ? reader->left_ : reader->right_)->parent_ = reader;
     balanceTreeInsertion(((tmp_comp) ? reader->left_ : reader->right_));
@@ -402,9 +384,16 @@ inline bool AVLTree<T, TComparison>::insert(T *obj)
 /// @param data T to search for and remove
 /// @return deep copy of the T that was stored in the AVLTree
 template <typename T, typename TComparison>
-inline T *AVLTree<T, TComparison>::remove(const T &data)
+inline T AVLTree<T, TComparison>::remove(const T &data)
 {
-    return remove(data, true, nullptr);
+    T *tmp = remove(data, true, nullptr);
+    if (tmp == nullptr)
+    {
+        return NULL;
+    }
+    T returner = T(*tmp);
+    delete tmp;
+    return returner;
 }
 
 /// @brief returns a pointer to the T object stored in the AVLTree
@@ -1000,23 +989,11 @@ inline void AVLTree<T, TComparison>::sideways(Node *current, int level) const
             cout << "    ";
         }
 
-        // cout << *current->data_ << endl; // display information of object
-        sidewaysHelper(current, is_pointer<T>());
-        // cout << (*current).balanceFactor_ << endl; // display information of object
+        cout << *current->data_ << endl; // display information of object
+        // sidewaysHelper(current, is_pointer<T>());
+        //  cout << (*current).balanceFactor_ << endl; // display information of object
         sideways(current->left_, level);
     }
-}
-
-template <typename T, typename TComparison>
-inline void AVLTree<T, TComparison>::sidewaysHelper(Node *data, false_type) const
-{
-    cout << *data->data_ << endl; // display information of object
-}
-
-template <typename T, typename TComparison>
-inline void AVLTree<T, TComparison>::sidewaysHelper(Node *data, true_type) const
-{
-    cout << **data->data_ << endl; // display information of object
 }
 
 #endif // AVLTREE_H_

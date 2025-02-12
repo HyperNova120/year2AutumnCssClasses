@@ -79,14 +79,14 @@ int main()
         cout << i << endl;
     }
 
-    delete test.remove(testing(11, 24));
-    delete test.remove(testing(12, 64));
-    delete test.remove(testing(8, 89));
-    delete test.remove(testing(14, 17));
-    delete test.remove(testing(16, 41));
-    delete test.remove(testing(10, 13));
-    delete test.remove(testing(15, 12));
-    delete test.remove(testing(9, 67));
+    test.remove(testing(11, 24));
+    test.remove(testing(12, 64));
+    test.remove(testing(8, 89));
+    test.remove(testing(14, 17));
+    test.remove(testing(16, 41));
+    test.remove(testing(10, 13));
+    test.remove(testing(15, 12));
+    test.remove(testing(9, 67));
     // delete test.remove(testing(6, 9));
     test.print();
     cout << "=================================" << endl;
@@ -110,7 +110,7 @@ int main()
     }
 
     cout << "=================================" << endl;
-    int randCount = 50000000;
+    int randCount = 1000000;
     AVLTree<int> largeTest;
     auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
@@ -123,7 +123,7 @@ int main()
     auto t3 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
     {
-        delete largeTest.remove(rand() % randCount);
+        largeTest.remove(rand() % randCount);
     }
     auto t4 = chrono::high_resolution_clock::now();
     cout << "=================================" << endl;
@@ -157,13 +157,5 @@ int main()
 
     cout << "=================================" << endl;
 
-    AVLTree<testing *> ptr_Test;
-    testing *tmp = new testing(1,1);
-    ptr_Test.insert(tmp);
-    ptr_Test.print();
-    tmp->key1 = 5;
-    tmp->key2 = 5;
-    ptr_Test.print();
-    ptr_Test.~AVLTree();
-    delete tmp;
+    
 }
