@@ -17,8 +17,8 @@ public:
     }
     bool operator<(const testing &other) const { return key1 < other.key1; }
     bool operator>(const testing &other) const { return key1 > other.key1; }
-    bool operator==(const testing &other) const { return key2 == other.key2; }
-    bool operator!=(const testing &other) const { return key2 != other.key2; }
+    bool operator==(const testing &other) const { return key1 == other.key1; }
+    bool operator!=(const testing &other) const { return key1 != other.key1; }
     friend ostream &operator<<(ostream &os, testing &obj)
     {
         os << to_string(obj.key1);
@@ -54,30 +54,61 @@ int main()
     test.print();
     test.~AVLTree(); */
     test.insert(testing(4, 5));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(2, 6));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(6, 9));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(1, 14));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(3, 52));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(5, 8));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(7, 4));
+    test.print();
+    cout << "=================================" << endl;
 
     test.insert(testing(16, 41));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(15, 12));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(14, 17));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(13, 18));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(12, 64));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(11, 24));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(10, 13));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(8, 89));
+    test.print();
+    cout << "=================================" << endl;
     test.insert(testing(9, 67));
 
     test.print();
     cout << "=================================" << endl;
     cout << "Size:" << test.size() << endl;
-    for (auto i : test)
+    /* for (auto i : test)
     {
         cout << i << endl;
-    }
+    } */
+    cout << "=============REMOVE===========" << endl;
 
     test.remove(testing(11, 24));
     test.print();
@@ -118,21 +149,31 @@ int main()
     // test2.print();
     //  test2.print();
     cout << "Size:" << test.size() << endl;
-    for (auto i : test)
+    /* for (auto i : test)
     {
         cout << i << endl;
-    }
+    } */
+
+    /* AVLTree<int> failTest;
+    for (int i = 0; i < 25; i++)
+    {
+        cout << "INSERT " << (25 - i) << endl;
+        failTest.insert(25 - i);
+        failTest.print();
+    } */
 
     cout << "=================================" << endl;
-    int randCount = 1000000;
+    int randCount = 10000000;
     AVLTree<int> largeTest;
     auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
     {
         largeTest.insert(rand() % randCount);
+        // cout << "INSERT " << tmp << endl;
+        // largeTest.print();
     }
     auto t2 = chrono::high_resolution_clock::now();
-    // largeTest.print();
+    //largeTest.print();
     cout << "=================================" << endl;
     auto t3 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
@@ -170,6 +211,4 @@ int main()
     cout << "AVL DELETE Percent DIFF:" << ((double)deleteTMP / chrono::duration_cast<chrono::milliseconds>(t8 - t7).count()) * 100 << endl;
 
     cout << "=================================" << endl;
-
-    
 }

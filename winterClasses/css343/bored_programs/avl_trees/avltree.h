@@ -7,6 +7,7 @@
 #include <cmath>
 #include <iterator>
 #include <cstddef>
+#include "avltree.h"
 using namespace std;
 
 // TODO rewrite to allow for pointers
@@ -71,7 +72,7 @@ private:
     TComparison m_comp;                                                                    // user defined comparison method
     bool TEqual(const T &A, const T &B) const;                                             // equality checker for T using the user define comparison method
     void sideways(Node *current, int level) const;                                         // prints tree sideways to cout
-    void calculateBalanceFactors(Node *curNode);                                           // calculates and sets balancefactors for curNode and all nodes under curNode
+    void calculateBalanceFactor(Node *curNode);                                           // calculates and sets balancefactors for curNode and all nodes under curNode
     int getHeight(Node *curNode);                                                          // returns height of curNode
     void balanceTreeInsertion(Node *curNode);                                              // balances tree after insertion
     void balanceTreeRemove(Node *changedNode);                                             // balances tree after deletion
@@ -776,7 +777,7 @@ inline int AVLTree<T, TComparison>::size() const
 /// @brief recursively calculates the balance factor (rightHeight - leftHeight) for curNode
 /// @param curNode node to calculate the balance factor for
 template <typename T, typename TComparison>
-inline void AVLTree<T, TComparison>::calculateBalanceFactors(Node *curNode)
+inline void AVLTree<T, TComparison>::calculateBalanceFactor(Node *curNode)
 {
     if (curNode == nullptr)
     {
@@ -788,8 +789,8 @@ inline void AVLTree<T, TComparison>::calculateBalanceFactors(Node *curNode)
     }
     curNode->balanceFactor_ = getHeight(curNode->right_) - getHeight(curNode->left_);
     curNode->BalanceFactorOnChange_ = true;
-    calculateBalanceFactors(curNode->left_);
-    calculateBalanceFactors(curNode->right_);
+    calculateBalanceFactor(curNode->left_);
+    calculateBalanceFactor(curNode->right_);
 }
 
 /// @brief calculates and returns height of given node
@@ -819,7 +820,7 @@ inline int AVLTree<T, TComparison>::getHeight(Node *curNode)
     return curNode->height_;
 }
 
-/// @brief balances the AVLTree after insertion
+ /// @brief balances the AVLTree after insertion
 /// @param changedNode node that was inserted
 /// @param nodeStack node stack trace from root to inserted node
 template <typename T, typename TComparison>
@@ -845,7 +846,7 @@ inline void AVLTree<T, TComparison>::balanceTreeInsertion(Node *curNode)
     Node *parent = nullptr;
     Node *child = nullptr;
     curNode = curNode->parent_;
-    calculateBalanceFactors(gParent);
+    calculateBalanceFactor(gParent);
     bool leftToUpdate = (root->left_ == gParent);
     while (curNode != nullptr && abs((*gParent).balanceFactor_) < 2)
     {
@@ -854,7 +855,7 @@ inline void AVLTree<T, TComparison>::balanceTreeInsertion(Node *curNode)
         gParent = root;
         root = curNode;
         leftToUpdate = (root->left_ == gParent);
-        calculateBalanceFactors(gParent);
+        calculateBalanceFactor(gParent);
         curNode = curNode->parent_;
     }
 
@@ -862,7 +863,7 @@ inline void AVLTree<T, TComparison>::balanceTreeInsertion(Node *curNode)
     bool isSmallTree = false;
     if (curNode == nullptr && abs((*gParent).balanceFactor_) < 2)
     {
-        calculateBalanceFactors(root);
+        calculateBalanceFactor(root);
         if (abs((*root).balanceFactor_) > 1)
         {
             child = parent;
@@ -920,7 +921,7 @@ inline void AVLTree<T, TComparison>::balanceTreeRemove(Node *curNode)
             isSmallTree = true;
             gParent = root;
         }
-        calculateBalanceFactors(gParent);
+        calculateBalanceFactor(gParent);
         if (abs((*gParent).balanceFactor_) > 1)
         {
             Node *parent = nullptr;
