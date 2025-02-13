@@ -1,0 +1,11 @@
+#_Elements,AVL_Insert,AVL_Delete,SET_Insert,SET_Delete,INSERT_DIFF,DELETE_DIFF
+100000,129,119,0,0,inf,inf
+200000,301,266,0,0,inf,inf
+300000,454,440,0,0,inf,inf
+400000,693,633,0,0,inf,inf
+500000,888,841,0,0,inf,inf
+600000,1111,1030,0,0,inf,inf
+700000,1333,1252,0,0,inf,inf
+800000,1575,1471,0,0,inf,inf
+900000,1814,1698,0,0,inf,inf
+1000000,2064,1932,0,0,inf,inf

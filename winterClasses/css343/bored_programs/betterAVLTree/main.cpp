@@ -6,8 +6,6 @@
 
 using namespace std;
 
-
-
 class testing
 {
 public:
@@ -37,25 +35,55 @@ struct Compare
 
 int main()
 {
-    // cout << "Hello World!" << endl;
+    cout << "#_Elements,AVL_Insert,AVL_Delete,SET_Insert,SET_Delete,INSERT_DIFF,DELETE_DIFF" << endl;
+    //int randCount2 = 1000000;
+    /* for (int randCount2 = 100000; randCount2 <= 1000000; randCount2 += 100000)
+    {
+        AVLTree<int> largeTest2;
+        auto t1 = chrono::high_resolution_clock::now();
+        for (int i = 0; i < randCount2; i++)
+        {
+            largeTest2.insert(rand() % randCount2);
+            // cout << "INSERT " << tmp << endl;
+            // largeTest.print();
+        }
+        auto t2 = chrono::high_resolution_clock::now();
+        auto t3 = chrono::high_resolution_clock::now();
+        for (int i = 0; i < randCount2; i++)
+        {
+            largeTest2.remove(rand() % randCount2);
+        }
+        auto t4 = chrono::high_resolution_clock::now();
+        //largeTest2.clear();
+        //cout << largeTest2.size() << endl;
+        set<int> setTest2;
+        auto t5 = chrono::high_resolution_clock::now();
+        /* for (int i = 0; i < randCount2; i++)
+        {
+            setTest2.insert(rand() % randCount2);
+        } 
+        auto t6 = chrono::high_resolution_clock::now();
+        auto t7 = chrono::high_resolution_clock::now();
+        /* for (int i = 0; i < randCount2; i++)
+        {
+            setTest2.erase(rand() % randCount2);
+        }
+        auto t8 = chrono::high_resolution_clock::now();
+        cout << randCount2;
+        cout << "," << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count();
+        cout << "," << chrono::duration_cast<chrono::milliseconds>(t4 - t3).count();
+        cout << "," << chrono::duration_cast<chrono::milliseconds>(t6 - t5).count();
+        cout << "," << chrono::duration_cast<chrono::milliseconds>(t8 - t7).count();
+        int insertTMP = chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() - chrono::duration_cast<chrono::milliseconds>(t6 - t5).count();
+        int deleteTMP = chrono::duration_cast<chrono::milliseconds>(t4 - t3).count() - chrono::duration_cast<chrono::milliseconds>(t8 - t7).count();
+
+        cout << "," << ((double)insertTMP / chrono::duration_cast<chrono::milliseconds>(t6 - t5).count()) * 100;
+        cout << "," << ((double)deleteTMP / chrono::duration_cast<chrono::milliseconds>(t8 - t7).count()) * 100 << endl;
+    }
+
+    return 0; */
+
     AVLTree<testing, Compare> test = AVLTree<testing, Compare>();
-    /* test.insert(5);
-    test.insert(4);
-    test.insert(8);
-    test.insert(7);
-    test.insert(9);
-    test.insert(6);
-    test.print();
-    delete test.remove(6);
-    cout << "=========================" << endl;
-    test.print();
-    delete test.remove(8);
-    cout << "=========================" << endl;
-    test.print();
-    delete test.remove(9);
-    cout << "=========================" << endl;
-    test.print();
-    test.~AVLTree(); */
     test.insert(testing(4, 5));
     test.insert(testing(2, 6));
     test.insert(testing(6, 9));
@@ -93,17 +121,8 @@ int main()
     // delete test.remove(testing(6, 9));
     test.print();
     cout << "=================================" << endl;
-    /*AVLTree<int> test2 = AVLTree<int>(test);
-    test2.print();
-    cout << "Test:" << (test == test2) << endl;
-    cout << "Test2:" << (test != test2) << endl;
-    cout << "Test:" << (test == test) << endl; */
 
-    /* AVLTree<int> test2 = AVLTree<int>();
-    for (int i = 0; i < 10000; i++)
-    {
-        test2.insert(rand() % 100000);
-    } */
+
     // test2.print();
     //  test2.print();
     cout << "Size:" << test.size() << endl;
@@ -112,16 +131,8 @@ int main()
         cout << i << endl;
     }
 
-    /* AVLTree<int> failTest;
-    for (int i = 0; i < 25; i++)
-    {
-        cout << "INSERT " << (25 - i) << endl;
-        failTest.insert(25 - i);
-        failTest.print();
-    } */
-
     cout << "=================================" << endl;
-    int randCount = 20000;
+    int randCount = 1000000;
     AVLTree<int> largeTest;
     auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
@@ -178,7 +189,21 @@ int main()
     ptr_test.insert(tmp2);
     ptr_test.insert(tmp3);
     ptr_test.print();
+    cout << "Size:" << ptr_test.size() << endl;
+    for (auto i : ptr_test)
+    {
+        cout << i << endl;
+    }
     *tmp = 6;
     cout << "=================================" << endl;
     ptr_test.print();
+    cout << "Size:" << ptr_test.size() << endl;
+    for (auto i : ptr_test)
+    {
+        cout << i << endl;
+    }
+    cout << "=================================" << endl;
+    delete tmp;
+    delete tmp2;
+    delete tmp3;
 }
