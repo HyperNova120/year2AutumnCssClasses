@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+
 class testing
 {
 public:
@@ -129,7 +131,7 @@ int main()
         // largeTest.print();
     }
     auto t2 = chrono::high_resolution_clock::now();
-    //largeTest.print();
+    // largeTest.print();
     cout << "=================================" << endl;
     auto t3 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
@@ -168,12 +170,15 @@ int main()
 
     cout << "=================================" << endl;
 
-    /* AVLTree<int *, Compare> ptr_test;
+    AVLTree<int *> ptr_test;
     int *tmp = new int(5);
     int *tmp2 = new int(3);
     int *tmp3 = new int(7);
     ptr_test.insert(tmp);
     ptr_test.insert(tmp2);
     ptr_test.insert(tmp3);
-    ptr_test.print(); */
+    ptr_test.print();
+    *tmp = 6;
+    cout << "=================================" << endl;
+    ptr_test.print();
 }
