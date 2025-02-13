@@ -30,6 +30,7 @@ public:
 struct Compare
 {
     int operator()(testing a, testing b) const { return a.key1 < b.key1; }
+    int operator()(testing *a, testing *b) const { return a->key1 < b->key1; }
 };
 
 int main()
@@ -118,7 +119,7 @@ int main()
     } */
 
     cout << "=================================" << endl;
-    int randCount = 10000000;
+    int randCount = 20000;
     AVLTree<int> largeTest;
     auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
@@ -166,4 +167,13 @@ int main()
     cout << "AVL DELETE Percent DIFF:" << ((double)deleteTMP / chrono::duration_cast<chrono::milliseconds>(t8 - t7).count()) * 100 << endl;
 
     cout << "=================================" << endl;
+
+    /* AVLTree<int *, Compare> ptr_test;
+    int *tmp = new int(5);
+    int *tmp2 = new int(3);
+    int *tmp3 = new int(7);
+    ptr_test.insert(tmp);
+    ptr_test.insert(tmp2);
+    ptr_test.insert(tmp3);
+    ptr_test.print(); */
 }

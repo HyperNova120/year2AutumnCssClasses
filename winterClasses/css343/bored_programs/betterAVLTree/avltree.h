@@ -79,8 +79,6 @@ protected:
     int size_ = 0;
     Node *root_ = nullptr;
 
-    void wtf(Node *curNode);
-
 public:
     struct Iterator
     {
@@ -203,138 +201,6 @@ public:
     /// @brief returns iterator placed at end of AVLTree
     /// @return Iterator at end of AVLTree
     Iterator end() { return Iterator(nullptr, m_comp); }
-};
-
-template <typename T, typename TComparison>
-class AVLTree<T *, TComparison> : public AVLTree<T>
-{
-private:
-    using typename AVLTree<T>::Node;
-    bool TCompare(const T &A, const T &B) const;
-    void sideways(Node *current, int level) const; // prints tree sideways to cout
-
-public:
-    struct Iterator
-    {
-        using iterator_category = forward_iterator_tag;
-        using difference_type = ptrdiff_t;
-        using value_type = T;
-        using pointer = value_type *;
-        using reference = value_type &;
-
-    private:
-        struct IteratorNodeData
-        {
-            Node *node = nullptr;
-            bool vistedRightBranch = false;
-            bool firstVisit = true;
-        };
-        stack<IteratorNodeData> nodeStack;
-        TComparison m_compare;
-
-    public:
-        Iterator(Node *ptr, TComparison comp)
-        {
-            m_compare = comp;
-            if (ptr == nullptr)
-            {
-                return;
-            }
-            Node *reader = ptr;
-            do
-            {
-                nodeStack.push({reader, false});
-                reader = reader->left_;
-            } while (reader != nullptr);
-            nodeStack.top().firstVisit = false;
-            nodeStack.top().vistedRightBranch = true;
-        };
-
-        reference operator*() const { return nodeStack.top().node->nodeData->data_; };
-        pointer operator->() { return &nodeStack.top().node->nodeData->data_; };
-
-        // prefix
-        Iterator &operator++()
-        {
-            if (nodeStack.size() == 0)
-            {
-                return *this;
-            }
-            if (nodeStack.top().vistedRightBranch)
-            {
-                // fully explored children
-                while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
-                {
-                    nodeStack.pop();
-                }
-            }
-            else
-            {
-                // need to visit right
-                if (nodeStack.top().node->right_ == nullptr && nodeStack.top().firstVisit)
-                {
-                    // no right node on first visit
-                    nodeStack.top().firstVisit = false;
-                    nodeStack.top().vistedRightBranch = true;
-                    while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
-                    {
-                        nodeStack.pop();
-                    }
-                    return *this;
-                }
-                nodeStack.top().vistedRightBranch = true;
-                // has right node
-                nodeStack.push({nodeStack.top().node->right_, (nodeStack.top().node->right_->right_ == nullptr)});
-                while (nodeStack.top().node->left_ != nullptr)
-                {
-                    nodeStack.push({nodeStack.top().node->left_, false});
-                }
-            }
-
-            return *this;
-        }
-
-        // postfix
-        Iterator operator++(int)
-        {
-            Iterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-
-        friend bool operator==(const Iterator &a, const Iterator &b)
-        {
-            if (a.nodeStack.size() == 0 && b.nodeStack.size() == 0)
-            {
-                return true;
-            }
-            if (a.nodeStack.size() != b.nodeStack.size())
-            {
-                return false;
-            }
-            bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
-            equalPlace &= a.nodeStack.top().firstVisit == b.nodeStack.top().firstVisit;
-            // equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
-            equalPlace &= (!a.m_compare(*a.nodeStack.top().node->nodeData->data_, *b.nodeStack.top().node->nodeData->data_) &&
-                           !a.m_compare(*b.nodeStack.top().node->nodeData->data_, *a.nodeStack.top().node->nodeData->data_));
-            // equalPlace(equals(a.nodeStack.top()->nodeData->data_, b.nodeStack.top()->nodeData->data_));
-
-            return equalPlace;
-        }
-
-        friend bool operator!=(const Iterator &a, const Iterator &b)
-        {
-            return !(a == b);
-        }
-    };
-
-    /// @brief returns iterator placed at the start of AVLTree
-    /// @return Iterator at beginning of AVLTree
-    Iterator begin() { return Iterator(*this->root_, *this->m_comp); }
-
-    /// @brief returns iterator placed at end of AVLTree
-    /// @return Iterator at end of AVLTree
-    Iterator end() { return Iterator(nullptr, *this->m_comp); }
 };
 
 template <typename T, typename TComparison>
@@ -888,31 +754,6 @@ inline void AVLTree<T, TComparison>::sideways(Node *current, int level) const
     }
 }
 
-//---------------------------- Sideways -------------------------------------
-// Helper method for displaySideways
-// Preconditions: NONE
-// Postconditions: BinTree remains unchanged.
-template <typename T, typename TComparison>
-inline void AVLTree<T *, TComparison>::sideways(Node *current, int level) const
-{
-    if (current != NULL)
-    {
-        level++;
-        sideways(current->right_, level);
-
-        // indent for readability, 4 spaces per depth level
-        for (int i = level; i > 0; i--)
-        {
-            cout << "    ";
-        }
-
-        cout << *(current->nodeData->data_) << endl; // display information of object
-        // sidewaysHelper(current, is_pointer<T>());
-        //  cout << (*current).balanceFactor_ << endl; // display information of object
-        sideways(current->left_, level);
-    }
-}
-
 template <typename T, typename TComparison>
 inline bool AVLTree<T, TComparison>::TCompare(const T &A, const T &B) const
 {
@@ -920,32 +761,9 @@ inline bool AVLTree<T, TComparison>::TCompare(const T &A, const T &B) const
 }
 
 template <typename T, typename TComparison>
-inline void AVLTree<T, TComparison>::wtf(Node *curNode)
-{
-    if (curNode == nullptr)
-    {
-        return;
-    }
-    calculateBalanceFactor(curNode);
-    if (abs(curNode->balanceFactor) > 1)
-    {
-        cout << "==========WTF==========" << endl;
-        print();
-        cout << "=======================" << endl;
-        throw runtime_error("HOW TF");
-    }
-}
-
-template <typename T, typename TComparison>
 inline bool AVLTree<T, TComparison>::TEqual(const T &A, const T &B) const
 {
     return !(TCompare(A, B)) && !(TCompare(B, A));
-}
-
-template <typename T, typename TComparison>
-inline bool AVLTree<T *, TComparison>::TCompare(const T &A, const T &B) const
-{
-    return m_comp(*A, *B);
 }
 
 #endif //_AVL_TREE_H_
