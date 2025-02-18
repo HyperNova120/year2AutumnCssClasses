@@ -30,7 +30,7 @@ void GraphL::buildGraph(ifstream &infile)
         return;
     }
     string s = "";
-    int numNodes;
+    int numNodes = 0;
 
     infile >> numNodes;
     getline(infile, s); // this is here to remove the \r at the end of the line.
@@ -76,7 +76,6 @@ void GraphL::displayGraph()
         while (reader != nullptr)
         {
             cout << " edge " << i << " " << reader->adjGraphNode << endl;
-            ;
             reader = reader->nextEdge;
         }
     }
