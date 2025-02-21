@@ -9,19 +9,19 @@ using namespace std;
 class GraphL
 {
 public:
-    GraphL();
-    ~GraphL();
+    GraphL();  // constructor
+    ~GraphL(); // deconstructor
 
-    void buildGraph(ifstream &infile);
-    void insertEdge(int from, int to);
-    void displayGraph();
-    void depthFirstSearch();
+    void buildGraph(ifstream &infile); // build graph from file
+    void insertEdge(int from, int to); // add edge between from and to
+    void displayGraph();               // display graph
+    void depthFirstSearch();           // display nodes via DFS
     void depthFirstSearchHelper(int originNode, queue<int> &DFSOrder);
 
 private:
     static const int maxNodes = 101; // allow for 100 nodes with 1 based indexing
-    int size = 0;        
-                // for calculation simplicity size = #nodes+1
+    int size = 0;                    // size of graph
+    // for calculation simplicity size = #nodes+1
     struct TableType
     {
         bool visited; // whether node has been visited

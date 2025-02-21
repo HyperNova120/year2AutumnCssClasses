@@ -1,5 +1,6 @@
 #include "graphl.h"
 
+/// @brief default constructor
 GraphL::GraphL()
 {
     size = 0;
@@ -9,6 +10,7 @@ GraphL::GraphL()
     }
 }
 
+/// @brief deconstructor
 GraphL::~GraphL()
 {
     for (int i = 0; i < size; i++)
@@ -23,6 +25,8 @@ GraphL::~GraphL()
     }
 }
 
+/// @brief create from from data stored in infile
+/// @param infile file to read graph data from
 void GraphL::buildGraph(ifstream &infile)
 {
     if (infile.eof())
@@ -52,6 +56,9 @@ void GraphL::buildGraph(ifstream &infile)
     }
 }
 
+/// @brief create edge between nodes
+/// @param from node edge originates from
+/// @param to node edge points to
 void GraphL::insertEdge(int from, int to)
 {
     if ((from < 1 || from > size) || (to < 1 || to > size))
@@ -65,6 +72,7 @@ void GraphL::insertEdge(int from, int to)
     // costMatrix[from][to] = weight;
 }
 
+/// @brief displays graph and path data
 void GraphL::displayGraph()
 {
     cout << "Graph:" << endl;
@@ -81,6 +89,7 @@ void GraphL::displayGraph()
     }
 }
 
+/// @brief prints DFS search data
 void GraphL::depthFirstSearch()
 {
     queue<int> DFSOrder;
@@ -95,6 +104,9 @@ void GraphL::depthFirstSearch()
          << endl;
 }
 
+/// @brief recursive helper for DFS
+/// @param originNode current node to start from
+/// @param DFSOrder stack for DFS path
 void GraphL::depthFirstSearchHelper(int originNode, queue<int> &DFSOrder)
 {
     if (NodeList[originNode].visited)

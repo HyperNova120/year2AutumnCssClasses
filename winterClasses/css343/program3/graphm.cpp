@@ -1,5 +1,6 @@
 #include "graphm.h"
 
+/// @brief default constructor
 GraphM::GraphM()
 {
     size = 1;
@@ -15,6 +16,8 @@ GraphM::GraphM()
     }
 }
 
+/// @brief creates graph from data stored in file
+/// @param infile file to build graph from
 void GraphM::buildGraph(ifstream &infile)
 {
     if (infile.eof())
@@ -43,24 +46,32 @@ void GraphM::buildGraph(ifstream &infile)
     }
 }
 
+/// @brief adds an edge betwen from and to
+/// @param from node edge originates from
+/// @param to node edge points to
+/// @param weight cost of taking that edge
 void GraphM::insertEdge(int from, int to, int weight)
 {
-    if ((from < 1 || from > size) || (to < 1 || to > size))
+    if ((from < 1 || from >= size) || (to < 1 || to >= size))
     {
         return;
     }
     costMatrix[from][to] = weight;
 }
 
+/// @brief removes an edge between from and to
+/// @param from node edge originates from
+/// @param to node edge points to
 void GraphM::removeEdge(int from, int to)
 {
-    if ((from < 1 || from > size) || (to < 1 || to > size))
+    if ((from < 1 || from >= size) || (to < 1 || to >= size))
     {
         return;
     }
     costMatrix[from][to] = INT_MAX;
 }
 
+/// @brief calculates shortest path between every node
 void GraphM::findShortestPath()
 {
     // start at 1 b/e we 1 based index for nodes :(
@@ -93,6 +104,7 @@ void GraphM::findShortestPath()
     }
 }
 
+/// @brief displays all nodes with shortest paths
 void GraphM::displayAll()
 {
     cout << "Description\t\tFrom Node  To Node   Dijkstra's  Path" << endl;
@@ -111,6 +123,9 @@ void GraphM::displayAll()
     }
 }
 
+/// @brief displays data for paths between nodes
+/// @param originNode start node
+/// @param endNode end node
 void GraphM::display(int originNode, int endNode)
 {
     stack<int> tmp = displayPlain(originNode, endNode);
@@ -121,6 +136,10 @@ void GraphM::display(int originNode, int endNode)
     }
 }
 
+/// @brief calculates only the path data for given nodes
+/// @param originNode node to start from
+/// @param endNode node to end at
+/// @return path as int stack
 stack<int> GraphM::displayPlain(int originNode, int endNode)
 {
     stack<int> returner;
