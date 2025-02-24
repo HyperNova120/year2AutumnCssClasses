@@ -9,117 +9,150 @@ using namespace std;
 
 namespace AVLTreeInternals
 {
+    /// @brief template for compare
     template <typename T>
     struct DefaultComparator
     {
         typedef std::less<T> Comparator;
     };
 
+    /// @brief specialized template for compare
     template <typename T>
     struct DefaultComparator<T *>
     {
         typedef std::less<T> Comparator;
     };
 
+    /// @brief template for storing T
     template <typename T>
     struct NodeData
     {
         T data_;
     };
+
+    /// @brief specialized template for storing T*
     template <typename T>
     struct NodeData<T *>
     {
         T *data_;
     };
 
+    /// @brief internal base class for AVLTree
+    /// @tparam T type to store
+    /// @tparam TComparison comparison method to use for <
     template <typename T, typename TComparison = typename DefaultComparator<T>::Comparator>
     class AVLTreeBase
     {
     protected:
+        /// @brief internal node class
         class Node
         {
         public:
+            /// @brief constructor
+            /// @param data T to store
+            /// @param parent parent of node
             Node(T data, Node *parent)
             {
                 nodeData = new NodeData<T>{data};
                 parent_ = parent;
             };
+
+            /// @brief deconstructor
             ~Node()
             {
-                delete nodeData;
+                if (nodeData != nullptr)
+                {
+                    delete nodeData;
+                }
             };
 
-            Node *left_ = nullptr;
-            Node *right_ = nullptr;
-            Node *parent_ = nullptr;
-            NodeData<T> *nodeData = nullptr;
-            int height_ = 0;
-            int balanceFactor = 0;
-            bool heightOnChange_ = false;
-            bool balanceFactorOnChange_ = false;
+            /// @brief set node to recalculate height and balancefactor
+            void updated()
+            {
+                heightOnChange_ = false;
+                balanceFactorOnChange_ = false;
+            }
+
+            Node *left_ = nullptr;               // left branch
+            Node *right_ = nullptr;              // right branch
+            Node *parent_ = nullptr;             // parent
+            NodeData<T> *nodeData = nullptr;     // data storing T
+            int height_ = 0;                     // calculated height
+            int balanceFactor = 0;               // calculated balanceFactor
+            bool heightOnChange_ = false;        // if height has changed
+            bool balanceFactorOnChange_ = false; // if balanceFactor has changed
         };
 
     public:
-        AVLTreeBase();
-        AVLTreeBase(TComparison comp);
-        AVLTreeBase(const AVLTreeBase &other);
-        ~AVLTreeBase();
+        AVLTreeBase();                         // constructor
+        AVLTreeBase(TComparison comp);         // constructor for custom comparison method
+        AVLTreeBase(const AVLTreeBase &other); // copy constructor
+        ~AVLTreeBase();                        // deconstructor
 
-        AVLTreeBase<T, TComparison> &operator=(const AVLTreeBase<T, TComparison> &other);
-        bool operator==(const AVLTreeBase<T, TComparison> &other) const;
-        bool operator!=(const AVLTreeBase<T, TComparison> &other) const;
+        AVLTreeBase<T, TComparison> &operator=(const AVLTreeBase<T, TComparison> &other); // assignment operator
+        bool operator==(const AVLTreeBase<T, TComparison> &other) const;                  // equivalency overload
+        bool operator!=(const AVLTreeBase<T, TComparison> &other) const;                  // non-equivalency overload
 
-        bool insert(const T obj);
-        bool contains(const T obj) const;
+        bool insert(const T obj);         // add obj to tree
+        bool contains(const T obj) const; // check if tree contanis obj
+
+        /// @brief clear tree to empty
         void clear()
         {
             this->~AVLTreeBase();
         };
-        // virtual T *retrieve(const T obj) = 0;
-        bool remove(const T obj);
-        bool isEmpty() const;
-        int size() const;
-        void print(); // calls sideways
+
+        bool remove(const T obj); // remove obj from tree
+        bool isEmpty() const;     // return if tree is empty
+        int size() const;         // return size of tree
+        void print();             // calls sideways
 
     protected:
-        void remove(Node *curNode, bool original);
+        void remove(Node *curNode, bool original); // recursive helper
 
-        void calculateBalanceFactor(Node *curNode);
-        int getHeight(Node *curNode);
+        void calculateBalanceFactor(Node *curNode); // calculate balanceFactor for node
+        int getHeight(Node *curNode);               // calculate height of node
 
-        void balanceInsert(Node *curNode);
-        void balanceRemove(Node *curNode);
+        void balanceInsert(Node *curNode); // perform balance after successful insertion
+        void balanceRemove(Node *curNode); // perform balance after successful removal
 
-        void rotate(bool isInsert, bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);
-        void rotateLL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);
-        void rotateLR(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);
-        void rotateRL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);
-        void rotateRR(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);
+        void rotate(bool isInsert, bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child); // rotate sub tree
+        void rotateLL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);              // LL subtree rotation
+        void rotateLR(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);              // LR subtree rotation
+        void rotateRL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);              // RL subtree rotation
+        void rotateRR(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child);              // RR subtree rotation
 
         virtual void sideways(Node *current, int level) const = 0; // prints tree sideways to cout
 
-        TComparison m_comp; // user defined comparison method
-        bool TEqual(const T &A, const T &B) const;
-        virtual bool TCompare(const NodeData<T> &A, const NodeData<T> &B) const = 0;
-        int size_ = 0;
-        Node *root_ = nullptr;
+        bool TEqual(const T &A, const T &B) const;                                   // return if A and B equal based on m_comp
+        virtual bool TCompare(const NodeData<T> &A, const NodeData<T> &B) const = 0; // return if A < B
+
+        TComparison m_comp;    // user defined comparison method
+        int size_ = 0;         // size of tree
+        Node *root_ = nullptr; // root of tree
     }; // AVLTreeBase
 
+    /// @brief default constructor
     template <typename T, typename TComparison>
     inline AVLTreeBase<T, TComparison>::AVLTreeBase() {}
 
+    /// @brief constructor for custom compare method
+    /// @param comp bool method to use to compare
     template <typename T, typename TComparison>
     inline AVLTreeBase<T, TComparison>::AVLTreeBase(TComparison comp)
     {
         m_comp = comp;
     }
 
+    /// @brief copy constructor
+    /// @param other tree to copy
     template <typename T, typename TComparison>
     inline AVLTreeBase<T, TComparison>::AVLTreeBase(const AVLTreeBase &other)
     {
         *this = other;
     }
 
+    /// @brief deconstructor
     template <typename T, typename TComparison>
     inline AVLTreeBase<T, TComparison>::~AVLTreeBase()
     {
@@ -146,6 +179,9 @@ namespace AVLTreeInternals
         root_ = nullptr;
     }
 
+    /// @brief assignment overload
+    /// @param other tree to copy
+    /// @return AVLTree as copy
     template <typename T, typename TComparison>
     inline AVLTreeBase<T, TComparison> &AVLTreeBase<T, TComparison>::operator=(const AVLTreeBase<T, TComparison> &other)
     {
@@ -173,6 +209,9 @@ namespace AVLTreeInternals
         return *this;
     }
 
+    /// @brief insert into tree
+    /// @param obj T to insert
+    /// @return if successful tree
     template <typename T, typename TComparison>
     inline bool AVLTreeBase<T, TComparison>::insert(const T obj)
     {
@@ -195,32 +234,29 @@ namespace AVLTreeInternals
             // duplicate
             return false;
         }
-
-        Node *tmp = new Node(obj, reader);
-        ((moveLeft) ? reader->left_ : reader->right_) = tmp;
-        size_++;
-        while (reader != nullptr)
-        {
-            reader->balanceFactorOnChange_ = false;
-            reader->heightOnChange_ = false;
-            reader = reader->parent_;
-        }
-        balanceInsert(tmp);
-        // wtf(root_);
+        ((moveLeft) ? reader->left_ : reader->right_) = new Node(obj, reader);
+        balanceInsert(((moveLeft) ? reader->left_ : reader->right_));
         return true;
     }
 
+    /// @brief checks if AVLTree contains obj
+    /// @param obj T to search for
+    /// @return if AVLTree contains obj
     template <typename T, typename TComparison>
     inline bool AVLTreeBase<T, TComparison>::contains(const T obj) const
     {
         Node *reader = root_;
+        NodeData<T> test{obj};
         while (reader != nullptr && !TEqual(reader->nodeData->data_, obj))
         {
-            reader = (TCompare(NodeData<T>{obj}, *reader->nodeData)) ? reader->left_ : reader->right_;
+            reader = (TCompare(test, *reader->nodeData)) ? reader->left_ : reader->right_;
         }
         return reader != nullptr;
     }
 
+    /// @brief remove obj from AVLTree
+    /// @param obj obj to remove
+    /// @return if successful remove
     template <typename T, typename TComparison>
     inline bool AVLTreeBase<T, TComparison>::remove(const T obj)
     {
@@ -234,23 +270,13 @@ namespace AVLTreeInternals
         {
             return false;
         }
-
-        Node *tmp = reader->parent_;
-        while (tmp != nullptr)
-        {
-            tmp->balanceFactorOnChange_ = false;
-            tmp->heightOnChange_ = false;
-            tmp = tmp->parent_;
-        }
-
-        // Node *curNode = reader->parent_;
         remove(reader, true);
-
-        // balanceRemove(curNode);
-
         return true;
     }
 
+    /// @brief remove node from AVLTree
+    /// @param curNode node to remove
+    /// @param original if original remove call
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::remove(Node *curNode, bool original)
     {
@@ -265,16 +291,7 @@ namespace AVLTreeInternals
             }
             else
             {
-                if (TCompare(*curNode->nodeData, *curNode->parent_->nodeData))
-                {
-                    // left
-                    curNode->parent_->left_ = nullptr;
-                }
-                else
-                {
-                    // right
-                    curNode->parent_->right_ = nullptr;
-                }
+                ((TCompare(*curNode->nodeData, *curNode->parent_->nodeData)) ? curNode->parent_->left_ : curNode->parent_->right_) = nullptr;
                 W = curNode->parent_;
             }
             delete curNode;
@@ -286,6 +303,7 @@ namespace AVLTreeInternals
             Node *branch = ((curNode->left_ == nullptr) ? curNode->right_ : curNode->left_);
             if (curNode->parent_ == nullptr)
             {
+                // is root
                 root_ = branch;
                 branch->parent_ = nullptr;
                 W = branch;
@@ -310,20 +328,19 @@ namespace AVLTreeInternals
         else
         {
             // dual branch
-            Node *replacement = curNode->right_;
-            replacement->balanceFactorOnChange_ = false;
-            replacement->heightOnChange_ = false;
-            while (replacement->left_ != nullptr)
+            Node *replacement = curNode->left_;
+            replacement->updated();
+            while (replacement->right_ != nullptr)
             {
-                replacement = replacement->left_;
-                replacement->balanceFactorOnChange_ = false;
-                replacement->heightOnChange_ = false;
+                replacement = replacement->right_;
+                replacement->updated();
             }
+
             T replacementData = replacement->nodeData->data_;
             remove(replacement, false);
             curNode->nodeData->data_ = replacementData;
-            curNode->balanceFactorOnChange_ = false;
-            curNode->heightOnChange_ = false;
+
+            curNode->updated();
             W = curNode;
         }
         if (W != nullptr && original)
@@ -332,6 +349,8 @@ namespace AVLTreeInternals
         }
     }
 
+    /// @brief calculate balance factor for curNode
+    /// @param curNode node to calculate balanceFactor for
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::calculateBalanceFactor(Node *curNode)
     {
@@ -347,6 +366,9 @@ namespace AVLTreeInternals
         curNode->balanceFactorOnChange_ = true;
     }
 
+    /// @brief calculate height of curNode
+    /// @param curNode node to calculate height of
+    /// @return height of curNode
     template <typename T, typename TComparison>
     inline int AVLTreeBase<T, TComparison>::getHeight(Node *curNode)
     {
@@ -369,29 +391,41 @@ namespace AVLTreeInternals
         return curNode->height_;
     }
 
+    /// @brief check if AVLTree is empty
+    /// @return if AVLTree is empty
     template <typename T, typename TComparison>
     inline bool AVLTreeBase<T, TComparison>::isEmpty() const
     {
         return root_ == nullptr;
     }
 
+    /// @brief return size of AVLTree
+    /// @return size of AVLTree
     template <typename T, typename TComparison>
     inline int AVLTreeBase<T, TComparison>::size() const
     {
         return size_;
     }
 
+    /// @brief print AVLTree sideways to cout
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::print()
     {
         sideways(root_, -1);
     }
 
+    /// @brief balance AVLTree after successful insert
+    /// @param curNode inserted node
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::balanceInsert(Node *curNode)
     {
         Node *gParent = curNode;
+        gParent->updated();
         Node *root = curNode->parent_;
+        if (root != nullptr)
+        {
+            root->updated();
+        }
         Node *parent = nullptr;
         Node *child = nullptr;
         calculateBalanceFactor(gParent);
@@ -401,6 +435,10 @@ namespace AVLTreeInternals
             parent = gParent;
             gParent = root;
             root = root->parent_;
+            if (root != nullptr)
+            {
+                root->updated();
+            }
             calculateBalanceFactor(gParent);
         }
         if (root == nullptr && abs(gParent->balanceFactor) < 2)
@@ -408,44 +446,36 @@ namespace AVLTreeInternals
             // balanced
             return;
         }
-        if (root_ == gParent)
-        {
-            // smallTree
-            rotate(true, true, nullptr, gParent, parent, child);
-        }
-        else
-        {
-            // not smallTree
-            rotate(true, false, root, gParent, parent, child);
-        }
+        rotate(true, (root_ == gParent), root, gParent, parent, child);
     }
 
+    /// @brief balance AVLTree after successful removal
+    /// @param curNode node removed
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::balanceRemove(Node *curNode)
     {
         Node *root = nullptr;
         Node *gParent = curNode;
-        Node *parent = nullptr;
-        Node *child = nullptr;
         while (gParent != nullptr)
         {
-            bool isSmallTree = true;
+            gParent->updated();
             root = gParent->parent_;
-            if (root != nullptr)
-            {
-                isSmallTree = false;
-                root->balanceFactorOnChange_ = false;
-                root->heightOnChange_ = false;
-            }
             calculateBalanceFactor(gParent);
             if (abs(gParent->balanceFactor) > 1)
             {
-                rotate(false, isSmallTree, root, gParent, parent, child);
+                rotate(false, (root == nullptr), root, gParent, nullptr, nullptr);
             }
             gParent = root;
         }
     }
 
+    /// @brief perform needed rotation after insert or remove
+    /// @param isInsert if caller is insert
+    /// @param isSmallTree if gParent is root
+    /// @param root parent of gParent
+    /// @param gParent grandparent node
+    /// @param parent parent node
+    /// @param child child node
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::rotate(bool isInsert, bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child)
     {
@@ -523,6 +553,12 @@ namespace AVLTreeInternals
         }
     }
 
+    /// @brief perform a LL rotation
+    /// @param isSmallTree if gParent is root
+    /// @param root parent of gParent
+    /// @param gParent grandparent node
+    /// @param parent parent node
+    /// @param child child node
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::rotateLL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child)
     {
@@ -530,8 +566,6 @@ namespace AVLTreeInternals
         if (!isSmallTree)
         {
             isLeft = (root->left_ == gParent);
-            /* root_->balanceFactorOnChange_ = false;
-            root_->heightOnChange_ = false; */
         }
         gParent->left_ = parent->right_;
         gParent->parent_ = parent;
@@ -545,12 +579,16 @@ namespace AVLTreeInternals
         ((isSmallTree) ? root_ : ((isLeft) ? root->left_ : root->right_)) = parent;
         parent->parent_ = (isSmallTree) ? nullptr : root;
 
-        gParent->balanceFactorOnChange_ = false;
-        gParent->heightOnChange_ = false;
-        parent->balanceFactorOnChange_ = false;
-        parent->heightOnChange_ = false;
+        gParent->updated();
+        parent->updated();
     }
 
+    /// @brief perform a LR rotation
+    /// @param isSmallTree if gParent is root
+    /// @param root parent of gParent
+    /// @param gParent grandparent node
+    /// @param parent parent node
+    /// @param child child node
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::rotateLR(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child)
     {
@@ -565,11 +603,16 @@ namespace AVLTreeInternals
         child->parent_ = gParent;
         gParent->left_ = child;
 
-        parent->balanceFactorOnChange_ = false;
-        parent->heightOnChange_ = false;
+        parent->updated();
         rotateLL(isSmallTree, root, gParent, child, parent);
     }
 
+    /// @brief perform a RL rotation
+    /// @param isSmallTree if gParent is root
+    /// @param root parent of gParent
+    /// @param gParent grandparent node
+    /// @param parent parent node
+    /// @param child child node
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::rotateRL(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child)
     {
@@ -577,8 +620,6 @@ namespace AVLTreeInternals
         if (parent->left_ != nullptr)
         {
             parent->left_->parent_ = parent;
-            /* root_->balanceFactorOnChange_ = false;
-            root_->heightOnChange_ = false; */
         }
 
         child->right_ = parent;
@@ -586,11 +627,16 @@ namespace AVLTreeInternals
         child->parent_ = gParent;
         gParent->right_ = child;
 
-        parent->balanceFactorOnChange_ = false;
-        parent->heightOnChange_ = false;
+        parent->updated();
         rotateRR(isSmallTree, root, gParent, child, parent);
     }
 
+    /// @brief perform a RR rotation
+    /// @param isSmallTree if gParent is root
+    /// @param root parent of gParent
+    /// @param gParent grandparent node
+    /// @param parent parent node
+    /// @param child child node
     template <typename T, typename TComparison>
     inline void AVLTreeBase<T, TComparison>::rotateRR(bool isSmallTree, Node *root, Node *gParent, Node *parent, Node *child)
     {
@@ -611,17 +657,17 @@ namespace AVLTreeInternals
         ((isSmallTree) ? root_ : ((isLeft) ? root->left_ : root->right_)) = parent;
         parent->parent_ = (isSmallTree) ? nullptr : root;
 
-        gParent->balanceFactorOnChange_ = false;
-        gParent->heightOnChange_ = false;
-        parent->balanceFactorOnChange_ = false;
-        parent->heightOnChange_ = false;
+        gParent->updated();
+        parent->updated();
     }
 
+    /// @brief check if A equals B
+    /// @param A T to compare with
+    /// @param B T to compare against
+    /// @return if A equals B
     template <typename T, typename TComparison>
     inline bool AVLTreeBase<T, TComparison>::TEqual(const T &A, const T &B) const
     {
-        // NodeData<T> ADat = {A};
-        // NodeData<T> BDat = {B};
         return !(TCompare({A}, {B})) && !(TCompare({B}, {A}));
     }
 } // AVLTreeInternals
@@ -630,19 +676,28 @@ namespace AVLTreeInternals
 // PUBLIC TEMPLATES
 //============================================
 
+/// @brief AVLTree
+/// @tparam T type to store
+/// @tparam TComparison bool method to use for <
 template <typename T, typename TComparison = typename AVLTreeInternals::DefaultComparator<T>::Comparator>
 class AVLTree : public AVLTreeInternals::AVLTreeBase<T, TComparison>
 {
 public:
+    /// @brief deconstructor
     ~AVLTree()
     {
         this->clear();
     };
     using typename AVLTreeInternals::AVLTreeBase<T, TComparison>::Node;
-    T *retrieve(const T obj);
+    T *retrieve(const T obj); // return pointer to T in AVLTree
 
 protected:
     void sideways(Node *current, int level) const override; // prints tree sideways to cout
+
+    /// @brief compare overload
+    /// @param A NodeData to compare with
+    /// @param B NodeData to compare against
+    /// @return if A < B
     bool TCompare(const AVLTreeInternals::NodeData<T> &A, const AVLTreeInternals::NodeData<T> &B) const override
     {
         return this->m_comp(A.data_, B.data_);
@@ -749,10 +804,8 @@ public:
             }
             bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
             equalPlace &= a.nodeStack.top().firstVisit == b.nodeStack.top().firstVisit;
-            // equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
             equalPlace &= (!a.m_compare(a.nodeStack.top().node->nodeData->data_, b.nodeStack.top().node->nodeData->data_) &&
                            !a.m_compare(b.nodeStack.top().node->nodeData->data_, a.nodeStack.top().node->nodeData->data_));
-            // equalPlace(equals(a.nodeStack.top()->nodeData->data_, b.nodeStack.top()->nodeData->data_));
 
             return equalPlace;
         }
@@ -772,6 +825,9 @@ public:
     Iterator end() { return Iterator(nullptr, this->m_comp); }
 }; // AVLTree<T>
 
+/// @brief return read/write ponter to obj in AVLTree
+/// @param obj obj to search for
+/// @return pointer to T in AVLtree
 template <typename T, typename TComparison>
 T *AVLTree<T, TComparison>::retrieve(const T obj)
 {
@@ -787,6 +843,9 @@ T *AVLTree<T, TComparison>::retrieve(const T obj)
     return &reader->nodeData->data_;
 }
 
+/// @brief print AVLTree to cout
+/// @param current node to print
+/// @param level depth of current
 template <typename T, typename TComparison>
 void AVLTree<T, TComparison>::sideways(Node *current, int level) const
 {
@@ -802,26 +861,33 @@ void AVLTree<T, TComparison>::sideways(Node *current, int level) const
         }
 
         cout << current->nodeData->data_ << endl; // display information of object
-        // sidewaysHelper(current, is_pointer<T>());
-        //  cout << (*current).balanceFactor_ << endl; // display information of object
         sideways(current->left_, level);
     }
 }
 
+/// @brief specialized AVLTree for pointers
+/// @tparam T type of pointer
+/// @tparam TComparison custom method to use for <
 template <typename T, typename TComparison>
 class AVLTree<T *, TComparison> : public AVLTreeInternals::AVLTreeBase<T *, TComparison>
 {
 public:
+    /// @brief deconstructor
     ~AVLTree()
     {
         this->clear();
     };
     using typename AVLTreeInternals::AVLTreeBase<T *, TComparison>::Node;
-    T *retrieve(const T obj);
-    T *retrieve(const T *obj);
+    T *retrieve(const T obj);  // get pointer to obj in AVLTree
+    T *retrieve(const T *obj); // get pointer to obj in AVLTree
 
 protected:
     void sideways(Node *current, int level) const override; // prints tree sideways to cout
+
+    /// @brief compare overload
+    /// @param A NodeData to compare with
+    /// @param B NodeData to compare against
+    /// @return if A < B
     bool TCompare(const AVLTreeInternals::NodeData<T *> &A, const AVLTreeInternals::NodeData<T *> &B) const override
     {
         return this->m_comp(*A.data_, *B.data_);
@@ -928,10 +994,8 @@ public:
             }
             bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
             equalPlace &= a.nodeStack.top().firstVisit == b.nodeStack.top().firstVisit;
-            // equalPlace = equalPlace && (*a.nodeStack.top().node->data_ == *b.nodeStack.top().node->data_);
             equalPlace &= (!a.m_compare(*a.nodeStack.top().node->nodeData->data_, *b.nodeStack.top().node->nodeData->data_) &&
                            !a.m_compare(*b.nodeStack.top().node->nodeData->data_, *a.nodeStack.top().node->nodeData->data_));
-            // equalPlace(equals(a.nodeStack.top()->nodeData->data_, b.nodeStack.top()->nodeData->data_));
 
             return equalPlace;
         }
@@ -951,6 +1015,9 @@ public:
     Iterator end() { return Iterator(nullptr, this->m_comp); }
 }; // AVLTree<T*>
 
+/// @brief get read/write pointer to obj in AVLTree
+/// @param obj obj to search for
+/// @return pointer to obj in AVLTree, nullptr if not found
 template <typename T, typename TComparison>
 T *AVLTree<T *, TComparison>::retrieve(const T obj)
 {
@@ -966,6 +1033,9 @@ T *AVLTree<T *, TComparison>::retrieve(const T obj)
     return reader->nodeData->data_;
 }
 
+/// @brief get read/write pointer to obj in AVLTree
+/// @param obj obj to search for
+/// @return pointer to obj in AVLTree, nullptr if not found
 template <typename T, typename TComparison>
 T *AVLTree<T *, TComparison>::retrieve(const T *obj)
 {
@@ -981,6 +1051,9 @@ T *AVLTree<T *, TComparison>::retrieve(const T *obj)
     return reader->nodeData->data_;
 }
 
+/// @brief print AVLTree to cout
+/// @param current node to print
+/// @param level depth of current
 template <typename T, typename TComparison>
 void AVLTree<T *, TComparison>::sideways(Node *current, int level) const
 {
@@ -995,9 +1068,7 @@ void AVLTree<T *, TComparison>::sideways(Node *current, int level) const
             cout << "    ";
         }
 
-        cout << *current->nodeData->data_ << endl; // display information of object
-        // sidewaysHelper(current, is_pointer<T>());
-        //  cout << (*current).balanceFactor_ << endl; // display information of object
+        cout << *current->nodeData->data_ << endl;
         sideways(current->left_, level);
     }
 }

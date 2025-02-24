@@ -35,7 +35,7 @@ struct Compare
 
 int main()
 {
-    cout << "#_Elements,AVL_Insert,AVL_Delete,SET_Insert,SET_Delete,INSERT_DIFF,DELETE_DIFF" << endl;
+    //cout << "#_Elements,AVL_Insert,AVL_Delete,SET_Insert,SET_Delete,INSERT_DIFF,DELETE_DIFF" << endl;
     //int randCount2 = 1000000;
     /* for (int randCount2 = 100000; randCount2 <= 1000000; randCount2 += 100000)
     {
@@ -118,6 +118,7 @@ int main()
     test.remove(testing(10, 13));
     test.remove(testing(15, 12));
     test.remove(testing(9, 67));
+    test.remove(testing(4, 5));
     // delete test.remove(testing(6, 9));
     test.print();
     cout << "=================================" << endl;
@@ -132,7 +133,7 @@ int main()
     }
 
     cout << "=================================" << endl;
-    int randCount = 5000000;
+    int randCount = 1000000;
     AVLTree<int> largeTest;
     auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
@@ -181,7 +182,7 @@ int main()
 
     cout << "=================================" << endl;
 
-    AVLTree<int *> ptr_test;
+   /*  AVLTree<int *> ptr_test;
     int *tmp = new int(5);
     int *tmp2 = new int(3);
     int *tmp3 = new int(7);
@@ -205,5 +206,5 @@ int main()
     cout << "=================================" << endl;
     delete tmp;
     delete tmp2;
-    delete tmp3;
+    delete tmp3; */
 }

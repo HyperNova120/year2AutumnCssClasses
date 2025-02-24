@@ -198,6 +198,10 @@ namespace RBTree_Internals
     template <typename T, typename TComparison>
     inline void RBTreeBase<T, TComparison>::balanceInsert(Node *curNode)
     {
+        if (root_ != nullptr)
+        {
+            root_->color_ = false;
+        }
         if (root_ == curNode)
         {
             root_->color_ = false;
@@ -223,7 +227,7 @@ namespace RBTree_Internals
         uncle->color_ = false;
         parent->color_ = false;
         gParent->color_ = true;
-        balanceInsert(parent);
+        balanceInsert(gParent);
     }
 
     template <typename T, typename TComparison>
@@ -403,7 +407,7 @@ namespace RBTree_Internals
             }
 
             // get replacement data
-            NodeData replacementData = reader->nodeData_;
+            NodeData<T> *replacementData = reader->nodeData_;
             reader->nodeData_ = nullptr;
 
             // node to remove is reader
@@ -426,11 +430,22 @@ namespace RBTree_Internals
     template <typename T, typename TComparison>
     inline void RBTreeBase<T, TComparison>::balanceRemove(Node *parent, bool color, bool lastMoveLeft)
     {
-        if (color)
+        Node *replacedNode = ((lastMoveLeft) ? parent->left_ : parent->right_);
+        if (color || (replacedNode != nullptr && replacedNode->color_))
         {
-            // deleted red
+            // deleted or replacement red
+            if (replacedNode != nullptr)
+            {
+                replacedNode->color_ = false;
+            }
             return;
         }
+        else if (!color && (replacedNode != nullptr && !replacedNode->color_))
+        {
+            // both deleted node and replacement is black
+            Node *u = replacedNode;
+        }
+
         Node *sibling = ((lastMoveLeft) ? parent->right_ : parent->left_);
         if (sibling != nullptr && sibling->color_)
         {
@@ -439,6 +454,19 @@ namespace RBTree_Internals
         else
         {
             // sibling is black
+            if (sibling != nullptr)
+            {
+                if ((sibling->left_ != nullptr && !sibling->left_->color_) && (sibling->right_ != nullptr && !sibling->right_->color_))
+                {
+                    // both children black
+                    sibling->color_ = true;
+                    parent->color_ = false;
+                }
+                else
+                {
+                    // at least one child red
+                }
+            }
         }
     }
 
