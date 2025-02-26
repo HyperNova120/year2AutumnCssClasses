@@ -126,10 +126,6 @@ bool BinTree::insert(NodeData *data)
 /// @return true if target was found, false if not
 bool BinTree::retrieve(const NodeData &target, NodeData *&nodeData) const
 {
-    if (nodeData == nullptr)
-    {
-        return false;
-    }
     Node *targetNode = getNode(target);
 
     if (targetNode != nullptr && *targetNode->data == target)

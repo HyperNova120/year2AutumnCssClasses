@@ -441,6 +441,12 @@ namespace AVLTreeInternals
             }
             calculateBalanceFactor(gParent);
         }
+        Node *reader = root;
+        while (reader != nullptr)
+        {
+            reader->updated();
+            reader = reader->parent_;
+        }
         if (root == nullptr && abs(gParent->balanceFactor) < 2)
         {
             // balanced
