@@ -1,1 +1,1 @@
-git add * && git commit -m "auto push" && git push
+cd ~/aidanm32/year2AutumnCssClasses/ && git add * && git commit -m "auto push" && git push
