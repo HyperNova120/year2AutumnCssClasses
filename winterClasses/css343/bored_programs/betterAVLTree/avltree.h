@@ -240,6 +240,7 @@ namespace AVLTreeInternals
         }
         ((moveLeft) ? reader->left_ : reader->right_) = new Node(obj, reader);
         balanceInsert(((moveLeft) ? reader->left_ : reader->right_));
+        size_++;
         return true;
     }
 
@@ -275,6 +276,7 @@ namespace AVLTreeInternals
             return false;
         }
         remove(reader, true);
+        size_--;
         return true;
     }
 

@@ -26,9 +26,29 @@ void vendor::readFile(ifstream &infile)
         }
         processCommand(tmpTransaction);
     }
+    printInventory();
 }
 
 vendor::vendor() {}
+
+vendor::~vendor()
+{
+    for (Classic &c : classicMovies_)
+    {
+        Classic *c_ptr = &c;
+        delete c_ptr;
+    }
+    for (Drama &d : dramaMovies_)
+    {
+        Drama *d_ptr = &d;
+        delete d_ptr;
+    }
+    for (Comedy &c : comedyMovies_)
+    {
+        Comedy *c_ptr = &c;
+        delete c_ptr;
+    }
+}
 
 void vendor::processCommand(CommandTransaction &t)
 {
@@ -83,15 +103,48 @@ void vendor::createMovie(CommandTransaction &t)
     Movie *newMovie = MovieFactory::createMovie(t);
     if (t.Movie_Type() == 'F')
     {
+        cout << "added:" << *((Comedy *)newMovie) << endl;
         comedyMovies_.insert((Comedy *)newMovie);
+        if (comedyMovies_.contains((Comedy *)newMovie))
+        {
+            cout << "\tSUCCESS ADD" << endl;
+        }
+        cout << "CURRENT COMEDY MOVIES:" << endl;
+        for (Comedy &d : comedyMovies_)
+        {
+            cout << "\t" << d << endl;
+        }
+        cout << endl << endl;
     }
     else if (t.Movie_Type() == 'D')
     {
+        cout << "added:" << *((Drama *)newMovie) << endl;
         dramaMovies_.insert((Drama *)newMovie);
+        if (dramaMovies_.contains((Drama *)newMovie))
+        {
+            cout << "\tSUCCESS ADD" << endl;
+        }
+        cout << "CURRENT DRAMA MOVIES:" << endl;
+        for (Drama &d : dramaMovies_)
+        {
+            cout << "\t" << d << endl;
+        }
+        cout << endl << endl;
     }
     else if (t.Movie_Type() == 'C')
     {
+        cout << "added:" << *((Classic *)newMovie) << endl;
         classicMovies_.insert((Classic *)newMovie);
+        if (classicMovies_.contains((Classic *)newMovie))
+        {
+            cout << "\tSUCCESS ADD" << endl;
+        }
+        cout << "CURRENT CLASSIC MOVIES:" << endl;
+        for (Classic &d : classicMovies_)
+        {
+            cout << "\t" << d << endl;
+        }
+        cout << endl << endl;
     }
 }
 
@@ -203,10 +256,16 @@ Movie *vendor::findMovie(CommandTransaction &t)
                 break;
             }
         }
+        delete tmpClassicMovie;
+        tmpClassicMovie = nullptr;
+        tmpMovie = nullptr;
     }
 
-    delete tmpMovie;
-    tmpMovie = nullptr;
+    if (tmpMovie != nullptr)
+    {
+        delete tmpMovie;
+        tmpMovie = nullptr;
+    }
 
     if (returner == nullptr)
     {

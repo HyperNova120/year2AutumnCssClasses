@@ -240,6 +240,7 @@ namespace AVLTreeInternals
         }
         ((moveLeft) ? reader->left_ : reader->right_) = new Node(obj, reader);
         balanceInsert(((moveLeft) ? reader->left_ : reader->right_));
+        size_++;
         return true;
     }
 
@@ -275,6 +276,7 @@ namespace AVLTreeInternals
             return false;
         }
         remove(reader, true);
+        size_--;
         return true;
     }
 
@@ -840,7 +842,7 @@ public:
     /// @return Iterator at end of AVLTree
     Iterator end() { return Iterator(nullptr, this->m_comp); }
 
-    /// @brief returns the last element of AVLTree
+    /* /// @brief returns the last element of AVLTree
     /// @return the last element of AVLTree
     T *last()
     {
@@ -850,7 +852,7 @@ public:
             reader = reader->right_;
         }
         return &reader->nodeData->data_;
-    }
+    } */
 }; // AVLTree<T>
 
 /// @brief return read/write ponter to obj in AVLTree

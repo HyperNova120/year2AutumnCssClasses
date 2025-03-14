@@ -43,7 +43,7 @@ bool Classic::operator<(const Movie &other) const
         }
         else if (year_made_ == otherClassic->year_made_ &&
                  month_made_ == otherClassic->month_made_ &&
-                 *const_cast<Classic*>(this)->major_actors_.last() < *const_cast<Classic*>(otherClassic)->major_actors_.begin())
+                 *const_cast<Classic*>(this)->major_actors_.begin() < *const_cast<Classic*>(otherClassic)->major_actors_.begin())
         {
             return true; 
         }
@@ -64,11 +64,8 @@ string Classic::toString() const
         string majorActor = curMajorActor + " ";
         string releaseDate = to_string(month_made_) + " " + to_string(year_made_);
         returner += type + stock + director + title + majorActor + releaseDate;
-        if (curMajorActor != *const_cast<Classic*>(this)->major_actors_.last())
-        {
-            returner += "\n";
-        }
     }
+    returner = returner.substr(0, returner.size()-1);
     return returner;
 }
 

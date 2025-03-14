@@ -19,6 +19,7 @@ using namespace std;
 class vendor{
     public:
     vendor();
+    ~vendor();
     void readFile(ifstream& infile);
     void processCommand(CommandTransaction &t);
 

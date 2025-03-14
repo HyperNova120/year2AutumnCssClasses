@@ -133,7 +133,7 @@ int main()
     }
 
     cout << "=================================" << endl;
-    int randCount = 5000000;
+    int randCount = 1000;
     AVLTree<int> largeTest;
     auto t1 = chrono::high_resolution_clock::now();
     for (int i = 0; i < randCount; i++)
@@ -182,7 +182,7 @@ int main()
 
     cout << "=================================" << endl;
 
-   /*  AVLTree<int *> ptr_test;
+    AVLTree<int *> ptr_test;
     int *tmp = new int(5);
     int *tmp2 = new int(3);
     int *tmp3 = new int(7);
@@ -206,5 +206,5 @@ int main()
     cout << "=================================" << endl;
     delete tmp;
     delete tmp2;
-    delete tmp3; */
+    delete tmp3;
 }
