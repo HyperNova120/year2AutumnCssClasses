@@ -66,6 +66,12 @@ CommandTransaction::CommandTransaction(vector<string> segmentedCommand)
     int index = 1;
     user_id_ = stoi(segmentedCommand[index++]);
     media_type_ = segmentedCommand[index++][0];
+    if (media_type_ != 'D')
+    {
+        isInvalid_ = true;
+        errorMessage_ = "Invalid Media Type";
+        return;
+    }
     movie_type_ = segmentedCommand[index++][0];
     if (movie_type_ == 'F')
     {
