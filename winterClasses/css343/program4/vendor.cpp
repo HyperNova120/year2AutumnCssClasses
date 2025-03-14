@@ -106,19 +106,25 @@ bool vendor::printInventory()
 {
     cout << "======INVENTORY======" << endl;
 
+    cout << endl;
     cout << "==COMEDY==" << endl;
+    cout << endl;
     for (Comedy &c : comedyMovies_)
     {
         cout << c << endl;
     }
 
+    cout << endl;
     cout << "==Drama==" << endl;
+    cout << endl;
     for (Drama &d : dramaMovies_)
     {
         cout << d << endl;
     }
 
+    cout << endl;
     cout << "==Classic==" << endl;
+    cout << endl;
     for (Classic &c : classicMovies_)
     {
         cout << c << endl;
@@ -170,11 +176,6 @@ Customer *vendor::findCustomer(CommandTransaction &t)
         // customer exists
         return &(*customer_data_.find(t.User_Id())).second;
     }
-    else
-    {
-        // customer does not exist
-        // cout << "No Customer With ID " << t.User_Id() << " Exists" << endl;
-    }
     return nullptr;
 }
 
@@ -217,24 +218,34 @@ Movie *vendor::findMovie(CommandTransaction &t)
 
 void vendor::validateCommand(CommandTransaction &t)
 {
-    if (t.GetTransactionType() == TransactionType::History)
+    // user validation
+    if (t.GetTransactionType() == TransactionType::History ||
+        t.GetTransactionType() == TransactionType::Borrow ||
+        t.GetTransactionType() == TransactionType::Return)
     {
         if (findCustomer(t) == nullptr)
         {
             t.isInvalid_ = true;
             t.errorMessage_ = "User Does Not Exist";
+            return;
         }
-        return;
     }
-    else if (t.GetTransactionType() == TransactionType::Borrow)
+    else if (t.GetTransactionType() == TransactionType::InitCustomer)
     {
         Customer *tmpCustomer = findCustomer(t);
-        if (tmpCustomer == nullptr)
+        if (tmpCustomer != nullptr)
         {
             t.isInvalid_ = true;
-            t.errorMessage_ = "User Does Not Exist";
+            t.errorMessage_ = "User Already Exists";
+            return;
         }
-        Movie *tmpMovie = findMovie(t);
+    }
+
+    // movie validation
+    Movie *tmpMovie = findMovie(t);
+    if (t.GetTransactionType() == TransactionType::Borrow ||
+        t.GetTransactionType() == TransactionType::Return)
+    {
         if (tmpMovie == nullptr)
         {
             t.isInvalid_ = true;
@@ -248,42 +259,26 @@ void vendor::validateCommand(CommandTransaction &t)
             {
                 t.isInvalid_ = true;
                 t.errorMessage_ = "Movie Does Not Exist";
+                return;
             }
         }
+    }
 
+    if (t.GetTransactionType() == TransactionType::Borrow)
+    {
+        // stock validation
         if (tmpMovie->Stock() < 1)
         {
             t.isInvalid_ = true;
             t.errorMessage_ = "Movie Is Out Of Stock";
+            return;
         }
     }
     else if (t.GetTransactionType() == TransactionType::Return)
     {
-        Customer *tmpCustomer = findCustomer(t);
-        if (tmpCustomer == nullptr)
-        {
-            t.isInvalid_ = true;
-            t.errorMessage_ = "User Does Not Exist";
-        }
-        Movie *tmpMovie = findMovie(t);
-        if (tmpMovie == nullptr)
-        {
-            // movie doesnt exist
-            t.isInvalid_ = true;
-            t.errorMessage_ = "Movie Does Not Exist";
-            return;
-        }
-        else if (t.Movie_Type() == 'C')
-        {
-            Classic *tmpClassic = (Classic *)tmpMovie;
-            if (!tmpClassic->Major_Actors().contains(t.Major_Actor()))
-            {
-                t.isInvalid_ = true;
-                t.errorMessage_ = "Movie Does Not Exist";
-            }
-        }
+        // previously borrowed validation
         bool found = false;
-        for (Movie *tmp : tmpCustomer->OutstandingBorrows())
+        for (Movie *tmp : findCustomer(t)->OutstandingBorrows())
         {
             if (tmp == tmpMovie)
             {
@@ -295,43 +290,39 @@ void vendor::validateCommand(CommandTransaction &t)
         {
             t.isInvalid_ = true;
             t.errorMessage_ = "User Has Not Borrowed That Movie";
-        }
-    }
-    else if (t.GetTransactionType() == TransactionType::InitCustomer)
-    {
-        Customer *tmpCustomer = findCustomer(t);
-        if (tmpCustomer != nullptr)
-        {
-            t.isInvalid_ = true;
-            t.errorMessage_ = "User Alraedy Exists";
+            return;
         }
     }
     else if (t.GetTransactionType() == TransactionType::InitMovie)
     {
+        // movie does not already exist validation
         if (t.Movie_Type() == 'C')
         {
+            // if classical movie validate major actor is not already present
             for (Classic &tmpClassicMovie : classicMovies_)
             {
-                auto tmpMajorActors = tmpClassicMovie.Major_Actors();
                 if (tmpClassicMovie.Director() == t.Director() &&
                     tmpClassicMovie.Title() == t.Title() &&
                     tmpClassicMovie.Year() == t.Date_Year() &&
                     tmpClassicMovie.Month() == t.Date_Month() &&
-                    tmpMajorActors.contains(t.Major_Actor()))
+                    tmpClassicMovie.Major_Actors().contains(t.Major_Actor()))
                 {
+                    // check if
                     t.isInvalid_ = true;
-                    t.errorMessage_ = "Movie Alraedy Exists";
-                    break;
+                    t.errorMessage_ = "Movie Already Exists";
+                    return;
                 }
             }
         }
         else
         {
+            // validate movie does not already exist
             Movie *tmpMovie = findMovie(t);
             if (tmpMovie != nullptr)
             {
                 t.isInvalid_ = true;
-                t.errorMessage_ = "Movie Alraedy Exists";
+                t.errorMessage_ = "Movie Already Exists";
+                return;
             }
         }
     }

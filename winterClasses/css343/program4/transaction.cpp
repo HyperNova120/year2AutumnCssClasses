@@ -84,6 +84,10 @@ CommandTransaction::CommandTransaction(vector<string> segmentedCommand)
         major_actor_ = segmentedCommand[index++] + " ";
         major_actor_ += segmentedCommand[index++];
     }
+    else{
+        isInvalid_ = true;
+        errorMessage_ = "Invalid Movie Type";
+    }
 }
 
 void CommandTransaction::setupMovieInfo(vector<string> segmentedCommand, int &index)
