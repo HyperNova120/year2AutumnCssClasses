@@ -1067,17 +1067,7 @@ public:
 template <typename T, typename TComparison>
 T *AVLTree<T *, TComparison>::retrieve(T obj)
 {
-    Node *reader = this->root_;
-    AVLTreeInternals::NodeData<T> objData = AVLTreeInternals::NodeData<T>{obj};
-    while (reader != nullptr && !TEqual(reader->nodeData->data_, obj))
-    {
-        reader = (TCompare(objData, *reader->nodeData)) ? reader->left_ : reader->right_;
-    }
-    if (reader == nullptr)
-    {
-        return nullptr;
-    }
-    return reader->nodeData->data_;
+    return retrieve(&obj);
 }
 
 /// @brief get read/write pointer to obj in AVLTree

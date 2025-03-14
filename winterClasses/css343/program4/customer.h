@@ -1,33 +1,33 @@
-#ifndef _CUSTOMER_H_
-#define _CUSTOMER_H_
+#ifndef customer_H
+#define customer_H
+#include <string>
+#include <iostream>
+#include <vector>
 #include "transaction.h"
-class Customer
-{
-public:
-    Customer(int ID, string firstName, string lastName);
-    Customer(const Customer &other);
+#include "movie.h"
+using namespace std;
 
-    bool operator<(const Customer &other) const;
-    bool operator<=(const Customer &other) const;
-    bool operator>(const Customer &other) const;
-    bool operator>=(const Customer &other) const;
-    bool operator==(const Customer &other) const;
-    bool operator!=(const Customer &other) const;
+class Customer{
 
-    void addTransactionToHistory(Transaction transactionToAdd);
-    void printTransactionHistory();
+    public:
+    Customer();
+    Customer(int id, string name);
 
-private:
-    int id = 0;
-    string firstName = "";
-    string lastName = "";
+    int ID();
+    string Name();
 
-    struct transactionHistory
-    {
-        Transaction transaction;
-        transactionHistory *next;
-    };
-    transactionHistory *root;
+
+    vector<CommandTransaction> History() const;
+    vector<Movie *> OutstandingBorrows() const;
+
+    void AddToHistory(CommandTransaction &t);
+    void AddToOutstandingBorrows(Movie *movie);
+    void removeFromOutstandingBorrows(Movie *movie);
+
+    private:
+    int id_ = 0;
+    string name_ = "";
+    vector<CommandTransaction> history_ = vector<CommandTransaction>();
+    vector<Movie *> outstandingBorrows_ = vector<Movie *>();
 };
-
-#endif //_CUSTOMER_H_
+#endif

@@ -1,42 +1,34 @@
-#ifndef _MOVIE_H_
-#define _MOVIE_H_
-
-using namespace std;
+#ifndef movie_H
+#define movie_H
 #include <string>
-enum MovieType
-{
-    Comedy,
-    Drama,
-    Classic,
-    UNKNOWN
-};
+using namespace std;
+
 class Movie
 {
+
 public:
-    Movie(MovieType type, int stock, string directorFirstName, string directorLastName, string title, int releaseYear);
-    Movie(Movie &other);
+    Movie();
+    Movie(int stock, string director, string title, int year);
+    Movie(const Movie &other);
+    ~Movie();
+    int Stock();
+    int Year();
+    string Director();
+    string Title();
+    char MediaType();
 
-    virtual bool operator<(const Movie &other) const;
-    virtual bool operator<=(const Movie &other) const;
-    virtual bool operator>(const Movie &other) const;
-    virtual bool operator>=(const Movie &other) const;
-    virtual bool operator==(const Movie &other) const;
-    virtual bool operator!=(const Movie &other) const;
+    bool incrementStock();
+    bool decrementStock();
 
-    int Stock() const;
-    string Director() const;
-    string Title() const;
-    int ReleaseYear() const;
+    virtual bool operator<(const Movie &other) const = 0;
 
-    bool IncreaseStock(const int amount);
-    bool DecreaseStock(const int amount);
+    virtual string toString() const = 0;
 
-private:
-    MovieType type = UNKNOWN;
-    int stock = 0;
-    string director = "";
-    string title = "";
-    int releaseYear = 0;
+protected:
+    char media_type_ = 'D'; // Dvd or vieo streaming
+    string title_ = "";
+    int stock_ = 0;
+    int year_made_ = 0;
+    string director_ = "";
 };
-
-#endif //_MOVIE_H_
+#endif

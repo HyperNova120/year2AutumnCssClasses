@@ -1,76 +1,59 @@
-#ifndef _TRANSACTION_H_
-#define _TRANSACTION_H_
+#ifndef transaction_H
+#define transaction_H
 #include <string>
-using namespace std;
-enum TransactionType
-{
-    B,
-    R,
-    I,
-    H,
-    NAt
-};
-enum TransactionMovieType
-{
-    F,
-    D,
-    C,
-    NAm
-};
+#include <iostream>
+#include <vector>
 
-class Transaction
+using namespace std;
+
+enum class TransactionType
+{
+    Borrow,
+    Return,
+    Inventory,
+    History,
+    InitMovie,
+    InitCustomer,
+    Invalid
+};
+class CommandTransaction
 {
 public:
-    Transaction();
-    Transaction(const Transaction &other);
+    CommandTransaction();
+    CommandTransaction(vector<string> segmentedCommand);
 
-    bool SetupMovieData(int movieStock, string movieDirector, string movieTitle, int releaseYear);
-    bool SetupMovieData(int movieStock, string movieDirector, string movieTitle, int releaseYear, int releaseMonth, string majorActorFirstName, string majorActorLastName);
+    friend ostream &operator<<(ostream &stream, const CommandTransaction &transaction);
 
-    bool SetupActionData(TransactionType type, int customerID, string mediaType);
-
-    bool SetupTransaction(string rawCommand);
-
-    // movie params
-    TransactionType Command_type() const;
-    TransactionMovieType Movie_type() const;
-    int Stock();
+    TransactionType GetTransactionType() const;
+    int User_Id() const;
+    string User_Name() const;
+    char Media_Type() const;
+    char Movie_Type() const;
     string Director() const;
-    string MajorActor_First() const;
-    string MajorActor_First() const;
     string Title() const;
-    int ReleaseYear() const;
-    int ReleaseMonth() const;
+    int Date_Month() const;
+    int Date_Year() const;
+    string Major_Actor() const;
+    int Stock() const;
 
-    // customer params
-    int Id() const;
-    string Customer_First() const;
-    string Customer_Last() const;
-
-    // state
-    bool invalid = false;
+    bool isInvalid_ = false;
+    string errorMessage_ = "Default Error";
 
 private:
-    TransactionType command_type = NAt;
+    void setupMovieInfo(vector<string> segmentedCommand, int &index);
+    string concatUntilComma(vector<string> segmentedCommand, int &index);
 
-    // movie params
-    TransactionMovieType movie_type = NAm;
-    int stock = 0;
-    string director = "";
-    string majorActor_First = "";
-    string majorActor_First = "";
-    string title = "";
-    int releaseYear = 0;
-    int releaseMonth = 0;
+    TransactionType t_type_ = TransactionType::Invalid;
+    int user_id_ = 0;
+    string user_name_ = "";
+    char media_type_ = 'D';
+    char movie_type_ = ' ';
 
-    // customer params
-    int id = 0;
-    string customer_First = "";
-    string customer_Last = "";
-
-    // state
-    bool invalid = false;
-    string invalidReason = "";
+    string director_ = "";
+    string title_ = "";
+    int date_month_ = 0;
+    int date_year_ = 0;
+    string major_actor_ = "";
+    int stock_ = 0;
 };
-
-#endif //_TRANSACTION_H_
+#endif
