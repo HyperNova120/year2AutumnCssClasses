@@ -26,7 +26,7 @@ void vendor::readFile(ifstream &infile)
         }
         processCommand(tmpTransaction);
     }
-    printInventory();
+    //printInventory();
 }
 
 vendor::vendor() {}
@@ -103,9 +103,9 @@ void vendor::createMovie(CommandTransaction &t)
     Movie *newMovie = MovieFactory::createMovie(t);
     if (t.Movie_Type() == 'F')
     {
-        cout << "added:" << *((Comedy *)newMovie) << endl;
+        //cout << "added:" << *((Comedy *)newMovie) << endl;
         comedyMovies_.insert((Comedy *)newMovie);
-        if (comedyMovies_.contains((Comedy *)newMovie))
+        /* if (comedyMovies_.contains((Comedy *)newMovie))
         {
             cout << "\tSUCCESS ADD" << endl;
         }
@@ -114,13 +114,13 @@ void vendor::createMovie(CommandTransaction &t)
         {
             cout << "\t" << d << endl;
         }
-        cout << endl << endl;
+        cout << endl << endl; */
     }
     else if (t.Movie_Type() == 'D')
     {
-        cout << "added:" << *((Drama *)newMovie) << endl;
+        //cout << "added:" << *((Drama *)newMovie) << endl;
         dramaMovies_.insert((Drama *)newMovie);
-        if (dramaMovies_.contains((Drama *)newMovie))
+        /* if (dramaMovies_.contains((Drama *)newMovie))
         {
             cout << "\tSUCCESS ADD" << endl;
         }
@@ -129,13 +129,13 @@ void vendor::createMovie(CommandTransaction &t)
         {
             cout << "\t" << d << endl;
         }
-        cout << endl << endl;
+        cout << endl << endl; */
     }
     else if (t.Movie_Type() == 'C')
     {
-        cout << "added:" << *((Classic *)newMovie) << endl;
+        //cout << "added:" << *((Classic *)newMovie) << endl;
         classicMovies_.insert((Classic *)newMovie);
-        if (classicMovies_.contains((Classic *)newMovie))
+        /* if (classicMovies_.contains((Classic *)newMovie))
         {
             cout << "\tSUCCESS ADD" << endl;
         }
@@ -144,7 +144,7 @@ void vendor::createMovie(CommandTransaction &t)
         {
             cout << "\t" << d << endl;
         }
-        cout << endl << endl;
+        cout << endl << endl; */
     }
 }
 

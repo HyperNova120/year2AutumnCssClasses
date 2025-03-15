@@ -8,9 +8,12 @@
 #include "classic.h"
 using namespace std;
 
-class MovieFactory{
+class MovieFactory
+{
 
-    public:
-    static Movie* createMovie(CommandTransaction t);//Will create the 3 types of movies
+public:
+    /// @brief  create movie
+    /// @return pointer to newly created movie
+    static Movie *createMovie(CommandTransaction t); // Will create the 3 types of movies
 };
 #endif

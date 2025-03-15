@@ -19,7 +19,7 @@ int main()
 
     vendor MovieVendor = vendor();
     MovieVendor.readFile(moviesStream);
-    //MovieVendor.readFile(customersStream);
-    //MovieVendor.readFile(commandsStream); 
+    MovieVendor.readFile(customersStream);
+    MovieVendor.readFile(commandsStream); 
     return 0;
 }

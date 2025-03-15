@@ -768,34 +768,26 @@ public:
             {
                 return *this;
             }
-            if (nodeStack.top().vistedRightBranch)
+
+            if (nodeStack.top().firstVisit)
             {
-                // fully explored children
-                while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
-                {
-                    nodeStack.pop();
-                }
+                nodeStack.top().firstVisit = false;
+                return *this;
             }
             else
             {
-                // need to visit right
-                if (nodeStack.top().node->right_ == nullptr && nodeStack.top().firstVisit)
+                Node *tmp = nodeStack.top().node;
+                nodeStack.pop();
+
+                Node *reader = tmp->right_;
+                while (reader != nullptr)
                 {
-                    // no right node on first visit
-                    nodeStack.top().firstVisit = false;
-                    nodeStack.top().vistedRightBranch = true;
-                    while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
-                    {
-                        nodeStack.pop();
-                    }
-                    return *this;
+                    nodeStack.push({reader, true});
+                    reader = reader->left_;
                 }
-                nodeStack.top().vistedRightBranch = true;
-                // has right node
-                nodeStack.push({nodeStack.top().node->right_, (nodeStack.top().node->right_->right_ == nullptr)});
-                while (nodeStack.top().node->left_ != nullptr)
+                if (nodeStack.size() != 0)
                 {
-                    nodeStack.push({nodeStack.top().node->left_, false});
+                    nodeStack.top().firstVisit = false;
                 }
             }
 
@@ -820,7 +812,7 @@ public:
             {
                 return false;
             }
-            bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
+            bool equalPlace = true;
             equalPlace &= a.nodeStack.top().firstVisit == b.nodeStack.top().firstVisit;
             equalPlace &= (!a.m_compare(a.nodeStack.top().node->nodeData->data_, b.nodeStack.top().node->nodeData->data_) &&
                            !a.m_compare(b.nodeStack.top().node->nodeData->data_, a.nodeStack.top().node->nodeData->data_));
@@ -942,7 +934,6 @@ public:
         struct IteratorNodeData
         {
             Node *node = nullptr;
-            bool vistedRightBranch = false;
             bool firstVisit = true;
         };
         stack<IteratorNodeData> nodeStack;
@@ -959,11 +950,10 @@ public:
             Node *reader = ptr;
             do
             {
-                nodeStack.push({reader, false});
+                nodeStack.push({reader, true});
                 reader = reader->left_;
             } while (reader != nullptr);
             nodeStack.top().firstVisit = false;
-            nodeStack.top().vistedRightBranch = true;
         };
 
         reference operator*() const { return *nodeStack.top().node->nodeData->data_; };
@@ -976,34 +966,26 @@ public:
             {
                 return *this;
             }
-            if (nodeStack.top().vistedRightBranch)
+
+            if (nodeStack.top().firstVisit)
             {
-                // fully explored children
-                while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
-                {
-                    nodeStack.pop();
-                }
+                nodeStack.top().firstVisit = false;
+                return *this;
             }
             else
             {
-                // need to visit right
-                if (nodeStack.top().node->right_ == nullptr && nodeStack.top().firstVisit)
+                Node *tmp = nodeStack.top().node;
+                nodeStack.pop();
+
+                Node *reader = tmp->right_;
+                while (reader != nullptr)
                 {
-                    // no right node on first visit
-                    nodeStack.top().firstVisit = false;
-                    nodeStack.top().vistedRightBranch = true;
-                    while (nodeStack.size() != 0 && (nodeStack.top().vistedRightBranch))
-                    {
-                        nodeStack.pop();
-                    }
-                    return *this;
+                    nodeStack.push({reader, true});
+                    reader = reader->left_;
                 }
-                nodeStack.top().vistedRightBranch = true;
-                // has right node
-                nodeStack.push({nodeStack.top().node->right_, (nodeStack.top().node->right_->right_ == nullptr)});
-                while (nodeStack.top().node->left_ != nullptr)
+                if (nodeStack.size() != 0)
                 {
-                    nodeStack.push({nodeStack.top().node->left_, false});
+                    nodeStack.top().firstVisit = false;
                 }
             }
 
@@ -1028,7 +1010,7 @@ public:
             {
                 return false;
             }
-            bool equalPlace = (a.nodeStack.top().vistedRightBranch && b.nodeStack.top().vistedRightBranch);
+            bool equalPlace = true;
             equalPlace &= a.nodeStack.top().firstVisit == b.nodeStack.top().firstVisit;
             equalPlace &= (!a.m_compare(*a.nodeStack.top().node->nodeData->data_, *b.nodeStack.top().node->nodeData->data_) &&
                            !a.m_compare(*b.nodeStack.top().node->nodeData->data_, *a.nodeStack.top().node->nodeData->data_));
